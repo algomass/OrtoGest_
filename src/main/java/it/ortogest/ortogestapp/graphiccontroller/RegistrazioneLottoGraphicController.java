@@ -2,6 +2,7 @@ package it.ortogest.ortogestapp.graphiccontroller;
 
 import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
 import it.ortogest.ortogestapp.beans.LottoBean;
+import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.collections.FXCollections;
@@ -66,14 +67,14 @@ public class RegistrazioneLottoGraphicController {
             String quantitaStr = quantitaField.getText();
             
             if (idLotto == null || idLotto.trim().isEmpty() || fornitore == null || fornitore.trim().isEmpty() || prodotto == null || prodotto.trim().isEmpty() || quantitaStr == null || quantitaStr.trim().isEmpty()) {
-                throw new Exception("Tutti i campi testuali sono obbligatori.");
+                throw new GestioneException("Tutti i campi testuali sono obbligatori.");
             }
 
             double quantita;
             try {
                 quantita = Double.parseDouble(quantitaStr);
             } catch (NumberFormatException e) {
-                throw new Exception("La quantità deve essere un numero valido.");
+                throw new GestioneException("La quantità deve essere un numero valido.");
             }
 
             double costoAcquisto = 0.0;
@@ -82,7 +83,7 @@ public class RegistrazioneLottoGraphicController {
                 try {
                     costoAcquisto = Double.parseDouble(costoStr);
                 } catch (NumberFormatException e) {
-                    throw new Exception("Il costo di acquisto deve essere un numero valido.");
+                    throw new GestioneException("Il costo di acquisto deve essere un numero valido.");
                 }
             }
 
@@ -107,8 +108,11 @@ public class RegistrazioneLottoGraphicController {
             // Torniamo alla home magazzino
             indietroAction();
 
-        } catch (Exception e) {
+        } catch (GestioneException e) {
             errorLabel.setText(e.getMessage());
+            errorLabel.setVisible(true);
+        } catch (Exception e) {
+            errorLabel.setText("Errore imprevisto.");
             errorLabel.setVisible(true);
         }
     }

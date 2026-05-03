@@ -8,6 +8,7 @@ import it.ortogest.ortogestapp.appcontroller.LoginAppController;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import it.ortogest.ortogestapp.utils.SessionManager;
+import it.ortogest.ortogestapp.utils.CostantiGUI;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -84,19 +85,19 @@ public class LoginGraphicController {
             String fxmlPath;
             switch (utenteLoggato.getRuolo()) {
                 case "Magazziniere":
-                    fxmlPath = "/GUI/Magazzino.fxml";
+                    fxmlPath = CostantiGUI.VIEW_MAGAZZINO;
                     break;
                 case "Responsabile":
-                    fxmlPath = "/GUI/Responsabile.fxml";
+                    fxmlPath = CostantiGUI.VIEW_RESPONSABILE;
                     break;
                 case "Operatore":
-                    fxmlPath = "/GUI/Cassa.fxml";
+                    fxmlPath = CostantiGUI.VIEW_CASSA;
                     break;
                 case "Cliente":
-                    fxmlPath = "/GUI/Cliente.fxml";
+                    fxmlPath = CostantiGUI.VIEW_CLIENTE;
                     break;
                 default:
-                    fxmlPath = "/GUI/Magazzino.fxml"; // Fallback
+                    fxmlPath = CostantiGUI.VIEW_MAGAZZINO; // Fallback
                     Printer.perror("Attenzione: ruolo non riconosciuto (" + utenteLoggato.getRuolo() + ").");
                     break;
             }

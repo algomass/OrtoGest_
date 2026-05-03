@@ -3,6 +3,7 @@ package it.ortogest.ortogestapp.appcontroller;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.dao.DAOFactory;
 import it.ortogest.ortogestapp.dao.IProdottoDAO;
+import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.model.Prodotto;
 
 import java.util.ArrayList;
@@ -39,18 +40,18 @@ public class GestioneCatalogoAppController {
      * Aggiorna il prezzo al pubblico di un prodotto.
      * @param bean Bean contenente il nome del prodotto e il nuovo prezzo.
      * @return Bean aggiornato se il salvataggio va a buon fine.
-     * @throws Exception se il prodotto non viene trovato o il prezzo è non valido.
+     * @throws GestioneException se il prodotto non viene trovato o il prezzo è non valido.
      */
-    public ProdottoBean aggiornaPrezzoProdotto(ProdottoBean bean) throws Exception {
+    public ProdottoBean aggiornaPrezzoProdotto(ProdottoBean bean) throws GestioneException {
         if (bean.getPrezzoAttuale() < 0) {
-            throw new Exception("Il prezzo non può essere negativo.");
+            throw new GestioneException("Il prezzo non può essere negativo.");
         }
 
         IProdottoDAO prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
         Prodotto p = prodottoDAO.trovaPerNome(bean.getNome());
 
         if (p == null) {
-            throw new Exception("Prodotto non trovato nel catalogo.");
+            throw new GestioneException("Prodotto non trovato nel catalogo.");
         }
 
         // Aggiorniamo il prezzo e la categoria nel dominio

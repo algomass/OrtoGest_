@@ -5,6 +5,7 @@ import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.dao.DAOFactory;
 import it.ortogest.ortogestapp.dao.IOrdineDAO;
 import it.ortogest.ortogestapp.dao.IProdottoDAO;
+import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.model.Ordine;
 import it.ortogest.ortogestapp.model.Prodotto;
 
@@ -71,11 +72,11 @@ public class GestioneOrdiniAppController {
      * @param emailCliente L'email del cliente che effettua l'ordine.
      * @param carrello La lista di prodotti e quantità selezionate.
      * @return Messaggio di conferma con l'ID dell'ordine.
-     * @throws Exception Se un prodotto non è trovato o la giacenza è insufficiente.
+     * @throws GestioneException Se un prodotto non è trovato o la giacenza è insufficiente.
      */
-    public String creaOrdine(String emailCliente, List<it.ortogest.ortogestapp.beans.RigaOrdineBean> carrello) throws Exception {
+    public String creaOrdine(String emailCliente, List<it.ortogest.ortogestapp.beans.RigaOrdineBean> carrello) throws GestioneException {
         if (carrello == null || carrello.isEmpty()) {
-            throw new Exception("Il carrello è vuoto.");
+            throw new GestioneException("Il carrello è vuoto.");
         }
 
         List<it.ortogest.ortogestapp.model.RigaOrdine> righeModello = new ArrayList<>();
@@ -84,10 +85,10 @@ public class GestioneOrdiniAppController {
         for (it.ortogest.ortogestapp.beans.RigaOrdineBean rigaBean : carrello) {
             Prodotto p = prodottoDAO.trovaPerNome(rigaBean.getNomeProdotto());
             if (p == null) {
-                throw new Exception("Prodotto '" + rigaBean.getNomeProdotto() + "' non trovato.");
+                throw new GestioneException("Prodotto '" + rigaBean.getNomeProdotto() + "' non trovato.");
             }
             if (p.getQuantitaTotaleDisponibile() < rigaBean.getQuantita()) {
-                throw new Exception("Giacenza insufficiente per: " + rigaBean.getNomeProdotto());
+                throw new GestioneException("Giacenza insufficiente per: " + rigaBean.getNomeProdotto());
             }
             // Creiamo la riga per il modello di dominio
             righeModello.add(new it.ortogest.ortogestapp.model.RigaOrdine(

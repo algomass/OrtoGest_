@@ -29,12 +29,10 @@ public class LoginAppController {
         
         // 3. Rispetto la regola "Isolamento Tramite Beans":
         // Non restituisco mai l'Entity "Utente" alla vista, ma creo un "UtenteBean"
-        UtenteBean utenteLoggato = new UtenteBean(
+        return new UtenteBean(
             utenteModel.getNome(), 
             utenteModel.getEmail(), 
             utenteModel.getRuolo()
         );
-        
-        return utenteLoggato;
     }
 }

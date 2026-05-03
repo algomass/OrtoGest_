@@ -2,6 +2,7 @@ package it.ortogest.ortogestapp.graphiccontroller;
 
 import it.ortogest.ortogestapp.appcontroller.GestioneCatalogoAppController;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
+import it.ortogest.ortogestapp.model.CategoriaProdotto;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.collections.FXCollections;
@@ -54,7 +55,7 @@ public class ResponsabileGraphicController {
         });
 
         // Inizializziamo la ComboBox delle categorie
-        nuovaCategoriaComboBox.getItems().addAll("Frutta", "Verdura");
+        nuovaCategoriaComboBox.getItems().addAll(CategoriaProdotto.FRUTTA, CategoriaProdotto.VERDURA);
 
         // Listener per la selezione nella tabella
         tabellaProdotti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {

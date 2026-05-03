@@ -16,6 +16,7 @@ import java.net.URL;
  * I controller chiederanno un cambio scena senza doversi preoccupare di *come* esso avvenga
  * o di dover configurare lo Stage in prima persona.
  */
+@SuppressWarnings("java:S6548")
 public class SceneManager {
     private static SceneManager instance;
     private Stage primaryWindow;

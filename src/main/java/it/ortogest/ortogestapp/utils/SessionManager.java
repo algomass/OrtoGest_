@@ -8,6 +8,7 @@ import it.ortogest.ortogestapp.beans.UtenteBean;
  * In questo modo si disaccoppiano i controller, evitando di dover passare le informazioni 
  * dell'utente di scena in scena tramite costruttori o metodi ad hoc.
  */
+@SuppressWarnings("java:S6548")
 public class SessionManager {
     private static SessionManager instance;
     private UtenteBean currentUser;

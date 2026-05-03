@@ -8,6 +8,8 @@ import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.dao.DAOFactory;
 import it.ortogest.ortogestapp.dao.ILottoDAO;
 import it.ortogest.ortogestapp.dao.IProdottoDAO;
+import it.ortogest.ortogestapp.exception.GestioneException;
+import it.ortogest.ortogestapp.model.CategoriaProdotto;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Prodotto;
 
@@ -24,6 +26,8 @@ public class GestioneMagazzinoAppController {
     private EmailAdapter emailAdapter;
     private ILottoDAO lottoDAO;
     private IProdottoDAO prodottoDAO;
+    
+    private static final String EMAIL_FORNITORE_DEFAULT = "assistenza@fornitore-ortofrutta.it";
 
     public GestioneMagazzinoAppController() {
         // In futuro potremmo usare la Dependency Injection (es. tramite un Factory)
@@ -58,12 +62,10 @@ public class GestioneMagazzinoAppController {
      */
     public String inoltraSegnalazione(AnomaliaBean anomaliaBean) {
         
-        // 1. (Opzionale/Futuro) Salvare l'anomalia nel DB usando un DAO appropriato.
-
-        // 2. Costruire il messaggio dell'email
+        // Costruire il messaggio dell'email
         // Nella realtà, l'email del fornitore verrebbe recuperata dal DB tramite il FornitoreDAO 
         // associato a quel lotto/prodotto. Per ora simuliamo.
-        String emailFornitore = "assistenza@fornitore-ortofrutta.it";
+        String emailFornitore = EMAIL_FORNITORE_DEFAULT;
         String oggetto = "Segnalazione Anomalia: Merce " + anomaliaBean.getTipoAnomalia();
         
         String corpo = String.format("Spett.le Fornitore,\n\n" +
@@ -88,24 +90,24 @@ public class GestioneMagazzinoAppController {
         }
     }
     
-    public LottoBean registraLotto(LottoBean bean) throws Exception {
+    public LottoBean registraLotto(LottoBean bean) throws GestioneException {
         // 1. Validazione base
         if (bean.getIdLotto() == null || bean.getIdLotto().trim().isEmpty()) {
-            throw new Exception("L'ID del Lotto non può essere vuoto.");
+            throw new GestioneException("L'ID del Lotto non può essere vuoto.");
         }
         if (bean.getQuantitaKg() <= 0) {
-            throw new Exception("La quantità deve essere maggiore di zero.");
+            throw new GestioneException("La quantità deve essere maggiore di zero.");
         }
         if (bean.getDataArrivo() == null || bean.getDataScadenza() == null) {
-            throw new Exception("Le date di arrivo e scadenza sono obbligatorie.");
+            throw new GestioneException("Le date di arrivo e scadenza sono obbligatorie.");
         }
         if (bean.getDataScadenza().isBefore(bean.getDataArrivo())) {
-            throw new Exception("La data di scadenza non può essere precedente alla data di arrivo.");
+            throw new GestioneException("La data di scadenza non può essere precedente alla data di arrivo.");
         }
 
         // 2. Controllo duplicato del lotto
         if (lottoDAO.trovaPerId(bean.getIdLotto()) != null) {
-            throw new Exception("Esiste già un lotto registrato con ID: " + bean.getIdLotto());
+            throw new GestioneException("Esiste già un lotto registrato con ID: " + bean.getIdLotto());
         }
 
         // 3. Ricerca del prodotto
@@ -113,8 +115,8 @@ public class GestioneMagazzinoAppController {
         
         if (prodotto == null) {
             // Creiamo un nuovo prodotto dinamicamente se non esiste
-            // Categoria di default "Frutta" — il responsabile potrà modificarla in seguito
-            prodotto = new Prodotto(bean.getNomeProdotto(), 0.0, 0.0, "Frutta", "/images/placeholder.png");
+            // Categoria di default FRUTTA — il responsabile potrà modificarla in seguito
+            prodotto = new Prodotto(bean.getNomeProdotto(), 0.0, 0.0, CategoriaProdotto.FRUTTA, "/images/placeholder.png");
             prodottoDAO.salvaProdotto(prodotto);
         }
 

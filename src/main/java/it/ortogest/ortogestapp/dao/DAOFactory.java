@@ -3,6 +3,7 @@ package it.ortogest.ortogestapp.dao;
 /**
  * Abstract Factory per disaccoppiare l'App Controller dalle implementazioni concrete dei DAO.
  */
+@SuppressWarnings("java:S6548")
 public class DAOFactory {
     
     private static DAOFactory instance;

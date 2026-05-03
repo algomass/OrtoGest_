@@ -5,6 +5,7 @@ import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.beans.RigaOrdineBean;
 import it.ortogest.ortogestapp.beans.UtenteBean;
+import it.ortogest.ortogestapp.model.CategoriaProdotto;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import it.ortogest.ortogestapp.utils.SessionManager;
@@ -104,7 +105,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         aggiornaStileSidebar(btnFrutta);
         titoloSezione.setText("Catalogo — Frutta");
         mostraCatalogo();
-        caricaProdottiPerCategoria("Frutta");
+        caricaProdottiPerCategoria(CategoriaProdotto.FRUTTA);
     }
 
     @FXML
@@ -112,7 +113,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         aggiornaStileSidebar(btnVerdura);
         titoloSezione.setText("Catalogo — Verdura");
         mostraCatalogo();
-        caricaProdottiPerCategoria("Verdura");
+        caricaProdottiPerCategoria(CategoriaProdotto.VERDURA);
     }
 
     @FXML
@@ -223,7 +224,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         aggiornaUIHeaderCarrello();
 
         // Ricarica la categoria per aggiornare le giacenze sulle card
-        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? "Verdura" : "Frutta";
+        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
 
@@ -255,7 +256,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         mostraMessaggio("Carrello svuotato.", true);
 
         // Ricarica la categoria per ripristinare le giacenze originali sulle card
-        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? "Verdura" : "Frutta";
+        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
 

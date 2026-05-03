@@ -1,5 +1,6 @@
 package it.ortogest.ortogestapp.dao;
 
+import it.ortogest.ortogestapp.model.CategoriaProdotto;
 import it.ortogest.ortogestapp.model.Prodotto;
 
 import java.util.ArrayList;
@@ -15,18 +16,18 @@ public class ProdottoDAO implements IProdottoDAO {
     
     static {
         // --- FRUTTA ---
-        catalogoDB.add(new Prodotto("Mele Golden",       1.50, 120.0, "Frutta",  "/images/mele_golden.png"));
-        catalogoDB.add(new Prodotto("Pere Abate",        2.20,  85.0, "Frutta",  "/images/pere_abate.png"));
-        catalogoDB.add(new Prodotto("Banane",            1.30, 200.0, "Frutta",  "/images/banane.png"));
-        catalogoDB.add(new Prodotto("Arance Tarocco",    1.80, 150.0, "Frutta",  "/images/arance_tarocco.png"));
-        catalogoDB.add(new Prodotto("Fragole",           3.90,  40.0, "Frutta",  "/images/fragole.png"));
+        catalogoDB.add(new Prodotto("Mele Golden",       1.50, 120.0, CategoriaProdotto.FRUTTA,  "/images/mele_golden.png"));
+        catalogoDB.add(new Prodotto("Pere Abate",        2.20,  85.0, CategoriaProdotto.FRUTTA,  "/images/pere_abate.png"));
+        catalogoDB.add(new Prodotto("Banane",            1.30, 200.0, CategoriaProdotto.FRUTTA,  "/images/banane.png"));
+        catalogoDB.add(new Prodotto("Arance Tarocco",    1.80, 150.0, CategoriaProdotto.FRUTTA,  "/images/arance_tarocco.png"));
+        catalogoDB.add(new Prodotto("Fragole",           3.90,  40.0, CategoriaProdotto.FRUTTA,  "/images/fragole.png"));
 
         // --- VERDURA ---
-        catalogoDB.add(new Prodotto("Pomodori Datterino", 3.50, 90.0, "Verdura", "/images/pomodori_datterino.png"));
-        catalogoDB.add(new Prodotto("Zucchine",           2.00, 70.0, "Verdura", "/images/zucchine.png"));
-        catalogoDB.add(new Prodotto("Peperoni",            2.80, 55.0, "Verdura", "/images/peperoni.png"));
-        catalogoDB.add(new Prodotto("Lattuga",             1.20, 60.0, "Verdura", "/images/lattuga.png"));
-        catalogoDB.add(new Prodotto("Carote",              1.10, 110.0,"Verdura", "/images/carote.png"));
+        catalogoDB.add(new Prodotto("Pomodori Datterino", 3.50, 90.0, CategoriaProdotto.VERDURA, "/images/pomodori_datterino.png"));
+        catalogoDB.add(new Prodotto("Zucchine",           2.00, 70.0, CategoriaProdotto.VERDURA, "/images/zucchine.png"));
+        catalogoDB.add(new Prodotto("Peperoni",            2.80, 55.0, CategoriaProdotto.VERDURA, "/images/peperoni.png"));
+        catalogoDB.add(new Prodotto("Lattuga",             1.20, 60.0, CategoriaProdotto.VERDURA, "/images/lattuga.png"));
+        catalogoDB.add(new Prodotto("Carote",              1.10, 110.0,CategoriaProdotto.VERDURA, "/images/carote.png"));
     }
 
     public List<Prodotto> getTuttiIProdotti() {

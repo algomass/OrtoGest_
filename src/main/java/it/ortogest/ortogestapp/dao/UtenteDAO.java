@@ -10,9 +10,6 @@ import it.ortogest.ortogestapp.model.Utente;
 public class UtenteDAO implements IUtenteDAO {
 
     public Utente verificaCredenziali(String email, String password) {
-        // SIMULAZIONE DATABASE:
-        // In futuro qui ci sarà il codice JDBC (es. SELECT * FROM utenti WHERE
-        // email=...)
         if ("a".equals(email) && "a".equals(password)) {
             // Se le trova, restituisce l'Entity popolata dal DB
             return new Utente("Mario Rossi", email, password, "Responsabile");
