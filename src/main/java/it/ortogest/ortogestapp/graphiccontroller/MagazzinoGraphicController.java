@@ -2,7 +2,6 @@ package it.ortogest.ortogestapp.graphiccontroller;
 
 import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
-import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -13,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-import it.ortogest.ortogestapp.utils.CostantiGUI;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,10 +20,14 @@ import java.util.List;
  */
 public class MagazzinoGraphicController extends BaseGraphicController {
 
-    @FXML private TableView<ProdottoBean> inventarioTable;
-    @FXML private TableColumn<ProdottoBean, String> colNome;
-    @FXML private TableColumn<ProdottoBean, Number> colPrezzo;
-    @FXML private TableColumn<ProdottoBean, Number> colGiacenza;
+    @FXML
+    private TableView<ProdottoBean> inventarioTable;
+    @FXML
+    private TableColumn<ProdottoBean, String> colNome;
+    @FXML
+    private TableColumn<ProdottoBean, Number> colPrezzo;
+    @FXML
+    private TableColumn<ProdottoBean, Number> colGiacenza;
 
     @FXML
     public void initialize() {

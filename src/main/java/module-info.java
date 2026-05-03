@@ -2,6 +2,7 @@ module it.ortogest.ortogestapp {
     requires transitive javafx.controls;
     requires javafx.fxml;
     requires transitive javafx.graphics;
+    requires java.logging;
 
     // Se usi JDBC per il database, decommenta la riga sotto:
     // requires java.sql;

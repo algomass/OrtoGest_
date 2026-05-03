@@ -298,6 +298,7 @@ public class ClienteGraphicController extends BaseGraphicController {
             if (imgStream != null)
                 imageView.setImage(new Image(imgStream));
         } catch (Exception e) {
+            Printer.perror("Errore caricamento immagine: " + e.getMessage());
         }
 
         Label nomeLabel = new Label(prodotto.getNome());

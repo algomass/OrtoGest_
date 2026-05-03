@@ -1,6 +1,11 @@
 package it.ortogest.ortogestapp.utils;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Printer {
+
+    private static final Logger LOGGER = Logger.getLogger(Printer.class.getName());
 
     private Printer () {}
 
@@ -17,7 +22,9 @@ public class Printer {
     }
 
     private static void printCLI(String s) {
-        System.out.print(s);
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info(s);
+        }
     }
 
 }

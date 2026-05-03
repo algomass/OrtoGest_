@@ -70,21 +70,12 @@ public class RegistrazioneLottoGraphicController {
                 throw new GestioneException("Tutti i campi testuali sono obbligatori.");
             }
 
-            double quantita;
-            try {
-                quantita = Double.parseDouble(quantitaStr);
-            } catch (NumberFormatException e) {
-                throw new GestioneException("La quantità deve essere un numero valido.");
-            }
+            double quantita = parseDoubleOrThrow(quantitaStr, "La quantità deve essere un numero valido.");
 
             double costoAcquisto = 0.0;
             String costoStr = costoAcquistoField.getText();
             if (costoStr != null && !costoStr.trim().isEmpty()) {
-                try {
-                    costoAcquisto = Double.parseDouble(costoStr);
-                } catch (NumberFormatException e) {
-                    throw new GestioneException("Il costo di acquisto deve essere un numero valido.");
-                }
+                costoAcquisto = parseDoubleOrThrow(costoStr, "Il costo di acquisto deve essere un numero valido.");
             }
 
             // 2. Creazione Bean
@@ -114,6 +105,14 @@ public class RegistrazioneLottoGraphicController {
         } catch (Exception e) {
             errorLabel.setText("Errore imprevisto.");
             errorLabel.setVisible(true);
+        }
+    }
+
+    private double parseDoubleOrThrow(String value, String errorMessage) throws GestioneException {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            throw new GestioneException(errorMessage);
         }
     }
 }
