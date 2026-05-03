@@ -2,8 +2,6 @@ package it.ortogest.ortogestapp.graphiccontroller;
 
 import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
 import it.ortogest.ortogestapp.beans.LottoBean;
-import it.ortogest.ortogestapp.dao.ProdottoDAO;
-import it.ortogest.ortogestapp.model.Prodotto;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.collections.FXCollections;
@@ -31,12 +29,9 @@ public class RegistrazioneLottoGraphicController {
     @FXML
     public void initialize() {
         // Popolamento della ComboBox con i prodotti esistenti
-        ProdottoDAO prodottoDAO = new ProdottoDAO();
-        List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
-        ObservableList<String> nomiProdotti = FXCollections.observableArrayList();
-        for (Prodotto p : prodotti) {
-            nomiProdotti.add(p.getNome());
-        }
+        GestioneMagazzinoAppController appController = new GestioneMagazzinoAppController();
+        List<String> nomi = appController.getNomiProdotti();
+        ObservableList<String> nomiProdotti = FXCollections.observableArrayList(nomi);
         prodottoComboBox.setItems(nomiProdotti);
     }
 

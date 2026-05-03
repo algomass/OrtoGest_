@@ -2,8 +2,9 @@ package it.ortogest.ortogestapp.appcontroller;
 
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
-import it.ortogest.ortogestapp.dao.OrdineDAO;
-import it.ortogest.ortogestapp.dao.ProdottoDAO;
+import it.ortogest.ortogestapp.dao.DAOFactory;
+import it.ortogest.ortogestapp.dao.IOrdineDAO;
+import it.ortogest.ortogestapp.dao.IProdottoDAO;
 import it.ortogest.ortogestapp.model.Ordine;
 import it.ortogest.ortogestapp.model.Prodotto;
 
@@ -16,12 +17,12 @@ import java.util.UUID;
  */
 public class GestioneOrdiniAppController {
 
-    private ProdottoDAO prodottoDAO;
-    private OrdineDAO ordineDAO;
+    private IProdottoDAO prodottoDAO;
+    private IOrdineDAO ordineDAO;
 
     public GestioneOrdiniAppController() {
-        this.prodottoDAO = new ProdottoDAO();
-        this.ordineDAO = new OrdineDAO();
+        this.prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
+        this.ordineDAO = DAOFactory.getInstance().getOrdineDAO();
     }
 
     public List<ProdottoBean> getCatalogoDisponibile() {

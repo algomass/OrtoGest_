@@ -1,7 +1,8 @@
 package it.ortogest.ortogestapp.appcontroller;
 
 import it.ortogest.ortogestapp.beans.ProdottoBean;
-import it.ortogest.ortogestapp.dao.ProdottoDAO;
+import it.ortogest.ortogestapp.dao.DAOFactory;
+import it.ortogest.ortogestapp.dao.IProdottoDAO;
 import it.ortogest.ortogestapp.model.Prodotto;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class GestioneCatalogoAppController {
      * @return Lista di ProdottoBean
      */
     public List<ProdottoBean> getTuttiIProdotti() {
-        ProdottoDAO prodottoDAO = new ProdottoDAO();
+        IProdottoDAO prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
         List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
         List<ProdottoBean> beans = new ArrayList<>();
 
@@ -45,7 +46,7 @@ public class GestioneCatalogoAppController {
             throw new Exception("Il prezzo non può essere negativo.");
         }
 
-        ProdottoDAO prodottoDAO = new ProdottoDAO();
+        IProdottoDAO prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
         Prodotto p = prodottoDAO.trovaPerNome(bean.getNome());
 
         if (p == null) {

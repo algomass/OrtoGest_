@@ -4,10 +4,15 @@ import it.ortogest.ortogestapp.beans.AnomaliaBean;
 import it.ortogest.ortogestapp.pattern.DummyEmailService;
 import it.ortogest.ortogestapp.pattern.EmailAdapter;
 import it.ortogest.ortogestapp.beans.LottoBean;
-import it.ortogest.ortogestapp.dao.LottoDAO;
-import it.ortogest.ortogestapp.dao.ProdottoDAO;
+import it.ortogest.ortogestapp.beans.ProdottoBean;
+import it.ortogest.ortogestapp.dao.DAOFactory;
+import it.ortogest.ortogestapp.dao.ILottoDAO;
+import it.ortogest.ortogestapp.dao.IProdottoDAO;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Prodotto;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Application Controller per la gestione delle operazioni di Magazzino.
@@ -17,11 +22,33 @@ public class GestioneMagazzinoAppController {
 
     // Utilizziamo l'interfaccia Adapter per l'invio delle email
     private EmailAdapter emailAdapter;
+    private ILottoDAO lottoDAO;
+    private IProdottoDAO prodottoDAO;
 
     public GestioneMagazzinoAppController() {
         // In futuro potremmo usare la Dependency Injection (es. tramite un Factory)
         // per instanziare il servizio reale. Per ora usiamo il Dummy.
         this.emailAdapter = new DummyEmailService();
+        this.lottoDAO = DAOFactory.getInstance().getLottoDAO();
+        this.prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
+    }
+
+    public List<ProdottoBean> getInventario() {
+        List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
+        List<ProdottoBean> beans = new ArrayList<>();
+        for (Prodotto p : prodotti) {
+            beans.add(new ProdottoBean(p.getNome(), p.getPrezzoAttuale(), p.getQuantitaTotaleDisponibile(), p.getCategoria(), p.getImmaginePath()));
+        }
+        return beans;
+    }
+
+    public List<String> getNomiProdotti() {
+        List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
+        List<String> nomi = new ArrayList<>();
+        for (Prodotto p : prodotti) {
+            nomi.add(p.getNome());
+        }
+        return nomi;
     }
 
     /**
@@ -77,13 +104,11 @@ public class GestioneMagazzinoAppController {
         }
 
         // 2. Controllo duplicato del lotto
-        LottoDAO lottoDAO = new LottoDAO();
         if (lottoDAO.trovaPerId(bean.getIdLotto()) != null) {
             throw new Exception("Esiste già un lotto registrato con ID: " + bean.getIdLotto());
         }
 
         // 3. Ricerca del prodotto
-        ProdottoDAO prodottoDAO = new ProdottoDAO();
         Prodotto prodotto = prodottoDAO.trovaPerNome(bean.getNomeProdotto());
         
         if (prodotto == null) {

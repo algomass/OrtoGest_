@@ -2,7 +2,8 @@ package it.ortogest.ortogestapp.appcontroller;
 
 import it.ortogest.ortogestapp.beans.CredenzialiBean;
 import it.ortogest.ortogestapp.beans.UtenteBean;
-import it.ortogest.ortogestapp.dao.UtenteDAO;
+import it.ortogest.ortogestapp.dao.DAOFactory;
+import it.ortogest.ortogestapp.dao.IUtenteDAO;
 import it.ortogest.ortogestapp.exception.LoginFallitoException;
 import it.ortogest.ortogestapp.model.Utente;
 
@@ -14,7 +15,7 @@ public class LoginAppController {
 
     public UtenteBean login(CredenzialiBean credenziali) throws LoginFallitoException {
         // 1. Chiamo il DAO per verificare i dati nel sistema di persistenza
-        UtenteDAO utenteDAO = new UtenteDAO();
+        IUtenteDAO utenteDAO = DAOFactory.getInstance().getUtenteDAO();
         Utente utenteModel = utenteDAO.verificaCredenziali(credenziali.getEmail(), credenziali.getPassword());
         
         // 2. Applico le regole di business

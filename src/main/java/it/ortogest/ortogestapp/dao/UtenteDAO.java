@@ -7,7 +7,7 @@ import it.ortogest.ortogestapp.model.Utente;
  * Si occupa ESCLUSIVAMENTE di parlare col database (o di simularlo, come in
  * questo caso).
  */
-public class UtenteDAO {
+public class UtenteDAO implements IUtenteDAO {
 
     public Utente verificaCredenziali(String email, String password) {
         // SIMULAZIONE DATABASE:

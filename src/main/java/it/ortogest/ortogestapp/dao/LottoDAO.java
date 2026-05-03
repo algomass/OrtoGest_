@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Data Access Object Mock per i Lotti.
  */
-public class LottoDAO {
+public class LottoDAO implements ILottoDAO {
     // Mock del database: una lista statica
     private static final List<Lotto> lottiDB = new ArrayList<>();
 

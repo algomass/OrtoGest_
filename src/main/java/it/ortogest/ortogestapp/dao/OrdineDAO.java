@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Data Access Object Mock per gli Ordini.
  */
-public class OrdineDAO {
+public class OrdineDAO implements IOrdineDAO {
     
     // Mock del database
     private static final List<Ordine> ordiniDB = new ArrayList<>();

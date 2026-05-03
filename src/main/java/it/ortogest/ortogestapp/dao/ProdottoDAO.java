@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Data Access Object Mock per i Prodotti (Catalogo).
  */
-public class ProdottoDAO {
+public class ProdottoDAO implements IProdottoDAO {
     
     // Mock del database: una lista statica
     private static final List<Prodotto> catalogoDB = new ArrayList<>();

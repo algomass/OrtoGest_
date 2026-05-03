@@ -1,8 +1,7 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
+import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
-import it.ortogest.ortogestapp.dao.ProdottoDAO;
-import it.ortogest.ortogestapp.model.Prodotto;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -38,12 +37,8 @@ public class MagazzinoGraphicController extends BaseGraphicController {
     }
 
     private void caricaInventario() {
-        ProdottoDAO prodottoDAO = new ProdottoDAO();
-        List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
-        List<ProdottoBean> beans = new ArrayList<>();
-        for (Prodotto p : prodotti) {
-            beans.add(new ProdottoBean(p.getNome(), p.getPrezzoAttuale(), p.getQuantitaTotaleDisponibile(), p.getCategoria(), p.getImmaginePath()));
-        }
+        GestioneMagazzinoAppController appController = new GestioneMagazzinoAppController();
+        List<ProdottoBean> beans = appController.getInventario();
         ObservableList<ProdottoBean> data = FXCollections.observableArrayList(beans);
         inventarioTable.setItems(data);
     }
