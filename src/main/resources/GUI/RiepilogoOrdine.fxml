@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.ortogest.ortogestapp.graphiccontroller.RiepilogoOrdineGraphicController">
+
+    <!-- HEADER -->
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="60.0" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Area Personale Cliente — Conferma Ordine" textFill="WHITE">
+                    <font><Font name="System Bold" size="20.0" /></font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS" />
+            </children>
+            <padding><Insets left="20.0" right="20.0" /></padding>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="20.0" style="-fx-background-color: #ecf0f1;">
+            <padding><Insets bottom="30.0" left="40.0" right="40.0" top="30.0" /></padding>
+            <children>
+                <Label text="Riepilogo del tuo Ordine" textFill="#2c3e50">
+                    <font><Font name="System Bold" size="24.0" /></font>
+                </Label>
+                
+                <Label text="Controlla i prodotti selezionati e le quantità prima di procedere con l'invio definitivo." textFill="#7f8c8d">
+                    <font><Font size="14.0" /></font>
+                </Label>
+
+                <TableView fx:id="recapTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8; -fx-border-radius: 8;">
+                    <columns>
+                        <TableColumn prefWidth="300.0" text="Prodotto">
+                            <cellValueFactory><PropertyValueFactory property="nomeProdotto" /></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="120.0" text="Quantità (Kg)">
+                            <cellValueFactory><PropertyValueFactory property="quantita" /></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="150.0" text="Prezzo Unit. (€/Kg)">
+                            <cellValueFactory><PropertyValueFactory property="prezzoUnitario" /></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="150.0" text="Subtotale (€)">
+                            <cellValueFactory><PropertyValueFactory property="subtotale" /></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="colRimuovi" prefWidth="120.0" text="Azioni" />
+                    </columns>
+                </TableView>
+
+                <HBox alignment="CENTER_RIGHT" spacing="20.0">
+                    <children>
+                        <Label text="TOTALE ORDINE:" textFill="#2c3e50">
+                            <font><Font name="System Bold" size="18.0" /></font>
+                        </Label>
+                        <Label fx:id="recapTotaleLabel" text="0.00 €" textFill="#27ae60">
+                            <font><Font name="System Bold" size="26.0" /></font>
+                        </Label>
+                    </children>
+                    <padding><Insets right="10.0" /></padding>
+                </HBox>
+
+                <HBox alignment="CENTER" spacing="30.0">
+                    <children>
+                        <Button onAction="#annullaAction" prefHeight="50.0" prefWidth="200.0" 
+                                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16; -fx-background-radius: 10; -fx-cursor: hand;" 
+                                text="❌ TORNA INDIETRO" />
+                        <Button onAction="#inviaOrdineAction" prefHeight="50.0" prefWidth="350.0" 
+                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18; -fx-background-radius: 10; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);" 
+                                text="🚀 INVIA ORDINE DEFINITIVO" />
+                    </children>
+                    <padding><Insets top="20.0" /></padding>
+                </HBox>
+                
+                <Label fx:id="statusLabel" alignment="CENTER" maxWidth="Infinity" text="" visible="false">
+                    <font><Font name="System Bold" size="14.0" /></font>
+                </Label>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

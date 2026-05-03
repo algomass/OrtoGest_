@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.ortogest.ortogestapp.graphiccontroller.SegnalazioneAnomaliaGraphicController">
+    <children>
+        <VBox maxWidth="500.0" prefWidth="500.0" spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+            <padding>
+                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+            </padding>
+            <children>
+                <Label text="Segnalazione Anomalia Fornitura" textFill="#2c3e50">
+                    <font>
+                        <Font name="System Bold" size="22.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="10.0" />
+                    </VBox.margin>
+                </Label>
+                
+                <Label fx:id="statusLabel" textFill="#e74c3c" visible="false">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+
+                <Label text="Tipo Anomalia:" textFill="#7f8c8d" />
+                <ComboBox fx:id="tipoAnomaliaComboBox" prefHeight="40.0" prefWidth="440.0" promptText="Seleziona tipo di anomalia..." />
+
+                <Label text="Nome Prodotto:" textFill="#7f8c8d" />
+                <TextField fx:id="prodottoField" prefHeight="40.0" promptText="es. Mele Golden" />
+
+                <Label text="Quantità Anomala (Kg):" textFill="#7f8c8d" />
+                <TextField fx:id="quantitaField" prefHeight="40.0" promptText="es. 15.5" />
+
+                <Label text="Note aggiuntive / Descrizione Danno:" textFill="#7f8c8d" />
+                <TextArea fx:id="noteArea" prefHeight="100.0" prefWidth="440.0" promptText="Descrivi brevemente l'anomalia riscontrata..." wrapText="true" />
+
+                <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <children>
+                        <Button onAction="#annullaAction" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Annulla" />
+                        <Button onAction="#inoltraSegnalazioneAction" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Inoltra Segnalazione">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</VBox>

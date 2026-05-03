@@ -1,0 +1,135 @@
+package it.ortogest.ortogestapp.graphiccontroller;
+
+import it.ortogest.ortogestapp.appcontroller.GestioneOrdiniAppController;
+import it.ortogest.ortogestapp.beans.RigaOrdineBean;
+import it.ortogest.ortogestapp.beans.UtenteBean;
+import it.ortogest.ortogestapp.utils.Printer;
+import it.ortogest.ortogestapp.utils.SceneManager;
+import it.ortogest.ortogestapp.utils.SessionManager;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * Controller Grafico dedicato esclusivamente alla fase di conferma finale dell'ordine.
+ */
+public class RiepilogoOrdineGraphicController extends BaseGraphicController {
+
+    @FXML
+    private TableView<RigaOrdineBean> recapTable;
+
+    @FXML
+    private TableColumn<RigaOrdineBean, Void> colRimuovi;
+
+    @FXML
+    private Label recapTotaleLabel;
+
+    @FXML
+    private Label statusLabel;
+
+    private List<RigaOrdineBean> carrello;
+    private GestioneOrdiniAppController appController;
+
+    @FXML
+    public void initialize() {
+        appController = new GestioneOrdiniAppController();
+        carrello = SessionManager.getInstance().getCarrelloCorrente();
+
+        if (carrello == null || carrello.isEmpty()) {
+            Printer.perror("Errore: Carrello vuoto in fase di riepilogo.");
+            tornaAlCatalogo();
+            return;
+        }
+
+        setupTabellaRecap();
+        rinfrescaTabella();
+    }
+
+    private void setupTabellaRecap() {
+        colRimuovi.setCellFactory(param -> new TableCell<RigaOrdineBean, Void>() {
+            private final Button btn = new Button("Rimuovi");
+            {
+                btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;");
+                btn.setOnAction(event -> {
+                    RigaOrdineBean riga = getTableView().getItems().get(getIndex());
+                    rimuoviDalCarrello(riga);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                }
+            }
+        });
+    }
+
+    private void rimuoviDalCarrello(RigaOrdineBean riga) {
+        carrello.remove(riga);
+        rinfrescaTabella();
+        
+        if (carrello.isEmpty()) {
+            tornaAlCatalogo();
+        }
+    }
+
+    private void rinfrescaTabella() {
+        ObservableList<RigaOrdineBean> data = FXCollections.observableArrayList(carrello);
+        recapTable.setItems(data);
+        
+        double totale = 0;
+        for (RigaOrdineBean r : carrello) {
+            totale += r.getSubtotale();
+        }
+        recapTotaleLabel.setText(String.format("%.2f €", totale));
+    }
+
+    @FXML
+    public void annullaAction() {
+        tornaAlCatalogo();
+    }
+
+    @FXML
+    public void inviaOrdineAction() {
+        UtenteBean currentUser = SessionManager.getInstance().getCurrentUser();
+        try {
+            String risultato = appController.creaOrdine(currentUser.getEmail(), carrello);
+            
+            // Successo: svuota carrello e torna indietro con feedback
+            carrello.clear();
+            SessionManager.getInstance().setCarrelloCorrente(null);
+            
+            Printer.printf("Ordine confermato: " + risultato);
+            tornaAlCatalogo();
+            // N.B. Qui potresti voler mostrare un messaggio di successo, 
+            // ma dato che cambiamo scena, il controller del catalogo dovrà occuparsene.
+            
+        } catch (Exception e) {
+            mostraErrore("Errore nell'invio dell'ordine: " + e.getMessage());
+            Printer.perror("Errore conferma ordine: " + e.getMessage());
+        }
+    }
+
+    private void tornaAlCatalogo() {
+        try {
+            SceneManager.getInstance().cambiaScena("/GUI/Cliente.fxml");
+        } catch (IOException e) {
+            Printer.perror("Errore critico nel ritorno al catalogo: " + e.getMessage());
+        }
+    }
+
+    private void mostraErrore(String msg) {
+        statusLabel.setText(msg);
+        statusLabel.setTextFill(Color.web("#e74c3c"));
+        statusLabel.setVisible(true);
+    }
+}

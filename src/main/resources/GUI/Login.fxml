@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="900.0" spacing="20.0" style="-fx-background-color: #ecf0f1;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.ortogest.ortogestapp.graphiccontroller.LoginGraphicController">
+    <children>
+        <VBox alignment="CENTER" maxWidth="400.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+            <children>
+                <Label text="OrtoGest 1.0" textFill="#27ae60">
+                    <font><Font name="System Bold" size="36.0" /></font>
+                    <VBox.margin><Insets bottom="10.0" /></VBox.margin>
+                </Label>
+
+                <Label text="Effettua l'accesso" textFill="#7f8c8d">
+                    <font><Font size="14.0" /></font>
+                    <VBox.margin><Insets bottom="20.0" /></VBox.margin>
+                </Label>
+
+                <Label fx:id="errorLabel" textFill="#e74c3c" visible="false">
+                    <font><Font name="System Bold" size="12.0" /></font>
+                </Label>
+
+                <TextField fx:id="emailField" prefHeight="40.0" promptText="Email" />
+                <PasswordField fx:id="passwordField" prefHeight="40.0" promptText="Password" />
+
+                <ComboBox fx:id="ruoloComboBox" prefHeight="40.0" prefWidth="360.0" promptText="Seleziona il tuo ruolo..." style="-fx-background-color: #f1f2f6;" />
+
+                <Button onAction="#loginAction" prefHeight="45.0" prefWidth="360.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="ENTRA">
+                    <font><Font name="System Bold" size="16.0" /></font>
+                    <VBox.margin><Insets top="10.0" /></VBox.margin>
+                </Button>
+            </children>
+            <padding><Insets bottom="40.0" left="40.0" right="40.0" top="40.0" /></padding>
+        </VBox>
+    </children>
+</VBox>
