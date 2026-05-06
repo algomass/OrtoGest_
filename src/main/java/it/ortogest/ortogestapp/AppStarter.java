@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
 
@@ -25,9 +26,9 @@ public class AppStarter extends Application {
             sceneManager.initStage(stage);
 
             // 2. Carico la schermata iniziale di login.
-            // N.B: Uso il path "/GUI/Login.fxml" perché Maven posiziona le risorse
+            // N.B: Uso il path in CostantiGUI perché Maven posiziona le risorse
             // direttamente nella root "target/classes/GUI" durante la compilazione.
-            sceneManager.cambiaScena("/GUI/Login.fxml");
+            sceneManager.cambiaScena(CostantiGUI.VIEW_LOGIN);
 
         } catch (IOException e) {
             // Gestione basilare degli errori di caricamento
