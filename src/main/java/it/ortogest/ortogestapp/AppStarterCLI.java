@@ -18,7 +18,7 @@ public class AppStarterCLI extends Application {
             // 3. Cambia il percorso per puntare al tuo file FXML iniziale
             SceneManager sceneManager = SceneManager.getInstance();
             sceneManager.initStage(stage);
-            sceneManager.cambiaScena("/GUI/Login.fxml");
+            sceneManager.cambiaScena(CostantiGUI.VIEW_LOGIN);
 
             stage.show();
         } catch (IOException e) {

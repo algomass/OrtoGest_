@@ -28,4 +28,14 @@ public class LottoDAO implements ILottoDAO {
         }
         return null;
     }
+
+    public List<Lotto> trovaPerProdotto(String nomeProdotto) {
+        List<Lotto> result = new ArrayList<>();
+        for (Lotto l : lottiDB) {
+            if (l.getTipologiaProdotto().getNome().equalsIgnoreCase(nomeProdotto)) {
+                result.add(l);
+            }
+        }
+        return result;
+    }
 }

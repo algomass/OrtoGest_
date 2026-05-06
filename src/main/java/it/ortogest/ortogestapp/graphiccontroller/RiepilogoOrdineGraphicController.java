@@ -4,6 +4,7 @@ import it.ortogest.ortogestapp.appcontroller.GestioneOrdiniAppController;
 import it.ortogest.ortogestapp.beans.RigaOrdineBean;
 import it.ortogest.ortogestapp.beans.UtenteBean;
 import it.ortogest.ortogestapp.utils.Printer;
+import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import it.ortogest.ortogestapp.utils.SessionManager;
 import javafx.collections.FXCollections;
@@ -25,6 +26,12 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
 
     @FXML
     private TableColumn<RigaOrdineBean, Void> colRimuovi;
+
+    @FXML
+    private TableColumn<RigaOrdineBean, Number> colPrezzoUnitario;
+
+    @FXML
+    private TableColumn<RigaOrdineBean, Number> colSubtotale;
 
     @FXML
     private Label recapTotaleLabel;
@@ -51,6 +58,34 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
     }
 
     private void setupTabellaRecap() {
+        if (colPrezzoUnitario != null) {
+            colPrezzoUnitario.setCellFactory(tc -> new TableCell<RigaOrdineBean, Number>() {
+                @Override
+                protected void updateItem(Number prezzo, boolean empty) {
+                    super.updateItem(prezzo, empty);
+                    if (empty || prezzo == null) {
+                        setText(null);
+                    } else {
+                        setText(String.format("%.2f", prezzo.doubleValue()));
+                    }
+                }
+            });
+        }
+
+        if (colSubtotale != null) {
+            colSubtotale.setCellFactory(tc -> new TableCell<RigaOrdineBean, Number>() {
+                @Override
+                protected void updateItem(Number subTotale, boolean empty) {
+                    super.updateItem(subTotale, empty);
+                    if (empty || subTotale == null) {
+                        setText(null);
+                    } else {
+                        setText(String.format("%.2f", subTotale.doubleValue()));
+                    }
+                }
+            });
+        }
+
         colRimuovi.setCellFactory(param -> new TableCell<RigaOrdineBean, Void>() {
             private final Button btn = new Button("Rimuovi");
             {
@@ -121,7 +156,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
 
     private void tornaAlCatalogo() {
         try {
-            SceneManager.getInstance().cambiaScena("/GUI/Cliente.fxml");
+            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_CLIENTE);
         } catch (IOException e) {
             Printer.perror("Errore critico nel ritorno al catalogo: " + e.getMessage());
         }

@@ -55,6 +55,23 @@ public class GestioneMagazzinoAppController {
         return nomi;
     }
 
+    public List<LottoBean> getLottiPerProdotto(String nomeProdotto) {
+        List<Lotto> lotti = lottoDAO.trovaPerProdotto(nomeProdotto);
+        List<LottoBean> beans = new ArrayList<>();
+        for (Lotto l : lotti) {
+            beans.add(new LottoBean(
+                    l.getIdLotto(),
+                    l.getNomeFornitore(),
+                    l.getTipologiaProdotto().getNome(),
+                    l.getQuantitaKg(),
+                    l.getDataArrivo(),
+                    l.getDataScadenza(),
+                    l.getCostoAcquisto()
+            ));
+        }
+        return beans;
+    }
+
     /**
      * Segnala un'anomalia di fornitura (merce mancante o danneggiata) e invia una mail al fornitore.
      * @param anomaliaBean I dati inseriti dalla vista.

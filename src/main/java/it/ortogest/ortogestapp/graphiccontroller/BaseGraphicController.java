@@ -1,6 +1,7 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
 import it.ortogest.ortogestapp.utils.Printer;
+import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import it.ortogest.ortogestapp.utils.SessionManager;
 import javafx.fxml.FXML;
@@ -22,7 +23,7 @@ public abstract class BaseGraphicController {
 
         // 2. Chiedo allo SceneManager di riportarmi alla view di Login
         try {
-            SceneManager.getInstance().cambiaScena("/GUI/Login.fxml");
+            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_LOGIN);
         } catch (IOException e) {
             Printer.perror("Errore critico durante il logout: impossibile ricaricare Login.fxml. " + e.getMessage());
         }

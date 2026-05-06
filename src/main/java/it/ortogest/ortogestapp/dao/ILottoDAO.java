@@ -7,4 +7,5 @@ public interface ILottoDAO {
     void salvaLotto(Lotto lotto);
     List<Lotto> getTuttiILotti();
     Lotto trovaPerId(String idLotto);
+    List<Lotto> trovaPerProdotto(String nomeProdotto);
 }

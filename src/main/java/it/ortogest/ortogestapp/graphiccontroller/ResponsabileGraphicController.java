@@ -4,6 +4,7 @@ import it.ortogest.ortogestapp.appcontroller.GestioneCatalogoAppController;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.model.CategoriaProdotto;
 import it.ortogest.ortogestapp.utils.Printer;
+import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -116,7 +117,7 @@ public class ResponsabileGraphicController {
     public void logoutAction() {
         try {
             // Effettuiamo un logout pulendo eventualmente la sessione (da implementare nel SessionManager se necessario)
-            SceneManager.getInstance().cambiaScena("/GUI/Login.fxml");
+            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_LOGIN);
         } catch (IOException e) {
             Printer.perror("Errore nel ritorno al login: " + e.getMessage());
         }

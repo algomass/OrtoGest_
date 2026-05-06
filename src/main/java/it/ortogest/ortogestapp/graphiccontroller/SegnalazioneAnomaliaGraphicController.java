@@ -3,6 +3,7 @@ package it.ortogest.ortogestapp.graphiccontroller;
 import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
 import it.ortogest.ortogestapp.beans.AnomaliaBean;
 import it.ortogest.ortogestapp.utils.Printer;
+import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -73,7 +74,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
         Printer.printf(messaggioRisultato);
         
         try {
-            SceneManager.getInstance().cambiaScena("/GUI/Magazzino.fxml");
+            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_MAGAZZINO);
         } catch (IOException e) {
             Printer.perror("Errore tornando al Magazzino: " + e.getMessage());
         }
@@ -82,7 +83,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
     @FXML
     public void annullaAction() {
         try {
-            SceneManager.getInstance().cambiaScena("/GUI/Magazzino.fxml");
+            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_MAGAZZINO);
         } catch (IOException e) {
             Printer.perror("Errore tornando al Magazzino: " + e.getMessage());
         }

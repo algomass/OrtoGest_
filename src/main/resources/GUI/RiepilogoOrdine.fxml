@@ -47,10 +47,10 @@
                         <TableColumn prefWidth="120.0" text="Quantità (Kg)">
                             <cellValueFactory><PropertyValueFactory property="quantita" /></cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="150.0" text="Prezzo Unit. (€/Kg)">
+                        <TableColumn fx:id="colPrezzoUnitario" prefWidth="150.0" text="Prezzo Unit. (€/Kg)">
                             <cellValueFactory><PropertyValueFactory property="prezzoUnitario" /></cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="150.0" text="Subtotale (€)">
+                        <TableColumn fx:id="colSubtotale" prefWidth="150.0" text="Subtotale (€)">
                             <cellValueFactory><PropertyValueFactory property="subtotale" /></cellValueFactory>
                         </TableColumn>
                         <TableColumn fx:id="colRimuovi" prefWidth="120.0" text="Azioni" />
@@ -73,10 +73,10 @@
                     <children>
                         <Button onAction="#annullaAction" prefHeight="50.0" prefWidth="200.0" 
                                 style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16; -fx-background-radius: 10; -fx-cursor: hand;" 
-                                text="❌ TORNA INDIETRO" />
+                                text="TORNA INDIETRO" />
                         <Button onAction="#inviaOrdineAction" prefHeight="50.0" prefWidth="350.0" 
                                 style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18; -fx-background-radius: 10; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);" 
-                                text="🚀 INVIA ORDINE DEFINITIVO" />
+                                text="INVIA ORDINE DEFINITIVO" />
                     </children>
                     <padding><Insets top="20.0" /></padding>
                 </HBox>

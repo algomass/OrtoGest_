@@ -7,6 +7,7 @@ import it.ortogest.ortogestapp.beans.RigaOrdineBean;
 import it.ortogest.ortogestapp.beans.UtenteBean;
 import it.ortogest.ortogestapp.model.CategoriaProdotto;
 import it.ortogest.ortogestapp.utils.Printer;
+import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import it.ortogest.ortogestapp.utils.SessionManager;
 import javafx.collections.FXCollections;
@@ -56,6 +57,9 @@ public class ClienteGraphicController extends BaseGraphicController {
     private Label titoloSezione;
 
     @FXML
+    private TextField searchField;
+
+    @FXML
     private Button btnFrutta;
 
     @FXML
@@ -102,6 +106,7 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void mostraFruttaAction() {
+        if (searchField != null) searchField.clear();
         aggiornaStileSidebar(btnFrutta);
         titoloSezione.setText("Catalogo — Frutta");
         mostraCatalogo();
@@ -110,6 +115,7 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void mostraVerduraAction() {
+        if (searchField != null) searchField.clear();
         aggiornaStileSidebar(btnVerdura);
         titoloSezione.setText("Catalogo — Verdura");
         mostraCatalogo();
@@ -118,13 +124,20 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void mostraOrdiniAction() {
+        if (searchField != null) searchField.clear();
         aggiornaStileSidebar(btnOrdini);
         titoloSezione.setText("I Miei Ordini");
         mostraOrdini();
         caricaOrdiniCliente();
     }
 
-    // ==================== LOGICA DI VISUALIZZAZIONE ====================
+    // ==================== LOGICA DI VISUALIZZAZIONE E RICERCA ====================
+
+    @FXML
+    public void cercaProdottoAction() {
+        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA : CategoriaProdotto.FRUTTA;
+        caricaProdottiPerCategoria(cat);
+    }
 
     private void mostraCatalogo() {
         scrollPaneCatalogo.setVisible(true);
@@ -144,15 +157,14 @@ public class ClienteGraphicController extends BaseGraphicController {
         List<ProdottoBean> prodotti = appController.getCatalogoPerCategoria(categoria);
         flowPaneProdotti.getChildren().clear();
 
-        if (prodotti.isEmpty()) {
-            Label vuoto = new Label("Nessun prodotto disponibile in questa categoria.");
-            vuoto.setTextFill(Color.web("#7f8c8d"));
-            vuoto.setStyle("-fx-font-size: 14;");
-            flowPaneProdotti.getChildren().add(vuoto);
-            return;
-        }
+        String filter = (searchField != null && searchField.getText() != null) ? searchField.getText().trim().toLowerCase() : "";
 
+        boolean trovati = false;
         for (ProdottoBean prodotto : prodotti) {
+            if (!filter.isEmpty() && !prodotto.getNome().toLowerCase().contains(filter)) {
+                continue;
+            }
+            trovati = true;
             // Sottrai la quantità già presente nel carrello
             double giacenzaResidua = prodotto.getGiacenza();
             for (RigaOrdineBean r : carrello) {
@@ -164,6 +176,13 @@ public class ClienteGraphicController extends BaseGraphicController {
 
             VBox card = creaProdottoCard(prodotto);
             flowPaneProdotti.getChildren().add(card);
+        }
+
+        if (!trovati) {
+            Label vuoto = new Label(filter.isEmpty() ? "Nessun prodotto disponibile in questa categoria." : "Nessun prodotto corrisponde alla ricerca.");
+            vuoto.setTextFill(Color.web("#7f8c8d"));
+            vuoto.setStyle("-fx-font-size: 14;");
+            flowPaneProdotti.getChildren().add(vuoto);
         }
     }
 
@@ -241,7 +260,7 @@ public class ClienteGraphicController extends BaseGraphicController {
             SessionManager.getInstance().setCarrelloCorrente(carrello);
 
             // Cambia scena verso il file FXML dedicato
-            SceneManager.getInstance().cambiaScena("/GUI/RiepilogoOrdine.fxml");
+            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_RIEPILOGO_ORDINE);
 
         } catch (IOException e) {
             mostraMessaggio("Errore nel caricamento del riepilogo: " + e.getMessage(), false);

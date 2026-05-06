@@ -4,6 +4,7 @@ import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.utils.Printer;
+import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,7 +40,7 @@ public class RegistrazioneLottoGraphicController {
     @FXML
     public void indietroAction() {
         try {
-            SceneManager.getInstance().cambiaScena("/GUI/Magazzino.fxml");
+            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_MAGAZZINO);
         } catch (IOException e) {
             Printer.perror("Errore nel ritorno al magazzino: " + e.getMessage());
         }
@@ -48,7 +49,7 @@ public class RegistrazioneLottoGraphicController {
     @FXML
     public void segnalaAnomaliaAction() {
         try {
-            SceneManager.getInstance().cambiaScena("/GUI/SegnalazioneAnomalia.fxml");
+            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_SEGNALAZIONE_ANOMALIA);
         } catch (IOException e) {
             Printer.perror("Errore nell'apertura della schermata di segnalazione: " + e.getMessage());
         }
