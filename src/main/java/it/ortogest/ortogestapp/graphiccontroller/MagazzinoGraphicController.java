@@ -42,32 +42,41 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         colPrezzo.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPrezzoAttuale()));
         colGiacenza.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getGiacenza()));
 
+        setupRowFactory();
+        caricaInventario();
+    }
+
+    private void setupRowFactory() {
         inventarioTable.setRowFactory(tv -> {
             javafx.scene.control.TableRow<ProdottoBean> row = new javafx.scene.control.TableRow<ProdottoBean>() {
                 @Override
                 protected void updateItem(ProdottoBean item, boolean empty) {
                     super.updateItem(item, empty);
-                    if (item == null || empty) {
-                        setStyle("");
-                    } else {
-                        String filter = searchField != null && searchField.getText() != null ? searchField.getText().trim().toLowerCase() : "";
-                        if (!filter.isEmpty() && item.getNome().toLowerCase().contains(filter)) {
-                            setStyle("-fx-background-color: #ffcccc;");
-                        } else {
-                            setStyle("");
-                        }
-                    }
+                    applyRowStyle(this, item, empty);
                 }
             };
-            row.setOnMouseClicked(event -> {
-                if (!row.isEmpty() && event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2) {
-                    mostraLottiProdotto(row.getItem().getNome());
-                }
-            });
+            row.setOnMouseClicked(event -> handleRowClick(row, event));
             return row;
         });
+    }
 
-        caricaInventario();
+    private void applyRowStyle(javafx.scene.control.TableRow<ProdottoBean> row, ProdottoBean item, boolean empty) {
+        if (item == null || empty) {
+            row.setStyle("");
+            return;
+        }
+        String filter = searchField != null && searchField.getText() != null ? searchField.getText().trim().toLowerCase() : "";
+        if (!filter.isEmpty() && item.getNome().toLowerCase().contains(filter)) {
+            row.setStyle("-fx-background-color: #ffcccc;");
+        } else {
+            row.setStyle("");
+        }
+    }
+
+    private void handleRowClick(javafx.scene.control.TableRow<ProdottoBean> row, javafx.scene.input.MouseEvent event) {
+        if (!row.isEmpty() && event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2) {
+            mostraLottiProdotto(row.getItem().getNome());
+        }
     }
 
     @FXML

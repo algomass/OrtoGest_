@@ -58,6 +58,12 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
     }
 
     private void setupTabellaRecap() {
+        setupColonnaPrezzoUnitario();
+        setupColonnaSubtotale();
+        setupColonnaRimuovi();
+    }
+
+    private void setupColonnaPrezzoUnitario() {
         if (colPrezzoUnitario != null) {
             colPrezzoUnitario.setCellFactory(tc -> new TableCell<RigaOrdineBean, Number>() {
                 @Override
@@ -71,7 +77,9 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
                 }
             });
         }
+    }
 
+    private void setupColonnaSubtotale() {
         if (colSubtotale != null) {
             colSubtotale.setCellFactory(tc -> new TableCell<RigaOrdineBean, Number>() {
                 @Override
@@ -85,7 +93,9 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
                 }
             });
         }
+    }
 
+    private void setupColonnaRimuovi() {
         colRimuovi.setCellFactory(param -> new TableCell<RigaOrdineBean, Void>() {
             private final Button btn = new Button("Rimuovi");
             {

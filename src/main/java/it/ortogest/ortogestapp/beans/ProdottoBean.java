@@ -18,20 +18,46 @@ public class ProdottoBean {
         this.immaginePath = immaginePath;
     }
 
-    public ProdottoBean() {}
+    public ProdottoBean() {
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public String getNome() {
+        return nome;
+    }
 
-    public double getPrezzoAttuale() { return prezzoAttuale; }
-    public void setPrezzoAttuale(double prezzoAttuale) { this.prezzoAttuale = prezzoAttuale; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public double getGiacenza() { return giacenza; }
-    public void setGiacenza(double giacenza) { this.giacenza = giacenza; }
+    public double getPrezzoAttuale() {
+        return prezzoAttuale;
+    }
 
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public void setPrezzoAttuale(double prezzoAttuale) {
+        this.prezzoAttuale = prezzoAttuale;
+    }
 
-    public String getImmaginePath() { return immaginePath; }
-    public void setImmaginePath(String immaginePath) { this.immaginePath = immaginePath; }
+    public double getGiacenza() {
+        return giacenza;
+    }
+
+    public void setGiacenza(double giacenza) {
+        this.giacenza = giacenza;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getImmaginePath() {
+        return immaginePath;
+    }
+
+    public void setImmaginePath(String immaginePath) {
+        this.immaginePath = immaginePath;
+    }
 }
