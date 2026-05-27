@@ -5,7 +5,7 @@ module it.ortogest.ortogestapp {
     requires java.logging;
 
     // Se usi JDBC per il database, decommenta la riga sotto:
-    // requires java.sql;
+    requires java.sql;
 
     // 1. Apri ed esporta il package root (dove si trova AppStarter)
     exports it.ortogest.ortogestapp;

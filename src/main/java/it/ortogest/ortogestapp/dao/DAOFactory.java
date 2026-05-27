@@ -18,18 +18,18 @@ public class DAOFactory {
     }
     
     public IProdottoDAO getProdottoDAO() {
-        return new ProdottoDAO();
+        return new ProdottoDAOJdbc();
     }
     
     public ILottoDAO getLottoDAO() {
-        return new LottoDAO();
+        return new LottoDAOJdbc();
     }
     
     public IOrdineDAO getOrdineDAO() {
-        return new OrdineDAO();
+        return new OrdineDAOJdbc();
     }
     
     public IUtenteDAO getUtenteDAO() {
-        return new UtenteDAO();
+        return new UtenteDAOJdbc();
     }
 }
