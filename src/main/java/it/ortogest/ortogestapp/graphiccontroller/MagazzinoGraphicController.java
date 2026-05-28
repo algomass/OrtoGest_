@@ -14,6 +14,19 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.geometry.Insets;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import java.time.LocalDate;
+import java.util.Optional;
+import it.ortogest.ortogestapp.beans.LottoBean;
+import it.ortogest.ortogestapp.exception.GestioneException;
 
 import java.io.IOException;
 import java.util.List;
@@ -86,27 +99,113 @@ public class MagazzinoGraphicController extends BaseGraphicController {
 
     private void mostraLottiProdotto(String nomeProdotto) {
         GestioneMagazzinoAppController controller = new GestioneMagazzinoAppController();
-        List<it.ortogest.ortogestapp.beans.LottoBean> lotti = controller.getLottiPerProdotto(nomeProdotto);
         
-        StringBuilder sb = new StringBuilder();
-        if (lotti.isEmpty()) {
-            sb.append("Nessun lotto registrato per questo prodotto.");
-        } else {
-            for (it.ortogest.ortogestapp.beans.LottoBean l : lotti) {
-                sb.append("ID Lotto: ").append(l.getIdLotto())
-                  .append("\nQuantità: ").append(l.getQuantitaKg()).append(" Kg")
-                  .append("\nArrivo: ").append(l.getDataArrivo())
-                  .append("\nScadenza: ").append(l.getDataScadenza())
-                  .append("\nFornitore: ").append(l.getNomeFornitore())
-                  .append("\n\n");
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Gestione Lotti");
+        dialog.setHeaderText("Lotti registrati per: " + nomeProdotto);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+        TableView<LottoBean> table = new TableView<>();
+        ObservableList<LottoBean> data = FXCollections.observableArrayList(controller.getLottiPerProdotto(nomeProdotto));
+        table.setItems(data);
+
+        TableColumn<LottoBean, String> colId = new TableColumn<>("ID");
+        colId.setCellValueFactory(new PropertyValueFactory<>("idLotto"));
+        
+        TableColumn<LottoBean, String> colFornitore = new TableColumn<>("Fornitore");
+        colFornitore.setCellValueFactory(new PropertyValueFactory<>("nomeFornitore"));
+        
+        TableColumn<LottoBean, Double> colQuantita = new TableColumn<>("Quantità (Kg)");
+        colQuantita.setCellValueFactory(new PropertyValueFactory<>("quantitaKg"));
+        
+        TableColumn<LottoBean, LocalDate> colArrivo = new TableColumn<>("Arrivo");
+        colArrivo.setCellValueFactory(new PropertyValueFactory<>("dataArrivo"));
+        
+        TableColumn<LottoBean, LocalDate> colScadenza = new TableColumn<>("Scadenza");
+        colScadenza.setCellValueFactory(new PropertyValueFactory<>("dataScadenza"));
+
+        table.getColumns().addAll(colId, colFornitore, colQuantita, colArrivo, colScadenza);
+
+        Button btnModifica = new Button("Modifica");
+        Button btnElimina = new Button("Elimina");
+
+        btnModifica.setOnAction(e -> {
+            LottoBean selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                apriModificaLottoDialog(selected, nomeProdotto, controller);
+                table.setItems(FXCollections.observableArrayList(controller.getLottiPerProdotto(nomeProdotto)));
+                caricaInventario();
+            }
+        });
+
+        btnElimina.setOnAction(e -> {
+            LottoBean selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                try {
+                    controller.eliminaLotto(selected.getIdLotto());
+                    table.setItems(FXCollections.observableArrayList(controller.getLottiPerProdotto(nomeProdotto)));
+                    caricaInventario();
+                    Printer.printf("Lotto eliminato con successo.");
+                } catch (GestioneException ex) {
+                    Alert err = new Alert(Alert.AlertType.ERROR, ex.getMessage());
+                    err.showAndWait();
+                }
+            }
+        });
+
+        HBox buttonBox = new HBox(10, btnModifica, btnElimina);
+        buttonBox.setPadding(new Insets(10, 0, 0, 0));
+
+        VBox vbox = new VBox(table, buttonBox);
+        vbox.setPadding(new Insets(10));
+        
+        dialog.getDialogPane().setContent(vbox);
+        dialog.showAndWait();
+    }
+
+    private void apriModificaLottoDialog(LottoBean lotto, String nomeProdotto, GestioneMagazzinoAppController controller) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Modifica Lotto");
+        dialog.setHeaderText("Modifica lotto ID: " + lotto.getIdLotto());
+        
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        TextField txtFornitore = new TextField(lotto.getNomeFornitore());
+        TextField txtQuantita = new TextField(String.valueOf(lotto.getQuantitaKg()));
+        DatePicker dpArrivo = new DatePicker(lotto.getDataArrivo());
+        DatePicker dpScadenza = new DatePicker(lotto.getDataScadenza());
+        TextField txtCosto = new TextField(String.valueOf(lotto.getCostoAcquisto()));
+
+        VBox vbox = new VBox(10);
+        vbox.getChildren().addAll(
+            new Label("Fornitore:"), txtFornitore,
+            new Label("Quantità (Kg):"), txtQuantita,
+            new Label("Data Arrivo:"), dpArrivo,
+            new Label("Data Scadenza:"), dpScadenza,
+            new Label("Costo Acquisto:"), txtCosto
+        );
+        dialog.getDialogPane().setContent(vbox);
+
+        Optional<ButtonType> res = dialog.showAndWait();
+        if (res.isPresent() && res.get() == ButtonType.OK) {
+            try {
+                LottoBean nuovo = new LottoBean(
+                    lotto.getIdLotto(),
+                    txtFornitore.getText(),
+                    nomeProdotto,
+                    Double.parseDouble(txtQuantita.getText()),
+                    dpArrivo.getValue(),
+                    dpScadenza.getValue(),
+                    Double.parseDouble(txtCosto.getText())
+                );
+                controller.modificaLotto(nuovo);
+                Printer.printf("Lotto modificato con successo.");
+            } catch (NumberFormatException ex) {
+                new Alert(Alert.AlertType.ERROR, "Valori numerici non validi.").showAndWait();
+            } catch (GestioneException ex) {
+                new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
             }
         }
-        
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Dettagli Lotti");
-        alert.setHeaderText("Dati Documento Trasporto - " + nomeProdotto);
-        alert.setContentText(sb.toString());
-        alert.showAndWait();
     }
 
     private void caricaInventario() {

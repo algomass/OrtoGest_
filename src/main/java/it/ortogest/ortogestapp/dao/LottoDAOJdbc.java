@@ -114,4 +114,17 @@ public class LottoDAOJdbc implements ILottoDAO {
             rs.getDouble("costo_acquisto")
         );
     }
+
+    @Override
+    public void eliminaLotto(String idLotto) {
+        String sql = "DELETE FROM lotto WHERE id_lotto = ?";
+        try (Connection conn = DatabaseHelper.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setString(1, idLotto);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            Printer.perror("Errore in eliminaLotto: " + e.getMessage());
+        }
+    }
 }

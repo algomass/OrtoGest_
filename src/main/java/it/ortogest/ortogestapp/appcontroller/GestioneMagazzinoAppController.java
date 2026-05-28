@@ -150,11 +150,65 @@ public class GestioneMagazzinoAppController {
 
         // 5. Aggiornamento Giacenza Prodotto
         prodotto.aggiungiGiacenza(lotto.getQuantitaKg());
+        prodottoDAO.salvaProdotto(prodotto); // Salvataggio aggiornamento prodotto
 
-        // 6. Salvataggio
+        // 6. Salvataggio Lotto
         lottoDAO.salvaLotto(lotto);
 
         // 7. Ritorno Bean per conferma
         return bean;
+    }
+
+    public void eliminaLotto(String idLotto) throws GestioneException {
+        Lotto lotto = lottoDAO.trovaPerId(idLotto);
+        if (lotto == null) {
+            throw new GestioneException("Lotto non trovato.");
+        }
+        
+        Prodotto prodotto = lotto.getTipologiaProdotto();
+        
+        // Verifica se è l'ultimo lotto per questo prodotto
+        List<Lotto> lottiEsistenti = lottoDAO.trovaPerProdotto(prodotto.getNome());
+        boolean isUltimoLotto = (lottiEsistenti.size() == 1 && lottiEsistenti.get(0).getIdLotto().equals(idLotto));
+        
+        lottoDAO.eliminaLotto(idLotto);
+        
+        if (isUltimoLotto) {
+            // Elimina il prodotto dalla tabella principale se era l'ultimo lotto
+            prodottoDAO.eliminaProdotto(prodotto.getNome());
+        } else {
+            // Altrimenti sottrai la quantità, assicurandoti che non diventi negativa
+            prodotto.sottraiGiacenza(lotto.getQuantitaKg());
+            if (prodotto.getQuantitaTotaleDisponibile() < 0) {
+                prodotto.setQuantitaTotaleDisponibile(0);
+            }
+            prodottoDAO.salvaProdotto(prodotto);
+        }
+    }
+
+    public void modificaLotto(LottoBean beanNuovo) throws GestioneException {
+        Lotto lottoVecchio = lottoDAO.trovaPerId(beanNuovo.getIdLotto());
+        if (lottoVecchio == null) {
+            throw new GestioneException("Lotto non trovato.");
+        }
+        
+        double diff = beanNuovo.getQuantitaKg() - lottoVecchio.getQuantitaKg();
+        
+        Prodotto prodotto = lottoVecchio.getTipologiaProdotto();
+        prodotto.aggiungiGiacenza(diff);
+        
+        // Evita che la giacenza diventi negativa
+        if (prodotto.getQuantitaTotaleDisponibile() < 0) {
+            prodotto.setQuantitaTotaleDisponibile(0);
+        }
+        prodottoDAO.salvaProdotto(prodotto);
+        
+        lottoVecchio.setNomeFornitore(beanNuovo.getNomeFornitore());
+        lottoVecchio.setQuantitaKg(beanNuovo.getQuantitaKg());
+        lottoVecchio.setDataArrivo(beanNuovo.getDataArrivo());
+        lottoVecchio.setDataScadenza(beanNuovo.getDataScadenza());
+        lottoVecchio.setCostoAcquisto(beanNuovo.getCostoAcquisto());
+        
+        lottoDAO.salvaLotto(lottoVecchio);
     }
 }

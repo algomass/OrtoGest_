@@ -60,8 +60,8 @@ public class GestioneCatalogoAppController {
             p.setCategoria(bean.getCategoria());
         }
 
-        // Nel caso di un DB reale, qui chiameremmo prodottoDAO.aggiorna(p);
-        // Poiché usiamo un Mock in memoria basato su reference, la modifica si propaga automaticamente.
+        // Salviamo il prodotto aggiornato nel database reale
+        prodottoDAO.salvaProdotto(p);
 
         return bean;
     }

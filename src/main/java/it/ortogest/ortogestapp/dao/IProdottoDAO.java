@@ -8,4 +8,5 @@ public interface IProdottoDAO {
     void salvaProdotto(Prodotto prodotto);
     Prodotto trovaPerNome(String nome);
     List<Prodotto> trovaPerCategoria(String categoria);
+    void eliminaProdotto(String nome);
 }

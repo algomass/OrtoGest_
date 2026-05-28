@@ -103,4 +103,17 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
             rs.getString("immagine_path")
         );
     }
+
+    @Override
+    public void eliminaProdotto(String nome) {
+        String sql = "DELETE FROM prodotto WHERE nome = ?";
+        try (Connection conn = DatabaseHelper.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setString(1, nome);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            Printer.perror("Errore in eliminaProdotto: " + e.getMessage());
+        }
+    }
 }

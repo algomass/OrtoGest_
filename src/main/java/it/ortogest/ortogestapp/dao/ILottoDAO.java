@@ -8,4 +8,5 @@ public interface ILottoDAO {
     List<Lotto> getTuttiILotti();
     Lotto trovaPerId(String idLotto);
     List<Lotto> trovaPerProdotto(String nomeProdotto);
+    void eliminaLotto(String idLotto);
 }
