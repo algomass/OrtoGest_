@@ -13,7 +13,7 @@ public class UtenteDAOJdbc implements IUtenteDAO {
 
     @Override
     public Utente verificaCredenziali(String email, String password) {
-        String sql = "SELECT * FROM utente WHERE email = ? AND password = ?";
+        String sql = "SELECT email, password, ruolo FROM utente WHERE email = ? AND password = ?";
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
              

@@ -14,7 +14,7 @@ public class DatabaseHelper {
     private static DatabaseHelper instance;
     private static final String DB_URL = "jdbc:mysql://localhost:3306/ortogest?createDatabaseIfNotExist=true";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "root"; // Imposta qui la password del tuo server MySQL locale
+    private static final String DB_PASS = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "root";
 
     private DatabaseHelper() {
         try {

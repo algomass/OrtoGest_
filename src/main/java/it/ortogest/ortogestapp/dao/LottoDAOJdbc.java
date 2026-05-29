@@ -47,7 +47,7 @@ public class LottoDAOJdbc implements ILottoDAO {
     @Override
     public List<Lotto> getTuttiILotti() {
         List<Lotto> lotti = new ArrayList<>();
-        String sql = "SELECT * FROM lotto";
+        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto FROM lotto";
         
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -64,7 +64,7 @@ public class LottoDAOJdbc implements ILottoDAO {
 
     @Override
     public Lotto trovaPerId(String idLotto) {
-        String sql = "SELECT * FROM lotto WHERE id_lotto = ?";
+        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto FROM lotto WHERE id_lotto = ?";
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
              
@@ -83,7 +83,7 @@ public class LottoDAOJdbc implements ILottoDAO {
     @Override
     public List<Lotto> trovaPerProdotto(String nomeProdotto) {
         List<Lotto> lotti = new ArrayList<>();
-        String sql = "SELECT * FROM lotto WHERE nome_prodotto = ?";
+        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto FROM lotto WHERE nome_prodotto = ?";
         
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

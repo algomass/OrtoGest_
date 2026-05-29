@@ -57,7 +57,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
     @Override
     public List<Ordine> trovaOrdiniCliente(String emailCliente) {
         List<Ordine> ordini = new ArrayList<>();
-        String sql = "SELECT * FROM ordine WHERE email_cliente = ?";
+        String sql = "SELECT id_ordine, stato FROM ordine WHERE email_cliente = ?";
         
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -79,7 +79,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
     
     private List<RigaOrdine> caricaRigheOrdine(Connection conn, String idOrdine) throws SQLException {
         List<RigaOrdine> righe = new ArrayList<>();
-        String sql = "SELECT * FROM riga_ordine WHERE id_ordine = ?";
+        String sql = "SELECT nome_prodotto, quantita, prezzo_fissato FROM riga_ordine WHERE id_ordine = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, idOrdine);
             try (ResultSet rs = stmt.executeQuery()) {

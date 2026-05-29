@@ -16,7 +16,7 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
     @Override
     public List<Prodotto> getTuttiIProdotti() {
         List<Prodotto> prodotti = new ArrayList<>();
-        String sql = "SELECT * FROM prodotto";
+        String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto";
         
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -58,7 +58,7 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
 
     @Override
     public Prodotto trovaPerNome(String nome) {
-        String sql = "SELECT * FROM prodotto WHERE nome = ?";
+        String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto WHERE nome = ?";
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
              
@@ -77,7 +77,7 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
     @Override
     public List<Prodotto> trovaPerCategoria(String categoria) {
         List<Prodotto> prodotti = new ArrayList<>();
-        String sql = "SELECT * FROM prodotto WHERE categoria = ?";
+        String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto WHERE categoria = ?";
         
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
