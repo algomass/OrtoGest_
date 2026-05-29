@@ -111,6 +111,7 @@ public class GestioneOrdiniAppController {
         for (it.ortogest.ortogestapp.model.RigaOrdine riga : righeModello) {
             Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
             p.sottraiGiacenza(riga.getQuantita());
+            prodottoDAO.salvaProdotto(p);
         }
         
         return "Ordine completato con ID: " + idOrdine;

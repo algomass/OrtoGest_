@@ -143,9 +143,15 @@ public class MagazzinoGraphicController extends BaseGraphicController {
             if (selected != null) {
                 try {
                     controller.eliminaLotto(selected.getIdLotto());
-                    table.setItems(FXCollections.observableArrayList(controller.getLottiPerProdotto(nomeProdotto)));
+                    List<LottoBean> lottiRimanenti = controller.getLottiPerProdotto(nomeProdotto);
+                    table.setItems(FXCollections.observableArrayList(lottiRimanenti));
                     caricaInventario();
                     Printer.printf("Lotto eliminato con successo.");
+                    
+                    if (lottiRimanenti.isEmpty()) {
+                        dialog.setResult(null);
+                        dialog.close();
+                    }
                 } catch (GestioneException ex) {
                     Alert err = new Alert(Alert.AlertType.ERROR, ex.getMessage());
                     err.showAndWait();

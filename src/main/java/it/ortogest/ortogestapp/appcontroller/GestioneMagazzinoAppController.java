@@ -41,7 +41,11 @@ public class GestioneMagazzinoAppController {
         List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
         List<ProdottoBean> beans = new ArrayList<>();
         for (Prodotto p : prodotti) {
-            beans.add(new ProdottoBean(p.getNome(), p.getPrezzoAttuale(), p.getQuantitaTotaleDisponibile(), p.getCategoria(), p.getImmaginePath()));
+            // Mostra solo i prodotti che hanno almeno un lotto registrato
+            List<Lotto> lotti = lottoDAO.trovaPerProdotto(p.getNome());
+            if (!lotti.isEmpty()) {
+                beans.add(new ProdottoBean(p.getNome(), p.getPrezzoAttuale(), p.getQuantitaTotaleDisponibile(), p.getCategoria(), p.getImmaginePath()));
+            }
         }
         return beans;
     }
@@ -173,16 +177,16 @@ public class GestioneMagazzinoAppController {
         
         lottoDAO.eliminaLotto(idLotto);
         
+        // Sottrai sempre la quantità, assicurandoti che non diventi negativa
+        prodotto.sottraiGiacenza(lotto.getQuantitaKg());
+        if (prodotto.getQuantitaTotaleDisponibile() < 0) {
+            prodotto.setQuantitaTotaleDisponibile(0);
+        }
+        prodottoDAO.salvaProdotto(prodotto);
+        
         if (isUltimoLotto) {
             // Elimina il prodotto dalla tabella principale se era l'ultimo lotto
             prodottoDAO.eliminaProdotto(prodotto.getNome());
-        } else {
-            // Altrimenti sottrai la quantità, assicurandoti che non diventi negativa
-            prodotto.sottraiGiacenza(lotto.getQuantitaKg());
-            if (prodotto.getQuantitaTotaleDisponibile() < 0) {
-                prodotto.setQuantitaTotaleDisponibile(0);
-            }
-            prodottoDAO.salvaProdotto(prodotto);
         }
     }
 
