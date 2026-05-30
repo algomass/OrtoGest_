@@ -16,7 +16,7 @@ public class LottoDAO implements ILottoDAO {
         lottiDB.add(lotto);
     }
 
-    public List<Lotto> getTuttiILotti() {
+    public List<Loatto> getTuttiILotti() {
         return new ArrayList<>(lottiDB);
     }
     

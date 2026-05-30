@@ -124,7 +124,11 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         TableColumn<LottoBean, LocalDate> colScadenza = new TableColumn<>("Scadenza");
         colScadenza.setCellValueFactory(new PropertyValueFactory<>("dataScadenza"));
 
-        table.getColumns().addAll(colId, colFornitore, colQuantita, colArrivo, colScadenza);
+        table.getColumns().add(colId);
+        table.getColumns().add(colFornitore);
+        table.getColumns().add(colQuantita);
+        table.getColumns().add(colArrivo);
+        table.getColumns().add(colScadenza);
 
         Button btnModifica = new Button("Modifica");
         Button btnElimina = new Button("Elimina");
