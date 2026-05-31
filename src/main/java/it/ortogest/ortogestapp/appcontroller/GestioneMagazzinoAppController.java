@@ -44,7 +44,9 @@ public class GestioneMagazzinoAppController {
             // Mostra solo i prodotti che hanno almeno un lotto registrato
             List<Lotto> lotti = lottoDAO.trovaPerProdotto(p.getNome());
             if (!lotti.isEmpty()) {
-                beans.add(new ProdottoBean(p.getNome(), p.getPrezzoAttuale(), p.getQuantitaTotaleDisponibile(), p.getCategoria(), p.getImmaginePath()));
+                ProdottoBean bean = new ProdottoBean(p.getNome(), p.getPrezzoAttuale(), p.getQuantitaTotaleDisponibile(), p.getCategoria(), p.getImmaginePath());
+                bean.setPrezzoAcquistoMedio(lottoDAO.getPrezzoMedioAcquisto(p.getNome()));
+                beans.add(bean);
             }
         }
         return beans;

@@ -131,4 +131,23 @@ public class GestioneOrdiniAppController {
         }
         return ordineBeans;
     }
+
+    public void eliminaOrdine(String idOrdine) throws GestioneException {
+        Ordine ordine = ordineDAO.trovaOrdinePerId(idOrdine);
+        if (ordine == null) {
+            throw new GestioneException("Ordine non trovato.");
+        }
+        
+        // Ripristina le giacenze dei prodotti
+        for (it.ortogest.ortogestapp.model.RigaOrdine riga : ordine.getRighe()) {
+            Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
+            if (p != null) {
+                p.aggiungiGiacenza(riga.getQuantita());
+                prodottoDAO.salvaProdotto(p);
+            }
+        }
+        
+        // Elimina l'ordine (e le righe associate) dal database
+        ordineDAO.eliminaOrdine(idOrdine);
+    }
 }

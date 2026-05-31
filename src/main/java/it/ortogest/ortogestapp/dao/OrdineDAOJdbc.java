@@ -94,4 +94,49 @@ public class OrdineDAOJdbc implements IOrdineDAO {
         }
         return righe;
     }
+
+    @Override
+    public Ordine trovaOrdinePerId(String idOrdine) {
+        String sql = "SELECT email_cliente, stato FROM ordine WHERE id_ordine = ?";
+        try (Connection conn = DatabaseHelper.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setString(1, idOrdine);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String emailCliente = rs.getString("email_cliente");
+                    String stato = rs.getString("stato");
+                    List<RigaOrdine> righe = caricaRigheOrdine(conn, idOrdine);
+                    return new Ordine(idOrdine, emailCliente, righe, stato);
+                }
+            }
+        } catch (SQLException e) {
+            Printer.perror("Errore in trovaOrdinePerId: " + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public void eliminaOrdine(String idOrdine) {
+        String sqlRiga = "DELETE FROM riga_ordine WHERE id_ordine = ?";
+        String sqlOrdine = "DELETE FROM ordine WHERE id_ordine = ?";
+
+        try (Connection conn = DatabaseHelper.getInstance().getConnection()) {
+            conn.setAutoCommit(false); // Transazione
+
+            try (PreparedStatement stmtRiga = conn.prepareStatement(sqlRiga)) {
+                stmtRiga.setString(1, idOrdine);
+                stmtRiga.executeUpdate();
+            }
+
+            try (PreparedStatement stmtOrdine = conn.prepareStatement(sqlOrdine)) {
+                stmtOrdine.setString(1, idOrdine);
+                stmtOrdine.executeUpdate();
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            Printer.perror("Errore in eliminaOrdine: " + e.getMessage());
+        }
+    }
 }

@@ -118,6 +118,12 @@
                                     </TableColumn>
                                 </columns>
                             </TableView>
+                            
+                            <HBox alignment="CENTER_RIGHT" spacing="10.0" style="-fx-padding: 15 0 0 0;">
+                                <children>
+                                    <Button text="Rimuovi Ordine Selezionato" onAction="#rimuoviOrdineAction" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" />
+                                </children>
+                            </HBox>
                         </children>
                     </VBox>
                 </StackPane>

@@ -21,6 +21,7 @@ public class ResponsabileGraphicController {
     @FXML private TableColumn<ProdottoBean, String> colNome;
     @FXML private TableColumn<ProdottoBean, String> colCategoria;
     @FXML private TableColumn<ProdottoBean, Double> colGiacenza;
+    @FXML private TableColumn<ProdottoBean, Double> colPrezzoAcquisto;
     @FXML private TableColumn<ProdottoBean, Double> colPrezzo;
 
     @FXML private TextField prodottoSelezionatoField;

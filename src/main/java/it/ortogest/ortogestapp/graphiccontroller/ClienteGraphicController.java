@@ -20,6 +20,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -192,6 +194,28 @@ public class ClienteGraphicController extends BaseGraphicController {
             List<OrdineBean> ordini = appController.getOrdiniCliente(currentUser.getEmail());
             ObservableList<OrdineBean> data = FXCollections.observableArrayList(ordini);
             ordiniTable.setItems(data);
+        }
+    }
+
+    @FXML
+    public void rimuoviOrdineAction() {
+        OrdineBean selected = ordiniTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            mostraMessaggio("Seleziona un ordine da rimuovere.", false);
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine() + "?\nLe quantità verranno ripristinate in magazzino.", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.YES) {
+            try {
+                appController.eliminaOrdine(selected.getIdOrdine());
+                mostraMessaggio("Ordine rimosso con successo.", true);
+                caricaOrdiniCliente();
+            } catch (it.ortogest.ortogestapp.exception.GestioneException e) {
+                mostraMessaggio("Errore nella rimozione: " + e.getMessage(), false);
+            }
         }
     }
 

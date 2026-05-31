@@ -4,6 +4,7 @@ import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.dao.DAOFactory;
 import it.ortogest.ortogestapp.dao.IProdottoDAO;
 import it.ortogest.ortogestapp.exception.GestioneException;
+import it.ortogest.ortogestapp.dao.ILottoDAO;
 import it.ortogest.ortogestapp.model.Prodotto;
 
 import java.util.ArrayList;
@@ -20,17 +21,20 @@ public class GestioneCatalogoAppController {
      */
     public List<ProdottoBean> getTuttiIProdotti() {
         IProdottoDAO prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
+        ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
         List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
         List<ProdottoBean> beans = new ArrayList<>();
 
         for (Prodotto p : prodotti) {
-            beans.add(new ProdottoBean(
+            ProdottoBean bean = new ProdottoBean(
                     p.getNome(),
                     p.getPrezzoAttuale(),
                     p.getQuantitaTotaleDisponibile(),
                     p.getCategoria(),
                     p.getImmaginePath()
-            ));
+            );
+            bean.setPrezzoAcquistoMedio(lottoDAO.getPrezzoMedioAcquisto(p.getNome()));
+            beans.add(bean);
         }
 
         return beans;

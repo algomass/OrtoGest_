@@ -69,6 +69,11 @@
                                 <PropertyValueFactory property="giacenza" />
                             </cellValueFactory>
                         </TableColumn>
+                        <TableColumn fx:id="colPrezzoAcquisto" prefWidth="150.0" text="Prezzo Acquisto Medio (€)">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="prezzoAcquistoMedio" />
+                            </cellValueFactory>
+                        </TableColumn>
                         <TableColumn fx:id="colPrezzo" prefWidth="150.0" text="Prezzo al Pubblico (€)">
                             <cellValueFactory>
                                 <PropertyValueFactory property="prezzoAttuale" />

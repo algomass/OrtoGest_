@@ -127,4 +127,22 @@ public class LottoDAOJdbc implements ILottoDAO {
             Printer.perror("Errore in eliminaLotto: " + e.getMessage());
         }
     }
+
+    @Override
+    public double getPrezzoMedioAcquisto(String nomeProdotto) {
+        String sql = "SELECT AVG(costo_acquisto) AS media FROM lotto WHERE nome_prodotto = ?";
+        try (Connection conn = DatabaseHelper.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setString(1, nomeProdotto);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("media");
+                }
+            }
+        } catch (SQLException e) {
+            Printer.perror("Errore in getPrezzoMedioAcquisto: " + e.getMessage());
+        }
+        return 0.0;
+    }
 }

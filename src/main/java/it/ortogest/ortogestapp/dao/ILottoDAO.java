@@ -9,4 +9,5 @@ public interface ILottoDAO {
     Lotto trovaPerId(String idLotto);
     List<Lotto> trovaPerProdotto(String nomeProdotto);
     void eliminaLotto(String idLotto);
+    double getPrezzoMedioAcquisto(String nomeProdotto);
 }

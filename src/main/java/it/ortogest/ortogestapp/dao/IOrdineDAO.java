@@ -6,4 +6,6 @@ import java.util.List;
 public interface IOrdineDAO {
     void salvaOrdine(Ordine ordine);
     List<Ordine> trovaOrdiniCliente(String emailCliente);
+    Ordine trovaOrdinePerId(String idOrdine);
+    void eliminaOrdine(String idOrdine);
 }

@@ -9,6 +9,7 @@ public class ProdottoBean {
     private double giacenza;
     private String categoria;
     private String immaginePath;
+    private double prezzoAcquistoMedio;
 
     public ProdottoBean(String nome, double prezzoAttuale, double giacenza, String categoria, String immaginePath) {
         this.nome = nome;
@@ -59,5 +60,13 @@ public class ProdottoBean {
 
     public void setImmaginePath(String immaginePath) {
         this.immaginePath = immaginePath;
+    }
+
+    public double getPrezzoAcquistoMedio() {
+        return prezzoAcquistoMedio;
+    }
+
+    public void setPrezzoAcquistoMedio(double prezzoAcquistoMedio) {
+        this.prezzoAcquistoMedio = prezzoAcquistoMedio;
     }
 }
