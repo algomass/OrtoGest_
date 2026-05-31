@@ -19,7 +19,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
         String sqlOrdine = "INSERT INTO ordine (id_ordine, email_cliente, stato) VALUES (?, ?, ?) " +
                            "ON DUPLICATE KEY UPDATE stato = VALUES(stato)";
                            
-        String sqlRiga = "INSERT INTO riga_ordine (id_ordine, nome_prodotto, quantita, prezzo_fissato) VALUES (?, ?, ?, ?)";
+        String sqlRiga = "INSERT INTO riga_ordine (id_ordine, id_lotto, nome_prodotto, quantita, prezzo_fissato) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseHelper.getInstance().getConnection()) {
             conn.setAutoCommit(false); // Transazione per sicurezza
@@ -40,9 +40,10 @@ public class OrdineDAOJdbc implements IOrdineDAO {
             try (PreparedStatement stmtRiga = conn.prepareStatement(sqlRiga)) {
                 for (RigaOrdine riga : ordine.getRighe()) {
                     stmtRiga.setString(1, ordine.getIdOrdine());
-                    stmtRiga.setString(2, riga.getNomeProdotto());
-                    stmtRiga.setDouble(3, riga.getQuantita());
-                    stmtRiga.setDouble(4, riga.getPrezzoUnitario());
+                    stmtRiga.setString(2, riga.getIdLotto());
+                    stmtRiga.setString(3, riga.getNomeProdotto());
+                    stmtRiga.setDouble(4, riga.getQuantita());
+                    stmtRiga.setDouble(5, riga.getPrezzoUnitario());
                     stmtRiga.addBatch();
                 }
                 stmtRiga.executeBatch();
@@ -79,13 +80,14 @@ public class OrdineDAOJdbc implements IOrdineDAO {
     
     private List<RigaOrdine> caricaRigheOrdine(Connection conn, String idOrdine) throws SQLException {
         List<RigaOrdine> righe = new ArrayList<>();
-        String sql = "SELECT nome_prodotto, quantita, prezzo_fissato FROM riga_ordine WHERE id_ordine = ?";
+        String sql = "SELECT id_lotto, nome_prodotto, quantita, prezzo_fissato FROM riga_ordine WHERE id_ordine = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, idOrdine);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     righe.add(new RigaOrdine(
                         rs.getString("nome_prodotto"),
+                        rs.getString("id_lotto"),
                         rs.getDouble("quantita"),
                         rs.getDouble("prezzo_fissato")
                     ));

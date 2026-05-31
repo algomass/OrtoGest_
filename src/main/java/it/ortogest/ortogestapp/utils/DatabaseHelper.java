@@ -60,6 +60,9 @@ public class DatabaseHelper {
                 "data_arrivo VARCHAR(50) NOT NULL, " +
                 "data_scadenza VARCHAR(50) NOT NULL, " +
                 "costo_acquisto DOUBLE NOT NULL, " +
+                "prezzo_vendita DOUBLE DEFAULT 0.0, " +
+                "sconto_attivo BOOLEAN DEFAULT FALSE, " +
+                "prezzo_scontato DOUBLE DEFAULT 0.0, " +
                 "FOREIGN KEY(nome_prodotto) REFERENCES prodotto(nome)" +
                 ");";
                 
@@ -72,6 +75,7 @@ public class DatabaseHelper {
         String sqlRigaOrdine = "CREATE TABLE IF NOT EXISTS riga_ordine (" +
                 "id_riga INT AUTO_INCREMENT PRIMARY KEY, " +
                 "id_ordine VARCHAR(100) NOT NULL, " +
+                "id_lotto VARCHAR(100), " +
                 "nome_prodotto VARCHAR(255) NOT NULL, " +
                 "quantita DOUBLE NOT NULL, " +
                 "prezzo_fissato DOUBLE NOT NULL, " +
@@ -93,6 +97,12 @@ public class DatabaseHelper {
             stmt.execute(sqlOrdine);
             stmt.execute(sqlRigaOrdine);
             stmt.execute(sqlUtente);
+            
+            // Tentativo di ALTER TABLE per supportare aggiornamenti senza cancellare i dati
+            try { stmt.execute("ALTER TABLE lotto ADD COLUMN prezzo_vendita DOUBLE DEFAULT 0.0"); } catch (SQLException ignore) {}
+            try { stmt.execute("ALTER TABLE lotto ADD COLUMN sconto_attivo BOOLEAN DEFAULT FALSE"); } catch (SQLException ignore) {}
+            try { stmt.execute("ALTER TABLE lotto ADD COLUMN prezzo_scontato DOUBLE DEFAULT 0.0"); } catch (SQLException ignore) {}
+            try { stmt.execute("ALTER TABLE riga_ordine ADD COLUMN id_lotto VARCHAR(100)"); } catch (SQLException ignore) {}
             
             Printer.printf("Database MySQL inizializzato con successo.");
             

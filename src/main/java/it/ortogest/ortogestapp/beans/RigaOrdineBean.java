@@ -6,17 +6,22 @@ package it.ortogest.ortogestapp.beans;
  */
 public class RigaOrdineBean {
     private String nomeProdotto;
+    private String idLotto;
     private double quantita;       // In Kg
     private double prezzoUnitario; // €/Kg
 
-    public RigaOrdineBean(String nomeProdotto, double quantita, double prezzoUnitario) {
+    public RigaOrdineBean(String nomeProdotto, String idLotto, double quantita, double prezzoUnitario) {
         this.nomeProdotto = nomeProdotto;
+        this.idLotto = idLotto;
         this.quantita = quantita;
         this.prezzoUnitario = prezzoUnitario;
     }
 
     public String getNomeProdotto() { return nomeProdotto; }
     public void setNomeProdotto(String nomeProdotto) { this.nomeProdotto = nomeProdotto; }
+
+    public String getIdLotto() { return idLotto; }
+    public void setIdLotto(String idLotto) { this.idLotto = idLotto; }
 
     public double getQuantita() { return quantita; }
     public void setQuantita(double quantita) { this.quantita = quantita; }

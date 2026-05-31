@@ -10,6 +10,14 @@ public class ProdottoBean {
     private String categoria;
     private String immaginePath;
     private double prezzoAcquistoMedio;
+    
+    // Campi aggiuntivi per la gestione FEFO / Sconto scadenza / Selezione Lotti
+    private double prezzoPieno;
+    private boolean inOffertaScadenza;
+    private double quantitaMassimaOfferta;
+    
+    private double prezzoMin;
+    private double prezzoMax;
 
     public ProdottoBean(String nome, double prezzoAttuale, double giacenza, String categoria, String immaginePath) {
         this.nome = nome;
@@ -69,4 +77,34 @@ public class ProdottoBean {
     public void setPrezzoAcquistoMedio(double prezzoAcquistoMedio) {
         this.prezzoAcquistoMedio = prezzoAcquistoMedio;
     }
+
+    public double getPrezzoPieno() {
+        return prezzoPieno;
+    }
+
+    public void setPrezzoPieno(double prezzoPieno) {
+        this.prezzoPieno = prezzoPieno;
+    }
+
+    public boolean isInOffertaScadenza() {
+        return inOffertaScadenza;
+    }
+
+    public void setInOffertaScadenza(boolean inOffertaScadenza) {
+        this.inOffertaScadenza = inOffertaScadenza;
+    }
+
+    public double getQuantitaMassimaOfferta() {
+        return quantitaMassimaOfferta;
+    }
+
+    public void setQuantitaMassimaOfferta(double quantitaMassimaOfferta) {
+        this.quantitaMassimaOfferta = quantitaMassimaOfferta;
+    }
+    
+    public double getPrezzoMin() { return prezzoMin; }
+    public void setPrezzoMin(double prezzoMin) { this.prezzoMin = prezzoMin; }
+    
+    public double getPrezzoMax() { return prezzoMax; }
+    public void setPrezzoMax(double prezzoMax) { this.prezzoMax = prezzoMax; }
 }

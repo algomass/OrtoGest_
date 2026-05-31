@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -14,13 +15,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.ortogest.ortogestapp.graphiccontroller.ResponsabileGraphicController">
+<BorderPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.ortogest.ortogestapp.graphiccontroller.ResponsabileGraphicController">
 
     <!-- Header -->
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="60.0" style="-fx-background-color: #8e44ad;" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Area Responsabile - Gestione Catalogo" textFill="WHITE">
+                <Label text="Area Responsabile - Gestione Catalogo e Lotti" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
@@ -39,20 +40,20 @@
     </top>
 
     <center>
-        <VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER">
+        <VBox alignment="TOP_CENTER" spacing="15.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER">
             <padding>
-                <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
+                <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
             </padding>
             <children>
 
                 <Label text="Elenco Prodotti a Sistema">
                     <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="System Bold" size="16.0" />
                     </font>
                 </Label>
 
                 <!-- Tabella Prodotti -->
-                <TableView fx:id="tabellaProdotti" prefHeight="300.0" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tabellaProdotti" prefHeight="150.0" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colNome" prefWidth="250.0" text="Nome Prodotto">
                             <cellValueFactory>
@@ -64,45 +65,94 @@
                                 <PropertyValueFactory property="categoria" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colGiacenza" prefWidth="150.0" text="Giacenza (Kg)">
+                        <TableColumn fx:id="colGiacenza" prefWidth="150.0" text="Giacenza Tot. (Kg)">
                             <cellValueFactory>
                                 <PropertyValueFactory property="giacenza" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colPrezzoAcquisto" prefWidth="150.0" text="Prezzo Acquisto Medio (€)">
+                    </columns>
+                </TableView>
+                
+                <!-- Modifica Categoria Prodotto -->
+                <HBox alignment="CENTER" spacing="15.0" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 5;">
+                    <Label text="Prodotto Selezionato:" />
+                    <TextField fx:id="prodottoSelezionatoField" editable="false" prefWidth="150.0" promptText="Nessun prodotto" style="-fx-background-color: #f1f2f6;" />
+                    
+                    <Label text="Modifica Categoria:" />
+                    <ComboBox fx:id="nuovaCategoriaComboBox" prefWidth="120.0" promptText="Categoria" />
+                    <Button onAction="#aggiornaCategoriaAction" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Salva Categoria" />
+                </HBox>
+
+                <Label text="Lotti del Prodotto Selezionato">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+
+                <!-- Tabella Lotti -->
+                <TableView fx:id="tabellaLotti" prefHeight="150.0" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colIdLotto" prefWidth="100.0" text="ID Lotto">
                             <cellValueFactory>
-                                <PropertyValueFactory property="prezzoAcquistoMedio" />
+                                <PropertyValueFactory property="idLotto" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colPrezzo" prefWidth="150.0" text="Prezzo al Pubblico (€)">
+                        <TableColumn fx:id="colDataScadenza" prefWidth="100.0" text="Scadenza">
                             <cellValueFactory>
-                                <PropertyValueFactory property="prezzoAttuale" />
+                                <PropertyValueFactory property="dataScadenza" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="colQuantitaLotto" prefWidth="100.0" text="Qtà (Kg)">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="quantitaKg" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="colCostoAcquisto" prefWidth="100.0" text="Costo (€)">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="costoAcquisto" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="colPrezzoVendita" prefWidth="100.0" text="Prezzo Vend. (€)">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="prezzoVendita" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="colScontoAttivo" prefWidth="80.0" text="In Sconto">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="scontoScadenzaAttivo" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="colPrezzoScontato" prefWidth="120.0" text="Prezzo Scontato (€)">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="prezzoScontato" />
                             </cellValueFactory>
                         </TableColumn>
                     </columns>
                 </TableView>
 
-                <!-- Modifica Prezzo -->
-                <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 5;">
-                    <Label text="Imposta Prezzo di Vendita">
+                <!-- Modifica Prezzo Lotto -->
+                <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
+                    <Label text="Imposta Prezzi per il Lotto Selezionato">
                         <font>
-                            <Font name="System Bold" size="16.0" />
+                            <Font name="System Bold" size="14.0" />
                         </font>
                     </Label>
                     
                     <HBox alignment="CENTER" spacing="15.0">
-                        <Label text="Prodotto Selezionato:" />
-                        <TextField fx:id="prodottoSelezionatoField" editable="false" prefWidth="200.0" promptText="Nessun prodotto selezionato" style="-fx-background-color: #f1f2f6;" />
+                        <Label text="ID Lotto:" />
+                        <TextField fx:id="lottoSelezionatoField" editable="false" prefWidth="100.0" promptText="ID" style="-fx-background-color: #f1f2f6;" />
                         
-                        <Label text="Nuova Categoria:" />
-                        <ComboBox fx:id="nuovaCategoriaComboBox" prefWidth="120.0" promptText="Categoria" />
-
-                        <Label text="Nuovo Prezzo (€):" />
-                        <TextField fx:id="nuovoPrezzoField" prefWidth="80.0" promptText="Es. 2.50" />
+                        <Label text="Prezzo Base (€):" />
+                        <TextField fx:id="prezzoVenditaField" prefWidth="70.0" promptText="Es. 2.50" />
                         
-                        <Button onAction="#aggiornaPrezzoAction" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Salva Prezzo">
+                        <CheckBox fx:id="scontoCheckBox" text="Attiva Sconto Scadenza" />
+                        
+                        <Label text="Prezzo Scontato (€):" />
+                        <TextField fx:id="prezzoScontatoField" prefWidth="70.0" promptText="Es. 1.50" />
+                        
+                        <Button onAction="#aggiornaPrezzoLottoAction" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Salva Prezzi">
                             <font>
-                                <Font name="System Bold" size="14.0" />
+                                <Font name="System Bold" size="12.0" />
                             </font>
                         </Button>
                     </HBox>

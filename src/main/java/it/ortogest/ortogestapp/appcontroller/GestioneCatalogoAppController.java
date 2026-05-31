@@ -7,6 +7,9 @@ import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.dao.ILottoDAO;
 import it.ortogest.ortogestapp.model.Prodotto;
 
+import it.ortogest.ortogestapp.beans.LottoBean;
+import it.ortogest.ortogestapp.model.Lotto;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,16 +44,9 @@ public class GestioneCatalogoAppController {
     }
 
     /**
-     * Aggiorna il prezzo al pubblico di un prodotto.
-     * @param bean Bean contenente il nome del prodotto e il nuovo prezzo.
-     * @return Bean aggiornato se il salvataggio va a buon fine.
-     * @throws GestioneException se il prodotto non viene trovato o il prezzo è non valido.
+     * Aggiorna solo la categoria di un prodotto.
      */
-    public ProdottoBean aggiornaPrezzoProdotto(ProdottoBean bean) throws GestioneException {
-        if (bean.getPrezzoAttuale() < 0) {
-            throw new GestioneException("Il prezzo non può essere negativo.");
-        }
-
+    public ProdottoBean aggiornaCategoriaProdotto(ProdottoBean bean) throws GestioneException {
         IProdottoDAO prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
         Prodotto p = prodottoDAO.trovaPerNome(bean.getNome());
 
@@ -58,14 +54,62 @@ public class GestioneCatalogoAppController {
             throw new GestioneException("Prodotto non trovato nel catalogo.");
         }
 
-        // Aggiorniamo il prezzo e la categoria nel dominio
-        p.setPrezzoAttuale(bean.getPrezzoAttuale());
         if (bean.getCategoria() != null && !bean.getCategoria().isEmpty()) {
             p.setCategoria(bean.getCategoria());
         }
 
-        // Salviamo il prodotto aggiornato nel database reale
         prodottoDAO.salvaProdotto(p);
+        return bean;
+    }
+
+    /**
+     * Recupera i lotti associati a un prodotto.
+     */
+    public List<LottoBean> getLottiPerProdotto(String nomeProdotto) {
+        ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
+        List<Lotto> lotti = lottoDAO.trovaPerProdotto(nomeProdotto);
+        List<LottoBean> beans = new ArrayList<>();
+        
+        for (Lotto l : lotti) {
+            beans.add(new LottoBean(
+                    l.getIdLotto(),
+                    l.getNomeFornitore(),
+                    l.getTipologiaProdotto().getNome(),
+                    l.getQuantitaKg(),
+                    l.getDataArrivo(),
+                    l.getDataScadenza(),
+                    l.getCostoAcquisto(),
+                    l.getPrezzoVendita(),
+                    l.isScontoScadenzaAttivo(),
+                    l.getPrezzoScontato()
+            ));
+        }
+        return beans;
+    }
+
+    /**
+     * Aggiorna i dati di vendita di un lotto (Prezzo, Sconto).
+     */
+    public LottoBean aggiornaPrezzoLotto(LottoBean bean) throws GestioneException {
+        if (bean.getPrezzoVendita() < 0) {
+            throw new GestioneException("Il prezzo di vendita non può essere negativo.");
+        }
+        if (bean.isScontoScadenzaAttivo() && bean.getPrezzoScontato() < 0) {
+            throw new GestioneException("Il prezzo scontato non può essere negativo.");
+        }
+
+        ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
+        Lotto lotto = lottoDAO.trovaPerId(bean.getIdLotto());
+
+        if (lotto == null) {
+            throw new GestioneException("Lotto non trovato.");
+        }
+
+        lotto.setPrezzoVendita(bean.getPrezzoVendita());
+        lotto.setScontoScadenzaAttivo(bean.isScontoScadenzaAttivo());
+        lotto.setPrezzoScontato(bean.getPrezzoScontato());
+
+        lottoDAO.salvaLotto(lotto);
 
         return bean;
     }

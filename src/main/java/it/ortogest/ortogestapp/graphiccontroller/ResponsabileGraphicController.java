@@ -1,6 +1,7 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
 import it.ortogest.ortogestapp.appcontroller.GestioneCatalogoAppController;
+import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.model.CategoriaProdotto;
 import it.ortogest.ortogestapp.utils.Printer;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ResponsabileGraphicController {
@@ -21,12 +23,24 @@ public class ResponsabileGraphicController {
     @FXML private TableColumn<ProdottoBean, String> colNome;
     @FXML private TableColumn<ProdottoBean, String> colCategoria;
     @FXML private TableColumn<ProdottoBean, Double> colGiacenza;
-    @FXML private TableColumn<ProdottoBean, Double> colPrezzoAcquisto;
-    @FXML private TableColumn<ProdottoBean, Double> colPrezzo;
 
     @FXML private TextField prodottoSelezionatoField;
     @FXML private ComboBox<String> nuovaCategoriaComboBox;
-    @FXML private TextField nuovoPrezzoField;
+
+    @FXML private TableView<LottoBean> tabellaLotti;
+    @FXML private TableColumn<LottoBean, String> colIdLotto;
+    @FXML private TableColumn<LottoBean, LocalDate> colDataScadenza;
+    @FXML private TableColumn<LottoBean, Double> colQuantitaLotto;
+    @FXML private TableColumn<LottoBean, Double> colCostoAcquisto;
+    @FXML private TableColumn<LottoBean, Double> colPrezzoVendita;
+    @FXML private TableColumn<LottoBean, Boolean> colScontoAttivo;
+    @FXML private TableColumn<LottoBean, Double> colPrezzoScontato;
+
+    @FXML private TextField lottoSelezionatoField;
+    @FXML private TextField prezzoVenditaField;
+    @FXML private CheckBox scontoCheckBox;
+    @FXML private TextField prezzoScontatoField;
+    
     @FXML private Label messaggioLabel;
 
     private GestioneCatalogoAppController appController;
@@ -35,8 +49,8 @@ public class ResponsabileGraphicController {
     public void initialize() {
         appController = new GestioneCatalogoAppController();
 
-        // Coloriamo di rosso i prodotti "Da prezzare" (prezzo 0.0)
-        colPrezzo.setCellFactory(column -> new TableCell<ProdottoBean, Double>() {
+        // Coloriamo di rosso i lotti "Da prezzare" (prezzo vendita 0.0)
+        colPrezzoVendita.setCellFactory(column -> new TableCell<LottoBean, Double>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
@@ -56,16 +70,32 @@ public class ResponsabileGraphicController {
             }
         });
 
-        // Inizializziamo la ComboBox delle categorie
         nuovaCategoriaComboBox.getItems().addAll(CategoriaProdotto.FRUTTA, CategoriaProdotto.VERDURA);
 
-        // Listener per la selezione nella tabella
+        // Listener per la selezione nella tabella prodotti
         tabellaProdotti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 prodottoSelezionatoField.setText(newSelection.getNome());
-                nuovoPrezzoField.setText(String.valueOf(newSelection.getPrezzoAttuale()));
                 nuovaCategoriaComboBox.setValue(newSelection.getCategoria());
+                caricaLotti(newSelection.getNome());
+                pulisciFormLotto();
             }
+        });
+
+        // Listener per la selezione nella tabella lotti
+        tabellaLotti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                lottoSelezionatoField.setText(newSelection.getIdLotto());
+                prezzoVenditaField.setText(String.valueOf(newSelection.getPrezzoVendita()));
+                scontoCheckBox.setSelected(newSelection.isScontoScadenzaAttivo());
+                prezzoScontatoField.setText(String.valueOf(newSelection.getPrezzoScontato()));
+            }
+        });
+
+        // Gestione abilitazione/disabilitazione campo sconto
+        prezzoScontatoField.setDisable(true);
+        scontoCheckBox.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
+            prezzoScontatoField.setDisable(!isNowSelected);
         });
 
         caricaCatalogo();
@@ -75,13 +105,34 @@ public class ResponsabileGraphicController {
         List<ProdottoBean> prodotti = appController.getTuttiIProdotti();
         ObservableList<ProdottoBean> observableList = FXCollections.observableArrayList(prodotti);
         tabellaProdotti.setItems(observableList);
+        
+        // Manteniamo la selezione se possibile
+        String prodSelezionato = prodottoSelezionatoField.getText();
+        if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
+            caricaLotti(prodSelezionato);
+        } else {
+            tabellaLotti.setItems(FXCollections.observableArrayList());
+            pulisciFormLotto();
+        }
+    }
+
+    private void caricaLotti(String nomeProdotto) {
+        List<LottoBean> lotti = appController.getLottiPerProdotto(nomeProdotto);
+        ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lotti);
+        tabellaLotti.setItems(observableList);
+    }
+    
+    private void pulisciFormLotto() {
+        lottoSelezionatoField.clear();
+        prezzoVenditaField.clear();
+        scontoCheckBox.setSelected(false);
+        prezzoScontatoField.clear();
     }
 
     @FXML
-    public void aggiornaPrezzoAction() {
+    public void aggiornaCategoriaAction() {
         messaggioLabel.setVisible(false);
         String nomeProdotto = prodottoSelezionatoField.getText();
-        String prezzoStr = nuovoPrezzoField.getText();
         String categoriaSelezionata = nuovaCategoriaComboBox.getValue();
 
         if (nomeProdotto == null || nomeProdotto.isEmpty()) {
@@ -95,17 +146,54 @@ public class ResponsabileGraphicController {
         }
 
         try {
-            double nuovoPrezzo = Double.parseDouble(prezzoStr);
-
             ProdottoBean bean = new ProdottoBean();
             bean.setNome(nomeProdotto);
-            bean.setPrezzoAttuale(nuovoPrezzo);
             bean.setCategoria(categoriaSelezionata);
 
-            appController.aggiornaPrezzoProdotto(bean);
+            appController.aggiornaCategoriaProdotto(bean);
 
-            mostraSuccesso("prezzo modificato correttamente");
-            caricaCatalogo(); // Ricarichiamo la tabella per mostrare il nuovo prezzo
+            mostraSuccesso("Categoria aggiornata correttamente");
+            caricaCatalogo();
+
+        } catch (Exception e) {
+            mostraErrore(e.getMessage());
+        }
+    }
+
+    @FXML
+    public void aggiornaPrezzoLottoAction() {
+        messaggioLabel.setVisible(false);
+        String idLotto = lottoSelezionatoField.getText();
+        
+        if (idLotto == null || idLotto.isEmpty()) {
+            mostraErrore("Seleziona prima un lotto dalla tabella.");
+            return;
+        }
+
+        try {
+            double nuovoPrezzo = Double.parseDouble(prezzoVenditaField.getText());
+            boolean scontoAttivo = scontoCheckBox.isSelected();
+            double prezzoScontato = 0.0;
+            
+            if (scontoAttivo) {
+                prezzoScontato = Double.parseDouble(prezzoScontatoField.getText());
+            }
+
+            LottoBean bean = new LottoBean();
+            bean.setIdLotto(idLotto);
+            bean.setPrezzoVendita(nuovoPrezzo);
+            bean.setScontoScadenzaAttivo(scontoAttivo);
+            bean.setPrezzoScontato(prezzoScontato);
+
+            appController.aggiornaPrezzoLotto(bean);
+
+            mostraSuccesso("Prezzi del lotto aggiornati correttamente");
+            
+            // Ricarichiamo i lotti del prodotto corrente
+            String prodSelezionato = prodottoSelezionatoField.getText();
+            if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
+                caricaLotti(prodSelezionato);
+            }
 
         } catch (NumberFormatException e) {
             mostraErrore("Inserisci un valore numerico valido per il prezzo (es. 2.50).");
@@ -117,7 +205,6 @@ public class ResponsabileGraphicController {
     @FXML
     public void logoutAction() {
         try {
-            // Effettuiamo un logout pulendo eventualmente la sessione (da implementare nel SessionManager se necessario)
             SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_LOGIN);
         } catch (IOException e) {
             Printer.perror("Errore nel ritorno al login: " + e.getMessage());

@@ -17,15 +17,18 @@ public class LottoDAOJdbc implements ILottoDAO {
 
     @Override
     public void salvaLotto(Lotto lotto) {
-        String sql = "INSERT INTO lotto (id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+        String sql = "INSERT INTO lotto (id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                      "ON DUPLICATE KEY UPDATE " +
                      "nome_fornitore = VALUES(nome_fornitore), " +
                      "nome_prodotto = VALUES(nome_prodotto), " +
                      "quantita_kg = VALUES(quantita_kg), " +
                      "data_arrivo = VALUES(data_arrivo), " +
                      "data_scadenza = VALUES(data_scadenza), " +
-                     "costo_acquisto = VALUES(costo_acquisto)";
+                     "costo_acquisto = VALUES(costo_acquisto), " +
+                     "prezzo_vendita = VALUES(prezzo_vendita), " +
+                     "sconto_attivo = VALUES(sconto_attivo), " +
+                     "prezzo_scontato = VALUES(prezzo_scontato)";
                      
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -37,6 +40,9 @@ public class LottoDAOJdbc implements ILottoDAO {
             stmt.setString(5, lotto.getDataArrivo().toString());
             stmt.setString(6, lotto.getDataScadenza().toString());
             stmt.setDouble(7, lotto.getCostoAcquisto());
+            stmt.setDouble(8, lotto.getPrezzoVendita());
+            stmt.setBoolean(9, lotto.isScontoScadenzaAttivo());
+            stmt.setDouble(10, lotto.getPrezzoScontato());
             
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -47,7 +53,7 @@ public class LottoDAOJdbc implements ILottoDAO {
     @Override
     public List<Lotto> getTuttiILotti() {
         List<Lotto> lotti = new ArrayList<>();
-        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto FROM lotto";
+        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato FROM lotto";
         
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -64,7 +70,7 @@ public class LottoDAOJdbc implements ILottoDAO {
 
     @Override
     public Lotto trovaPerId(String idLotto) {
-        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto FROM lotto WHERE id_lotto = ?";
+        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato FROM lotto WHERE id_lotto = ?";
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
              
@@ -83,7 +89,7 @@ public class LottoDAOJdbc implements ILottoDAO {
     @Override
     public List<Lotto> trovaPerProdotto(String nomeProdotto) {
         List<Lotto> lotti = new ArrayList<>();
-        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto FROM lotto WHERE nome_prodotto = ?";
+        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato FROM lotto WHERE nome_prodotto = ?";
         
         try (Connection conn = DatabaseHelper.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -111,7 +117,10 @@ public class LottoDAOJdbc implements ILottoDAO {
             rs.getDouble("quantita_kg"),
             LocalDate.parse(rs.getString("data_arrivo")),
             LocalDate.parse(rs.getString("data_scadenza")),
-            rs.getDouble("costo_acquisto")
+            rs.getDouble("costo_acquisto"),
+            rs.getDouble("prezzo_vendita"),
+            rs.getBoolean("sconto_attivo"),
+            rs.getDouble("prezzo_scontato")
         );
     }
 

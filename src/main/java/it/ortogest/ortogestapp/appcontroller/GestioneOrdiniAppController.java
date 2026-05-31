@@ -6,10 +6,13 @@ import it.ortogest.ortogestapp.dao.DAOFactory;
 import it.ortogest.ortogestapp.dao.IOrdineDAO;
 import it.ortogest.ortogestapp.dao.IProdottoDAO;
 import it.ortogest.ortogestapp.exception.GestioneException;
+import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Ordine;
 import it.ortogest.ortogestapp.model.Prodotto;
+import it.ortogest.ortogestapp.dao.ILottoDAO;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,10 +23,12 @@ public class GestioneOrdiniAppController {
 
     private IProdottoDAO prodottoDAO;
     private IOrdineDAO ordineDAO;
+    private ILottoDAO lottoDAO;
 
     public GestioneOrdiniAppController() {
         this.prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
         this.ordineDAO = DAOFactory.getInstance().getOrdineDAO();
+        this.lottoDAO = DAOFactory.getInstance().getLottoDAO();
     }
 
     public List<ProdottoBean> getCatalogoDisponibile() {
@@ -31,40 +36,72 @@ public class GestioneOrdiniAppController {
         List<ProdottoBean> catalogoBeans = new ArrayList<>();
         
         for (Prodotto p : prodotti) {
-            if (p.getQuantitaTotaleDisponibile() > 0 && p.getPrezzoAttuale() > 0) {
-                catalogoBeans.add(new ProdottoBean(
-                        p.getNome(),
-                        p.getPrezzoAttuale(),
-                        p.getQuantitaTotaleDisponibile(),
-                        p.getCategoria(),
-                        p.getImmaginePath()
-                ));
+            ProdottoBean bean = elaboraProdottoRiepilogo(p);
+            if (bean != null) {
+                catalogoBeans.add(bean);
             }
         }
         return catalogoBeans;
     }
 
-    /**
-     * Restituisce i prodotti disponibili filtrati per categoria.
-     * @param categoria La categoria richiesta ("Frutta" o "Verdura").
-     * @return Lista di ProdottoBean con giacenza > 0 e categoria corrispondente.
-     */
     public List<ProdottoBean> getCatalogoPerCategoria(String categoria) {
         List<Prodotto> prodotti = prodottoDAO.trovaPerCategoria(categoria);
         List<ProdottoBean> catalogoBeans = new ArrayList<>();
 
         for (Prodotto p : prodotti) {
-            if (p.getQuantitaTotaleDisponibile() > 0 && p.getPrezzoAttuale() > 0) {
-                catalogoBeans.add(new ProdottoBean(
-                        p.getNome(),
-                        p.getPrezzoAttuale(),
-                        p.getQuantitaTotaleDisponibile(),
-                        p.getCategoria(),
-                        p.getImmaginePath()
-                ));
+            ProdottoBean bean = elaboraProdottoRiepilogo(p);
+            if (bean != null) {
+                catalogoBeans.add(bean);
             }
         }
         return catalogoBeans;
+    }
+
+    private ProdottoBean elaboraProdottoRiepilogo(Prodotto p) {
+        if (p.getQuantitaTotaleDisponibile() <= 0) return null;
+
+        List<Lotto> lotti = lottoDAO.trovaPerProdotto(p.getNome());
+        
+        double minPrice = Double.MAX_VALUE;
+        double maxPrice = 0.0;
+        double validGiacenza = 0.0;
+        boolean hasValidLots = false;
+
+        for (Lotto l : lotti) {
+            if (l.getQuantitaKg() > 0 && l.getPrezzoVendita() > 0) {
+                hasValidLots = true;
+                double prezzo = (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato() : l.getPrezzoVendita();
+                if (prezzo < minPrice) minPrice = prezzo;
+                if (prezzo > maxPrice) maxPrice = prezzo;
+                validGiacenza += l.getQuantitaKg();
+            }
+        }
+        
+        if (!hasValidLots) return null;
+
+        ProdottoBean bean = new ProdottoBean(
+                p.getNome(),
+                minPrice,
+                validGiacenza,
+                p.getCategoria(),
+                p.getImmaginePath()
+        );
+        bean.setPrezzoMin(minPrice);
+        bean.setPrezzoMax(maxPrice);
+        
+        return bean;
+    }
+
+    public List<Lotto> getLottiDisponibili(String nomeProdotto) {
+        List<Lotto> lotti = lottoDAO.trovaPerProdotto(nomeProdotto);
+        List<Lotto> lottiValidi = new ArrayList<>();
+        for (Lotto l : lotti) {
+            if (l.getQuantitaKg() > 0 && l.getPrezzoVendita() > 0) {
+                lottiValidi.add(l);
+            }
+        }
+        lottiValidi.sort(Comparator.comparing(Lotto::getDataScadenza));
+        return lottiValidi;
     }
 
     /**
@@ -90,11 +127,12 @@ public class GestioneOrdiniAppController {
             if (p.getQuantitaTotaleDisponibile() < rigaBean.getQuantita()) {
                 throw new GestioneException("Giacenza insufficiente per: " + rigaBean.getNomeProdotto());
             }
-            // Creiamo la riga per il modello di dominio
+            // Creiamo la riga per il modello di dominio, passando anche idLotto
             righeModello.add(new it.ortogest.ortogestapp.model.RigaOrdine(
                     p.getNome(), 
+                    rigaBean.getIdLotto(),
                     rigaBean.getQuantita(), 
-                    p.getPrezzoAttuale()
+                    rigaBean.getPrezzoUnitario()
             ));
         }
 
@@ -107,11 +145,21 @@ public class GestioneOrdiniAppController {
         // Salviamo nel DB
         ordineDAO.salvaOrdine(nuovoOrdine);
         
-        // Scaliamo le giacenze per ogni prodotto nell'ordine
+        // Scaliamo le giacenze per ogni prodotto nell'ordine applicando il FEFO sui lotti
         for (it.ortogest.ortogestapp.model.RigaOrdine riga : righeModello) {
             Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
             p.sottraiGiacenza(riga.getQuantita());
             prodottoDAO.salvaProdotto(p);
+
+            // Scaliamo dal lotto esatto
+            Lotto l = lottoDAO.trovaPerId(riga.getIdLotto());
+            if (l != null && l.getQuantitaKg() >= riga.getQuantita()) {
+                l.setQuantitaKg(l.getQuantitaKg() - riga.getQuantita());
+                lottoDAO.salvaLotto(l);
+            } else {
+                // Se non c'è abbastanza quantità o non esiste, è un problema di concorrenza
+                throw new GestioneException("Quantità non disponibile nel lotto selezionato per: " + riga.getNomeProdotto());
+            }
         }
         
         return "Ordine completato con ID: " + idOrdine;
@@ -138,12 +186,19 @@ public class GestioneOrdiniAppController {
             throw new GestioneException("Ordine non trovato.");
         }
         
-        // Ripristina le giacenze dei prodotti
+        // Ripristina le giacenze dei prodotti e dei lotti
         for (it.ortogest.ortogestapp.model.RigaOrdine riga : ordine.getRighe()) {
             Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
             if (p != null) {
                 p.aggiungiGiacenza(riga.getQuantita());
                 prodottoDAO.salvaProdotto(p);
+
+                // Ripristiniamo la giacenza nel lotto d'origine
+                Lotto l = lottoDAO.trovaPerId(riga.getIdLotto());
+                if (l != null) {
+                    l.setQuantitaKg(l.getQuantitaKg() + riga.getQuantita());
+                    lottoDAO.salvaLotto(l);
+                }
             }
         }
         

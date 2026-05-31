@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -28,6 +29,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -222,36 +225,107 @@ public class ClienteGraphicController extends BaseGraphicController {
     // ==================== GESTIONE CARRELLO ====================
 
     /**
-     * Aggiunge un prodotto al carrello locale.
+     * Mostra il popup per selezionare un lotto da cui acquistare.
      */
-    private void aggiungiAlCarrelloAction(ProdottoBean prodotto, TextField quantitaField) {
+    private void mostraPopupSelezioneLotto(ProdottoBean prodotto) {
         errorLabel.setVisible(false);
+        
+        List<it.ortogest.ortogestapp.model.Lotto> lotti = appController.getLottiDisponibili(prodotto.getNome());
+        if (lotti == null || lotti.isEmpty()) {
+            mostraMessaggio("Nessun lotto disponibile per questo prodotto.", false);
+            return;
+        }
 
-        String qtaStr = quantitaField.getText();
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle("Scegli un lotto per " + prodotto.getNome());
+        
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+        root.setAlignment(Pos.TOP_CENTER);
+        
+        Label title = new Label("Lotti disponibili per " + prodotto.getNome());
+        title.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+        root.getChildren().add(title);
+        
+        for (it.ortogest.ortogestapp.model.Lotto l : lotti) {
+            // Calcola disponibilità residua del lotto rispetto al carrello
+            double giacenzaResidua = l.getQuantitaKg();
+            for (RigaOrdineBean r : carrello) {
+                if (l.getIdLotto().equals(r.getIdLotto())) {
+                    giacenzaResidua -= r.getQuantita();
+                }
+            }
+            
+            if (giacenzaResidua <= 0) continue;
+            
+            HBox lottoBox = new HBox(15);
+            lottoBox.setAlignment(Pos.CENTER_LEFT);
+            lottoBox.setStyle("-fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-padding: 10;");
+            
+            VBox infoBox = new VBox(5);
+            Label scadeLabel = new Label("Scadenza: " + l.getDataScadenza());
+            scadeLabel.setStyle("-fx-font-weight: bold;");
+            
+            double prezzoReale = (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato() : l.getPrezzoVendita();
+            Label prezzoLabel = new Label(String.format("Prezzo: %.2f €/Kg", prezzoReale));
+            if (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) {
+                prezzoLabel.setTextFill(Color.web("#e74c3c"));
+            }
+            
+            Label qtaLabel = new Label(String.format("Disp: %.1f Kg", giacenzaResidua));
+            infoBox.getChildren().addAll(scadeLabel, prezzoLabel, qtaLabel);
+            
+            TextField quantitaField = new TextField();
+            quantitaField.setPromptText("Kg");
+            quantitaField.setPrefWidth(60);
+            
+            Button aggiungiBtn = new Button("Aggiungi");
+            aggiungiBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
+            
+            double finalGiacenzaResidua = giacenzaResidua;
+            aggiungiBtn.setOnAction(e -> {
+                aggiungiLottoAlCarrello(l.getIdLotto(), prodotto.getNome(), quantitaField.getText(), prezzoReale, finalGiacenzaResidua, popupStage);
+            });
+            
+            lottoBox.getChildren().addAll(infoBox, quantitaField, aggiungiBtn);
+            root.getChildren().add(lottoBox);
+        }
+        
+        if (root.getChildren().size() == 1) {
+            Label noLotti = new Label("Nessun lotto disponibile o quantità già nel carrello.");
+            root.getChildren().add(noLotti);
+        }
+        
+        Scene scene = new Scene(root, 400, 400);
+        popupStage.setScene(scene);
+        popupStage.show();
+    }
+
+    private void aggiungiLottoAlCarrello(String idLotto, String nomeProdotto, String qtaStr, double prezzoUnitario, double maxAcquistabile, Stage popupStage) {
         if (qtaStr == null || qtaStr.trim().isEmpty()) {
-            mostraMessaggio("Inserisci la quantità per " + prodotto.getNome() + ".", false);
+            mostraMessaggio("Inserisci la quantità.", false);
             return;
         }
 
         double qta;
         try {
             qta = Double.parseDouble(qtaStr);
-            if (qta <= 0)
-                throw new NumberFormatException();
+            if (qta <= 0) throw new NumberFormatException();
         } catch (NumberFormatException e) {
             mostraMessaggio("Quantità non valida (deve essere > 0).", false);
             return;
         }
 
-        if (qta > prodotto.getGiacenza()) {
-            mostraMessaggio("Quantità superiore alla disponibilità (" + prodotto.getGiacenza() + " Kg).", false);
+        if (qta > maxAcquistabile) {
+            mostraMessaggio("Quantità superiore alla disponibilità del lotto (" + maxAcquistabile + " Kg).", false);
             return;
         }
 
-        // Verifica se il prodotto è già nel carrello, nel caso aggiorna la quantità
+        // Aggiunge o aggiorna nel carrello
         boolean trovato = false;
         for (RigaOrdineBean r : carrello) {
-            if (r.getNomeProdotto().equals(prodotto.getNome())) {
+            if (r.getIdLotto() != null && r.getIdLotto().equals(idLotto)) {
                 r.setQuantita(r.getQuantita() + qta);
                 trovato = true;
                 break;
@@ -259,11 +333,11 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
 
         if (!trovato) {
-            carrello.add(new RigaOrdineBean(prodotto.getNome(), qta, prodotto.getPrezzoAttuale()));
+            carrello.add(new RigaOrdineBean(nomeProdotto, idLotto, qta, prezzoUnitario));
         }
 
-        quantitaField.clear();
-        mostraMessaggio(prodotto.getNome() + " aggiunto al carrello!", true);
+        popupStage.close();
+        mostraMessaggio(nomeProdotto + " aggiunto al carrello!", true);
         aggiornaUIHeaderCarrello();
 
         // Ricarica la categoria per aggiornare le giacenze sulle card
@@ -347,26 +421,34 @@ public class ClienteGraphicController extends BaseGraphicController {
         Label nomeLabel = new Label(prodotto.getNome());
         nomeLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
-        Label prezzoLabel = new Label(String.format("%.2f €/Kg", prodotto.getPrezzoAttuale()));
-        prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+        VBox prezziBox = new VBox(2);
+        prezziBox.setAlignment(Pos.CENTER);
+        
+        if (prodotto.getPrezzoMin() == prodotto.getPrezzoMax()) {
+            Label prezzoLabel = new Label(String.format("%.2f €/Kg", prodotto.getPrezzoMin()));
+            prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 14;");
+            prezziBox.getChildren().add(prezzoLabel);
+        } else {
+            Label badgeVari = new Label("Lotti Multipli");
+            badgeVari.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 3 6; -fx-background-radius: 4; -fx-font-size: 10; -fx-font-weight: bold;");
+            
+            Label prezzoLabel = new Label(String.format("Da %.2f € a %.2f €", prodotto.getPrezzoMin(), prodotto.getPrezzoMax()));
+            prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 13;");
+            prezziBox.getChildren().addAll(badgeVari, prezzoLabel);
+        }
 
-        Label giacenzaLabel = new Label(String.format("Disp: %.1f Kg", prodotto.getGiacenza()));
+        Label giacenzaLabel = new Label(String.format("Disp. Totale: %.1f Kg", prodotto.getGiacenza()));
         giacenzaLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #7f8c8d;");
 
-        TextField quantitaField = new TextField();
-        quantitaField.setPromptText("Kg");
-        quantitaField.setPrefWidth(60);
-        quantitaField.setAlignment(Pos.CENTER);
-
-        Button aggiungiBtn = new Button("Aggiungi");
-        aggiungiBtn.setStyle(
+        Button selezionaBtn = new Button("Scegli Lotto");
+        selezionaBtn.setStyle(
                 "-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
-        aggiungiBtn.setOnAction(e -> aggiungiAlCarrelloAction(prodotto, quantitaField));
+        selezionaBtn.setOnAction(e -> mostraPopupSelezioneLotto(prodotto));
 
-        HBox bottomBox = new HBox(5, quantitaField, aggiungiBtn);
+        HBox bottomBox = new HBox(5, selezionaBtn);
         bottomBox.setAlignment(Pos.CENTER);
 
-        card.getChildren().addAll(imageView, nomeLabel, prezzoLabel, giacenzaLabel, bottomBox);
+        card.getChildren().addAll(imageView, nomeLabel, prezziBox, giacenzaLabel, bottomBox);
 
         card.setOnMouseEntered(e -> card.setStyle(
                 "-fx-background-color: #f8f9fa; -fx-background-radius: 8; -fx-border-color: #3498db; -fx-border-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);"));

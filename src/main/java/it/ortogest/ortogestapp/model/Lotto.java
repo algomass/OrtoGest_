@@ -14,8 +14,11 @@ public class Lotto {
     private LocalDate dataArrivo;
     private LocalDate dataScadenza;
     private double costoAcquisto; // Costo di acquisto del lotto dal fornitore
+    private double prezzoVendita;
+    private boolean scontoScadenzaAttivo;
+    private double prezzoScontato;
 
-    public Lotto(String idLotto, String nomeFornitore, Prodotto tipologiaProdotto, double quantitaKg, LocalDate dataArrivo, LocalDate dataScadenza, double costoAcquisto) {
+    public Lotto(String idLotto, String nomeFornitore, Prodotto tipologiaProdotto, double quantitaKg, LocalDate dataArrivo, LocalDate dataScadenza, double costoAcquisto, double prezzoVendita, boolean scontoScadenzaAttivo, double prezzoScontato) {
         this.idLotto = idLotto;
         this.nomeFornitore = nomeFornitore;
         this.tipologiaProdotto = tipologiaProdotto;
@@ -23,6 +26,13 @@ public class Lotto {
         this.dataArrivo = dataArrivo;
         this.dataScadenza = dataScadenza;
         this.costoAcquisto = costoAcquisto;
+        this.prezzoVendita = prezzoVendita;
+        this.scontoScadenzaAttivo = scontoScadenzaAttivo;
+        this.prezzoScontato = prezzoScontato;
+    }
+
+    public Lotto(String idLotto, String nomeFornitore, Prodotto tipologiaProdotto, double quantitaKg, LocalDate dataArrivo, LocalDate dataScadenza, double costoAcquisto) {
+        this(idLotto, nomeFornitore, tipologiaProdotto, quantitaKg, dataArrivo, dataScadenza, costoAcquisto, 0.0, false, 0.0);
     }
 
     public String getIdLotto() {
@@ -79,5 +89,29 @@ public class Lotto {
 
     public void setCostoAcquisto(double costoAcquisto) {
         this.costoAcquisto = costoAcquisto;
+    }
+
+    public double getPrezzoVendita() {
+        return prezzoVendita;
+    }
+
+    public void setPrezzoVendita(double prezzoVendita) {
+        this.prezzoVendita = prezzoVendita;
+    }
+
+    public boolean isScontoScadenzaAttivo() {
+        return scontoScadenzaAttivo;
+    }
+
+    public void setScontoScadenzaAttivo(boolean scontoScadenzaAttivo) {
+        this.scontoScadenzaAttivo = scontoScadenzaAttivo;
+    }
+
+    public double getPrezzoScontato() {
+        return prezzoScontato;
+    }
+
+    public void setPrezzoScontato(double prezzoScontato) {
+        this.prezzoScontato = prezzoScontato;
     }
 }
