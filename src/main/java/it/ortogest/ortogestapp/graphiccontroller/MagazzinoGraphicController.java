@@ -160,8 +160,8 @@ public class MagazzinoGraphicController extends BaseGraphicController {
                         dialog.setResult(null);
                         dialog.close();
                     }
-                } catch (GestioneException ex) {
-                    Alert err = new Alert(Alert.AlertType.ERROR, ex.getMessage());
+                } catch (GestioneException _) {
+                    Alert err = new Alert(Alert.AlertType.ERROR, "Errore durante l'operazione sul lotto.");
                     err.showAndWait();
                 }
             }
@@ -203,18 +203,18 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         Optional<ButtonType> res = dialog.showAndWait();
         if (res.isPresent() && res.get() == ButtonType.OK) {
             try {
-                LottoBean nuovo = new LottoBean(
-                    lotto.getIdLotto(),
-                    txtFornitore.getText(),
-                    nomeProdotto,
-                    Double.parseDouble(txtQuantita.getText()),
-                    dpArrivo.getValue(),
-                    dpScadenza.getValue(),
-                    Double.parseDouble(txtCosto.getText())
-                );
+                LottoBean nuovo = LottoBean.builder()
+                    .idLotto(lotto.getIdLotto())
+                    .nomeFornitore(txtFornitore.getText())
+                    .nomeProdotto(nomeProdotto)
+                    .quantitaKg(Double.parseDouble(txtQuantita.getText()))
+                    .dataArrivo(dpArrivo.getValue())
+                    .dataScadenza(dpScadenza.getValue())
+                    .costoAcquisto(Double.parseDouble(txtCosto.getText()))
+                    .build();
                 controller.modificaLotto(nuovo);
                 Printer.printf("Lotto modificato con successo.");
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException _) {
                 new Alert(Alert.AlertType.ERROR, "Valori numerici non validi.").showAndWait();
             } catch (GestioneException ex) {
                 new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();

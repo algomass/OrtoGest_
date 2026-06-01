@@ -18,21 +18,49 @@ public class LottoBean {
     private boolean scontoScadenzaAttivo;
     private double prezzoScontato;
 
-    public LottoBean(String idLotto, String nomeFornitore, String nomeProdotto, double quantitaKg, LocalDate dataArrivo, LocalDate dataScadenza, double costoAcquisto, double prezzoVendita, boolean scontoScadenzaAttivo, double prezzoScontato) {
-        this.idLotto = idLotto;
-        this.nomeFornitore = nomeFornitore;
-        this.nomeProdotto = nomeProdotto;
-        this.quantitaKg = quantitaKg;
-        this.dataArrivo = dataArrivo;
-        this.dataScadenza = dataScadenza;
-        this.costoAcquisto = costoAcquisto;
-        this.prezzoVendita = prezzoVendita;
-        this.scontoScadenzaAttivo = scontoScadenzaAttivo;
-        this.prezzoScontato = prezzoScontato;
+    private LottoBean(Builder builder) {
+        this.idLotto = builder.idLotto;
+        this.nomeFornitore = builder.nomeFornitore;
+        this.nomeProdotto = builder.nomeProdotto;
+        this.quantitaKg = builder.quantitaKg;
+        this.dataArrivo = builder.dataArrivo;
+        this.dataScadenza = builder.dataScadenza;
+        this.costoAcquisto = builder.costoAcquisto;
+        this.prezzoVendita = builder.prezzoVendita;
+        this.scontoScadenzaAttivo = builder.scontoScadenzaAttivo;
+        this.prezzoScontato = builder.prezzoScontato;
     }
 
-    public LottoBean(String idLotto, String nomeFornitore, String nomeProdotto, double quantitaKg, LocalDate dataArrivo, LocalDate dataScadenza, double costoAcquisto) {
-        this(idLotto, nomeFornitore, nomeProdotto, quantitaKg, dataArrivo, dataScadenza, costoAcquisto, 0.0, false, 0.0);
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String idLotto;
+        private String nomeFornitore;
+        private String nomeProdotto;
+        private double quantitaKg;
+        private LocalDate dataArrivo;
+        private LocalDate dataScadenza;
+        private double costoAcquisto;
+        private double prezzoVendita;
+        private boolean scontoScadenzaAttivo;
+        private double prezzoScontato;
+
+        public Builder idLotto(String idLotto) { this.idLotto = idLotto; return this; }
+        public Builder nomeFornitore(String nomeFornitore) { this.nomeFornitore = nomeFornitore; return this; }
+        public Builder nomeProdotto(String nomeProdotto) { this.nomeProdotto = nomeProdotto; return this; }
+        public Builder quantitaKg(double quantitaKg) { this.quantitaKg = quantitaKg; return this; }
+        public Builder dataArrivo(LocalDate dataArrivo) { this.dataArrivo = dataArrivo; return this; }
+        public Builder dataScadenza(LocalDate dataScadenza) { this.dataScadenza = dataScadenza; return this; }
+        public Builder costoAcquisto(double costoAcquisto) { this.costoAcquisto = costoAcquisto; return this; }
+        public Builder prezzoVendita(double prezzoVendita) { this.prezzoVendita = prezzoVendita; return this; }
+        public Builder scontoScadenzaAttivo(boolean scontoScadenzaAttivo) { this.scontoScadenzaAttivo = scontoScadenzaAttivo; return this; }
+        public Builder prezzoScontato(double prezzoScontato) { this.prezzoScontato = prezzoScontato; return this; }
+
+        public LottoBean build() {
+            return new LottoBean(this);
+        }
     }
 
     public LottoBean() {}

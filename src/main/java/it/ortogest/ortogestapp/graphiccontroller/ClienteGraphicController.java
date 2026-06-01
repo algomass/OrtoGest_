@@ -250,12 +250,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         
         for (it.ortogest.ortogestapp.model.Lotto l : lotti) {
             // Calcola disponibilità residua del lotto rispetto al carrello
-            double giacenzaResidua = l.getQuantitaKg();
-            for (RigaOrdineBean r : carrello) {
-                if (l.getIdLotto().equals(r.getIdLotto())) {
-                    giacenzaResidua -= r.getQuantita();
-                }
-            }
+            double giacenzaResidua = calcolaGiacenzaResidua(l);
             
             if (giacenzaResidua <= 0) continue;
             
@@ -302,6 +297,16 @@ public class ClienteGraphicController extends BaseGraphicController {
         popupStage.show();
     }
 
+    private double calcolaGiacenzaResidua(it.ortogest.ortogestapp.model.Lotto l) {
+        double giacenzaResidua = l.getQuantitaKg();
+        for (RigaOrdineBean r : carrello) {
+            if (r.getIdLotto() != null && l.getIdLotto().equals(r.getIdLotto())) {
+                giacenzaResidua -= r.getQuantita();
+            }
+        }
+        return giacenzaResidua;
+    }
+
     private void aggiungiLottoAlCarrello(String idLotto, String nomeProdotto, String qtaStr, double prezzoUnitario, double maxAcquistabile, Stage popupStage) {
         if (qtaStr == null || qtaStr.trim().isEmpty()) {
             mostraMessaggio("Inserisci la quantità.", false);
@@ -312,7 +317,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         try {
             qta = Double.parseDouble(qtaStr);
             if (qta <= 0) throw new NumberFormatException();
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             mostraMessaggio("Quantità non valida (deve essere > 0).", false);
             return;
         }

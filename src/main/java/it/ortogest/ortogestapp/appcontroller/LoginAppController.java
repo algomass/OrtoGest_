@@ -24,8 +24,7 @@ public class LoginAppController {
             throw new LoginFallitoException("Credenziali non valide o utente inesistente.");
         }
         
-        // Qui in futuro potresti aggiungere altre regole:
-        // es. if (utenteModel.isBloccato()) throw new AccountBloccatoException()...
+        // Qui in futuro potresti aggiungere altre regole.
         
         // 3. Rispetto la regola "Isolamento Tramite Beans":
         // Non restituisco mai l'Entity "Utente" alla vista, ma creo un "UtenteBean"

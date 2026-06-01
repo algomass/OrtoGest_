@@ -21,10 +21,7 @@ public class UtenteDAOJdbc implements IUtenteDAO {
             stmt.setString(2, password);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    String nome = "Utente"; // Valore di fallback
-                    try {
-                        nome = rs.getString("nome");
-                    } catch (SQLException ignore) { } // Se la colonna non esiste
+                    String nome = getNomeOrDefault(rs, "Utente");
                     
                     return new Utente(nome, rs.getString("email"), rs.getString("password"), rs.getString("ruolo"));
                 }
@@ -33,5 +30,13 @@ public class UtenteDAOJdbc implements IUtenteDAO {
             Printer.perror("Errore in verificaCredenziali: " + e.getMessage());
         }
         return null;
+    }
+
+    private String getNomeOrDefault(ResultSet rs, String fallback) {
+        try {
+            return rs.getString("nome");
+        } catch (SQLException _) {
+            return fallback;
+        }
     }
 }

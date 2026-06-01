@@ -80,15 +80,15 @@ public class RegistrazioneLottoGraphicController {
             }
 
             // 2. Creazione Bean
-            LottoBean lottoBean = new LottoBean(
-                    idLotto, 
-                    fornitore, 
-                    prodotto, 
-                    quantita, 
-                    dataArrivoPicker.getValue(), 
-                    dataScadenzaPicker.getValue(),
-                    costoAcquisto
-            );
+            LottoBean lottoBean = LottoBean.builder()
+                    .idLotto(idLotto)
+                    .nomeFornitore(fornitore)
+                    .nomeProdotto(prodotto)
+                    .quantitaKg(quantita)
+                    .dataArrivo(dataArrivoPicker.getValue())
+                    .dataScadenza(dataScadenzaPicker.getValue())
+                    .costoAcquisto(costoAcquisto)
+                    .build();
 
             // 3. Invio all'App Controller
             GestioneMagazzinoAppController appController = new GestioneMagazzinoAppController();
@@ -103,7 +103,7 @@ public class RegistrazioneLottoGraphicController {
         } catch (GestioneException e) {
             errorLabel.setText(e.getMessage());
             errorLabel.setVisible(true);
-        } catch (Exception e) {
+        } catch (Exception _) {
             errorLabel.setText("Errore imprevisto.");
             errorLabel.setVisible(true);
         }

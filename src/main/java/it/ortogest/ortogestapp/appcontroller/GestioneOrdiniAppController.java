@@ -68,9 +68,9 @@ public class GestioneOrdiniAppController {
         boolean hasValidLots = false;
 
         for (Lotto l : lotti) {
-            if (l.getQuantitaKg() > 0 && l.getPrezzoVendita() > 0) {
+            if (isLottoValido(l)) {
                 hasValidLots = true;
-                double prezzo = (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato() : l.getPrezzoVendita();
+                double prezzo = getPrezzoEffettivo(l);
                 if (prezzo < minPrice) minPrice = prezzo;
                 if (prezzo > maxPrice) maxPrice = prezzo;
                 validGiacenza += l.getQuantitaKg();
@@ -92,11 +92,19 @@ public class GestioneOrdiniAppController {
         return bean;
     }
 
+    private boolean isLottoValido(Lotto l) {
+        return l.getQuantitaKg() > 0 && l.getPrezzoVendita() > 0;
+    }
+
+    private double getPrezzoEffettivo(Lotto l) {
+        return (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato() : l.getPrezzoVendita();
+    }
+
     public List<Lotto> getLottiDisponibili(String nomeProdotto) {
         List<Lotto> lotti = lottoDAO.trovaPerProdotto(nomeProdotto);
         List<Lotto> lottiValidi = new ArrayList<>();
         for (Lotto l : lotti) {
-            if (l.getQuantitaKg() > 0 && l.getPrezzoVendita() > 0) {
+            if (isLottoValido(l)) {
                 lottiValidi.add(l);
             }
         }

@@ -65,15 +65,15 @@ public class GestioneMagazzinoAppController {
         List<Lotto> lotti = lottoDAO.trovaPerProdotto(nomeProdotto);
         List<LottoBean> beans = new ArrayList<>();
         for (Lotto l : lotti) {
-            beans.add(new LottoBean(
-                    l.getIdLotto(),
-                    l.getNomeFornitore(),
-                    l.getTipologiaProdotto().getNome(),
-                    l.getQuantitaKg(),
-                    l.getDataArrivo(),
-                    l.getDataScadenza(),
-                    l.getCostoAcquisto()
-            ));
+            beans.add(LottoBean.builder()
+                    .idLotto(l.getIdLotto())
+                    .nomeFornitore(l.getNomeFornitore())
+                    .nomeProdotto(l.getTipologiaProdotto().getNome())
+                    .quantitaKg(l.getQuantitaKg())
+                    .dataArrivo(l.getDataArrivo())
+                    .dataScadenza(l.getDataScadenza())
+                    .costoAcquisto(l.getCostoAcquisto())
+                    .build());
         }
         return beans;
     }
@@ -91,13 +91,16 @@ public class GestioneMagazzinoAppController {
         String emailFornitore = EMAIL_FORNITORE_DEFAULT;
         String oggetto = "Segnalazione Anomalia: Merce " + anomaliaBean.getTipoAnomalia();
         
-        String corpo = String.format("Spett.le Fornitore,\n\n" +
-                "Con la presente segnaliamo un'anomalia relativa all'ultima consegna.\n" +
-                "Prodotto: %s\n" +
-                "Quantità %s: %.2f Kg\n" +
-                "Note aggiuntive: %s\n\n" +
-                "In attesa di un vostro riscontro, porgiamo cordiali saluti.\n" +
-                "Il team di OrtoGest.", 
+        String corpo = String.format("""
+                Spett.le Fornitore,
+                
+                Con la presente segnaliamo un'anomalia relativa all'ultima consegna.
+                Prodotto: %s
+                Quantità %s: %.2f Kg
+                Note aggiuntive: %s
+                
+                In attesa di un vostro riscontro, porgiamo cordiali saluti.
+                Il team di OrtoGest.""", 
                 anomaliaBean.getNomeProdotto(), 
                 anomaliaBean.getTipoAnomalia().toLowerCase(), 
                 anomaliaBean.getQuantita(), 
@@ -144,15 +147,15 @@ public class GestioneMagazzinoAppController {
         }
 
         // 4. Creazione dell'Entità Lotto
-        Lotto lotto = new Lotto(
-                bean.getIdLotto(),
-                bean.getNomeFornitore(),
-                prodotto,
-                bean.getQuantitaKg(),
-                bean.getDataArrivo(),
-                bean.getDataScadenza(),
-                bean.getCostoAcquisto()
-        );
+        Lotto lotto = Lotto.builder()
+                .idLotto(bean.getIdLotto())
+                .nomeFornitore(bean.getNomeFornitore())
+                .tipologiaProdotto(prodotto)
+                .quantitaKg(bean.getQuantitaKg())
+                .dataArrivo(bean.getDataArrivo())
+                .dataScadenza(bean.getDataScadenza())
+                .costoAcquisto(bean.getCostoAcquisto())
+                .build();
 
         // 5. Aggiornamento Giacenza Prodotto
         prodotto.aggiungiGiacenza(lotto.getQuantitaKg());

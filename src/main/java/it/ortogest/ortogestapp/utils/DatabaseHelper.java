@@ -11,7 +11,7 @@ import java.sql.Statement;
  */
 public class DatabaseHelper {
 
-    private static DatabaseHelper instance;
+    private static final DatabaseHelper instance = new DatabaseHelper();
     private static final String DB_URL = "jdbc:mysql://localhost:3306/ortogest?createDatabaseIfNotExist=true";
     private static final String DB_USER = "root";
     private static final String DB_PASS = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "root";
@@ -26,9 +26,6 @@ public class DatabaseHelper {
     }
 
     public static DatabaseHelper getInstance() {
-        if (instance == null) {
-            instance = new DatabaseHelper();
-        }
         return instance;
     }
 
@@ -99,15 +96,23 @@ public class DatabaseHelper {
             stmt.execute(sqlUtente);
             
             // Tentativo di ALTER TABLE per supportare aggiornamenti senza cancellare i dati
-            try { stmt.execute("ALTER TABLE lotto ADD COLUMN prezzo_vendita DOUBLE DEFAULT 0.0"); } catch (SQLException ignore) {}
-            try { stmt.execute("ALTER TABLE lotto ADD COLUMN sconto_attivo BOOLEAN DEFAULT FALSE"); } catch (SQLException ignore) {}
-            try { stmt.execute("ALTER TABLE lotto ADD COLUMN prezzo_scontato DOUBLE DEFAULT 0.0"); } catch (SQLException ignore) {}
-            try { stmt.execute("ALTER TABLE riga_ordine ADD COLUMN id_lotto VARCHAR(100)"); } catch (SQLException ignore) {}
+            eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN prezzo_vendita DOUBLE DEFAULT 0.0");
+            eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN sconto_attivo BOOLEAN DEFAULT FALSE");
+            eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN prezzo_scontato DOUBLE DEFAULT 0.0");
+            eseguiAlterTableSilenzioso(stmt, "ALTER TABLE riga_ordine ADD COLUMN id_lotto VARCHAR(100)");
             
             Printer.printf("Database MySQL inizializzato con successo.");
             
         } catch (SQLException e) {
             Printer.perror("Errore durante l'inizializzazione del database MySQL: " + e.getMessage());
+        }
+    }
+
+    private void eseguiAlterTableSilenzioso(Statement stmt, String sql) {
+        try {
+            stmt.execute(sql);
+        } catch (SQLException _) {
+            // Ignora se la colonna esiste già
         }
     }
 }

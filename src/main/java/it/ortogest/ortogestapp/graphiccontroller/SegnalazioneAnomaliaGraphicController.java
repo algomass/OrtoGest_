@@ -58,7 +58,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
         try {
             quantita = Double.parseDouble(quantitaStr);
             if (quantita <= 0) throw new NumberFormatException();
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             mostraStatus("Inserire una quantità numerica valida (maggiore di 0).", false);
             return;
         }

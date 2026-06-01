@@ -195,7 +195,7 @@ public class ResponsabileGraphicController {
                 caricaLotti(prodSelezionato);
             }
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             mostraErrore("Inserisci un valore numerico valido per il prezzo (es. 2.50).");
         } catch (Exception e) {
             mostraErrore(e.getMessage());
