@@ -71,18 +71,18 @@ public class GestioneCatalogoAppController {
         List<LottoBean> beans = new ArrayList<>();
         
         for (Lotto l : lotti) {
-            beans.add(new LottoBean(
-                    l.getIdLotto(),
-                    l.getNomeFornitore(),
-                    l.getTipologiaProdotto().getNome(),
-                    l.getQuantitaKg(),
-                    l.getDataArrivo(),
-                    l.getDataScadenza(),
-                    l.getCostoAcquisto(),
-                    l.getPrezzoVendita(),
-                    l.isScontoScadenzaAttivo(),
-                    l.getPrezzoScontato()
-            ));
+            beans.add(LottoBean.builder()
+                    .idLotto(l.getIdLotto())
+                    .nomeFornitore(l.getNomeFornitore())
+                    .nomeProdotto(l.getTipologiaProdotto().getNome())
+                    .quantitaKg(l.getQuantitaKg())
+                    .dataArrivo(l.getDataArrivo())
+                    .dataScadenza(l.getDataScadenza())
+                    .costoAcquisto(l.getCostoAcquisto())
+                    .prezzoVendita(l.getPrezzoVendita())
+                    .scontoScadenzaAttivo(l.isScontoScadenzaAttivo())
+                    .prezzoScontato(l.getPrezzoScontato())
+                    .build());
         }
         return beans;
     }

@@ -2,13 +2,8 @@ package it.ortogest.ortogestapp.dao;
 
 import it.ortogest.ortogestapp.model.Prodotto;
 import it.ortogest.ortogestapp.utils.DatabaseHelper;
-import it.ortogest.ortogestapp.utils.Printer;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProdottoDAOJdbc implements IProdottoDAO {
@@ -22,16 +17,16 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
     @Override
     public void salvaProdotto(Prodotto prodotto) {
         String sql = "INSERT INTO prodotto (nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path) " +
-                     "VALUES (?, ?, ?, ?, ?) " +
-                     "ON DUPLICATE KEY UPDATE " +
-                     "prezzo_attuale = VALUES(prezzo_attuale), " +
-                     "quantita_disponibile = VALUES(quantita_disponibile), " +
-                     "categoria = VALUES(categoria), " +
-                     "immagine_path = VALUES(immagine_path)";
-                     
-        DatabaseHelper.getInstance().executeUpdate(sql, "Errore in salvaProdotto", 
-            prodotto.getNome(), prodotto.getPrezzoAttuale(), prodotto.getQuantitaTotaleDisponibile(), 
-            prodotto.getCategoria(), prodotto.getImmaginePath());
+                "VALUES (?, ?, ?, ?, ?) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "prezzo_attuale = VALUES(prezzo_attuale), " +
+                "quantita_disponibile = VALUES(quantita_disponibile), " +
+                "categoria = VALUES(categoria), " +
+                "immagine_path = VALUES(immagine_path)";
+
+        DatabaseHelper.getInstance().executeUpdate(sql, "Errore in salvaProdotto",
+                prodotto.getNome(), prodotto.getPrezzoAttuale(), prodotto.getQuantitaTotaleDisponibile(),
+                prodotto.getCategoria(), prodotto.getImmaginePath());
     }
 
     @Override
@@ -43,17 +38,17 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
     @Override
     public List<Prodotto> trovaPerCategoria(String categoria) {
         String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto WHERE categoria = ?";
-        return DatabaseHelper.getInstance().queryForList(sql, this::estraiProdotto, "Errore in trovaPerCategoria", categoria);
+        return DatabaseHelper.getInstance().queryForList(sql, this::estraiProdotto, "Errore in trovaPerCategoria",
+                categoria);
     }
-    
+
     private Prodotto estraiProdotto(ResultSet rs) throws SQLException {
         return new Prodotto(
-            rs.getString("nome"),
-            rs.getDouble("prezzo_attuale"),
-            rs.getDouble("quantita_disponibile"),
-            rs.getString("categoria"),
-            rs.getString("immagine_path")
-        );
+                rs.getString("nome"),
+                rs.getDouble("prezzo_attuale"),
+                rs.getDouble("quantita_disponibile"),
+                rs.getString("categoria"),
+                rs.getString("immagine_path"));
     }
 
     @Override

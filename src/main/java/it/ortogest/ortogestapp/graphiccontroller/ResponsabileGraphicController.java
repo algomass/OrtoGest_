@@ -4,44 +4,59 @@ import it.ortogest.ortogestapp.appcontroller.GestioneCatalogoAppController;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.model.CategoriaProdotto;
-import it.ortogest.ortogestapp.utils.Printer;
-import it.ortogest.ortogestapp.utils.CostantiGUI;
-import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class ResponsabileGraphicController extends BaseGraphicController {
 
-    @FXML private TableView<ProdottoBean> tabellaProdotti;
-    @FXML private TableColumn<ProdottoBean, String> colNome;
-    @FXML private TableColumn<ProdottoBean, String> colCategoria;
-    @FXML private TableColumn<ProdottoBean, Double> colGiacenza;
+    @FXML
+    private TableView<ProdottoBean> tabellaProdotti;
+    @FXML
+    private TableColumn<ProdottoBean, String> colNome;
+    @FXML
+    private TableColumn<ProdottoBean, String> colCategoria;
+    @FXML
+    private TableColumn<ProdottoBean, Double> colGiacenza;
 
-    @FXML private TextField prodottoSelezionatoField;
-    @FXML private ComboBox<String> nuovaCategoriaComboBox;
+    @FXML
+    private TextField prodottoSelezionatoField;
+    @FXML
+    private ComboBox<String> nuovaCategoriaComboBox;
 
-    @FXML private TableView<LottoBean> tabellaLotti;
-    @FXML private TableColumn<LottoBean, String> colIdLotto;
-    @FXML private TableColumn<LottoBean, LocalDate> colDataScadenza;
-    @FXML private TableColumn<LottoBean, Double> colQuantitaLotto;
-    @FXML private TableColumn<LottoBean, Double> colCostoAcquisto;
-    @FXML private TableColumn<LottoBean, Double> colPrezzoVendita;
-    @FXML private TableColumn<LottoBean, Boolean> colScontoAttivo;
-    @FXML private TableColumn<LottoBean, Double> colPrezzoScontato;
+    @FXML
+    private TableView<LottoBean> tabellaLotti;
+    @FXML
+    private TableColumn<LottoBean, String> colIdLotto;
+    @FXML
+    private TableColumn<LottoBean, LocalDate> colDataScadenza;
+    @FXML
+    private TableColumn<LottoBean, Double> colQuantitaLotto;
+    @FXML
+    private TableColumn<LottoBean, Double> colCostoAcquisto;
+    @FXML
+    private TableColumn<LottoBean, Double> colPrezzoVendita;
+    @FXML
+    private TableColumn<LottoBean, Boolean> colScontoAttivo;
+    @FXML
+    private TableColumn<LottoBean, Double> colPrezzoScontato;
 
-    @FXML private TextField lottoSelezionatoField;
-    @FXML private TextField prezzoVenditaField;
-    @FXML private CheckBox scontoCheckBox;
-    @FXML private TextField prezzoScontatoField;
-    
-    @FXML private Label messaggioLabel;
+    @FXML
+    private TextField lottoSelezionatoField;
+    @FXML
+    private TextField prezzoVenditaField;
+    @FXML
+    private CheckBox scontoCheckBox;
+    @FXML
+    private TextField prezzoScontatoField;
+
+    @FXML
+    private Label messaggioLabel;
 
     private GestioneCatalogoAppController appController;
 
@@ -105,7 +120,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
         List<ProdottoBean> prodotti = appController.getTuttiIProdotti();
         ObservableList<ProdottoBean> observableList = FXCollections.observableArrayList(prodotti);
         tabellaProdotti.setItems(observableList);
-        
+
         // Manteniamo la selezione se possibile
         String prodSelezionato = prodottoSelezionatoField.getText();
         if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
@@ -121,7 +136,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
         ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lotti);
         tabellaLotti.setItems(observableList);
     }
-    
+
     private void pulisciFormLotto() {
         lottoSelezionatoField.clear();
         prezzoVenditaField.clear();
@@ -139,7 +154,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             mostraErrore("Seleziona prima un prodotto dalla tabella.");
             return;
         }
-        
+
         if (categoriaSelezionata == null) {
             mostraErrore("Seleziona una categoria valida.");
             return;
@@ -164,7 +179,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     public void aggiornaPrezzoLottoAction() {
         messaggioLabel.setVisible(false);
         String idLotto = lottoSelezionatoField.getText();
-        
+
         if (idLotto == null || idLotto.isEmpty()) {
             mostraErrore("Seleziona prima un lotto dalla tabella.");
             return;
@@ -174,7 +189,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             double nuovoPrezzo = Double.parseDouble(prezzoVenditaField.getText());
             boolean scontoAttivo = scontoCheckBox.isSelected();
             double prezzoScontato = 0.0;
-            
+
             if (scontoAttivo) {
                 prezzoScontato = Double.parseDouble(prezzoScontatoField.getText());
             }
@@ -188,7 +203,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             appController.aggiornaPrezzoLotto(bean);
 
             mostraSuccesso("Prezzi del lotto aggiornati correttamente");
-            
+
             // Ricarichiamo i lotti del prodotto corrente
             String prodSelezionato = prodottoSelezionatoField.getText();
             if (prodSelezionato != null && !prodSelezionato.isEmpty()) {

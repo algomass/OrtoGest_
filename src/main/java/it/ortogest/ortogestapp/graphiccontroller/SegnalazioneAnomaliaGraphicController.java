@@ -10,8 +10,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
-
 import java.io.IOException;
 
 /**
@@ -49,7 +47,8 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
         String quantitaStr = quantitaField.getText();
         String note = noteArea.getText();
 
-        if (tipo == null || prodotto == null || prodotto.trim().isEmpty() || quantitaStr == null || quantitaStr.trim().isEmpty()) {
+        if (tipo == null || prodotto == null || prodotto.trim().isEmpty() || quantitaStr == null
+                || quantitaStr.trim().isEmpty()) {
             mostraStatus("Tutti i campi obbligatori devono essere compilati.", false);
             return;
         }
@@ -57,7 +56,8 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
         double quantita;
         try {
             quantita = Double.parseDouble(quantitaStr);
-            if (quantita <= 0) throw new NumberFormatException();
+            if (quantita <= 0)
+                throw new NumberFormatException();
         } catch (NumberFormatException _) {
             mostraStatus("Inserire una quantità numerica valida (maggiore di 0).", false);
             return;
@@ -66,13 +66,13 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
         // 2. Creazione Bean e comunicazione con l'Application Controller
         AnomaliaBean anomaliaBean = new AnomaliaBean(tipo, prodotto, quantita, note);
         GestioneMagazzinoAppController appController = new GestioneMagazzinoAppController();
-        
+
         String messaggioRisultato = appController.inoltraSegnalazione(anomaliaBean);
-        
+
         // 3. Mostro successo e torno al Magazzino
         mostraStatus(messaggioRisultato, true);
         Printer.printf(messaggioRisultato);
-        
+
         try {
             SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_MAGAZZINO);
         } catch (IOException e) {

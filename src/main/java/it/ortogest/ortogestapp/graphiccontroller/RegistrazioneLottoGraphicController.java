@@ -5,7 +5,6 @@ import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.CostantiGUI;
-import it.ortogest.ortogestapp.utils.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,19 +13,26 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import java.io.IOException;
 import java.util.List;
 
 public class RegistrazioneLottoGraphicController extends BaseGraphicController {
 
-    @FXML private TextField idLottoField;
-    @FXML private TextField fornitoreField;
-    @FXML private ComboBox<String> prodottoComboBox;
-    @FXML private TextField quantitaField;
-    @FXML private DatePicker dataArrivoPicker;
-    @FXML private DatePicker dataScadenzaPicker;
-    @FXML private TextField costoAcquistoField;
-    @FXML private Label errorLabel;
+    @FXML
+    private TextField idLottoField;
+    @FXML
+    private TextField fornitoreField;
+    @FXML
+    private ComboBox<String> prodottoComboBox;
+    @FXML
+    private TextField quantitaField;
+    @FXML
+    private DatePicker dataArrivoPicker;
+    @FXML
+    private DatePicker dataScadenzaPicker;
+    @FXML
+    private TextField costoAcquistoField;
+    @FXML
+    private Label errorLabel;
 
     @FXML
     public void initialize() {
@@ -44,7 +50,8 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
 
     @FXML
     public void segnalaAnomaliaAction() {
-        cambiaScenaSicuro(CostantiGUI.VIEW_SEGNALAZIONE_ANOMALIA, "Errore nell'apertura della schermata di segnalazione:");
+        cambiaScenaSicuro(CostantiGUI.VIEW_SEGNALAZIONE_ANOMALIA,
+                "Errore nell'apertura della schermata di segnalazione:");
     }
 
     @FXML
@@ -58,8 +65,10 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
             // Usiamo getEditor().getText() per leggere anche i nomi digitati manualmente
             String prodotto = prodottoComboBox.getEditor().getText();
             String quantitaStr = quantitaField.getText();
-            
-            if (idLotto == null || idLotto.trim().isEmpty() || fornitore == null || fornitore.trim().isEmpty() || prodotto == null || prodotto.trim().isEmpty() || quantitaStr == null || quantitaStr.trim().isEmpty()) {
+
+            if (idLotto == null || idLotto.trim().isEmpty() || fornitore == null || fornitore.trim().isEmpty()
+                    || prodotto == null || prodotto.trim().isEmpty() || quantitaStr == null
+                    || quantitaStr.trim().isEmpty()) {
                 throw new GestioneException("Tutti i campi testuali sono obbligatori.");
             }
 
@@ -88,7 +97,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
 
             // 4. Successo
             Printer.printf("Lotto registrato con successo! ID: " + risultato.getIdLotto());
-            
+
             // Torniamo alla home magazzino
             indietroAction();
 
