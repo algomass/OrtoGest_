@@ -1,34 +1,27 @@
 package it.ortogest.ortogestapp.beans;
 
+import it.ortogest.ortogestapp.model.AbstractLotto;
 import java.time.LocalDate;
 
 /**
  * Data Transfer Object per trasportare i dati del Lotto
  * tra il Graphic Controller e l'Application Controller.
  */
-public class LottoBean {
-    private String idLotto;
-    private String nomeFornitore;
+public class LottoBean extends AbstractLotto {
     private String nomeProdotto; // Trasportiamo solo il nome del prodotto (stringa) per disaccoppiamento
-    private double quantitaKg;
-    private LocalDate dataArrivo;
-    private LocalDate dataScadenza;
-    private double costoAcquisto;
-    private double prezzoVendita;
-    private boolean scontoScadenzaAttivo;
-    private double prezzoScontato;
 
     private LottoBean(Builder builder) {
-        this.idLotto = builder.idLotto;
-        this.nomeFornitore = builder.nomeFornitore;
+        super();
+        this.setIdLotto(builder.idLotto);
+        this.setNomeFornitore(builder.nomeFornitore);
         this.nomeProdotto = builder.nomeProdotto;
-        this.quantitaKg = builder.quantitaKg;
-        this.dataArrivo = builder.dataArrivo;
-        this.dataScadenza = builder.dataScadenza;
-        this.costoAcquisto = builder.costoAcquisto;
-        this.prezzoVendita = builder.prezzoVendita;
-        this.scontoScadenzaAttivo = builder.scontoScadenzaAttivo;
-        this.prezzoScontato = builder.prezzoScontato;
+        this.setQuantitaKg(builder.quantitaKg);
+        this.setDataArrivo(builder.dataArrivo);
+        this.setDataScadenza(builder.dataScadenza);
+        this.setCostoAcquisto(builder.costoAcquisto);
+        this.setPrezzoVendita(builder.prezzoVendita);
+        this.setScontoScadenzaAttivo(builder.scontoScadenzaAttivo);
+        this.setPrezzoScontato(builder.prezzoScontato);
     }
 
     public static Builder builder() {
@@ -65,83 +58,11 @@ public class LottoBean {
 
     public LottoBean() {}
 
-    public String getIdLotto() {
-        return idLotto;
-    }
-
-    public void setIdLotto(String idLotto) {
-        this.idLotto = idLotto;
-    }
-
-    public String getNomeFornitore() {
-        return nomeFornitore;
-    }
-
-    public void setNomeFornitore(String nomeFornitore) {
-        this.nomeFornitore = nomeFornitore;
-    }
-
     public String getNomeProdotto() {
         return nomeProdotto;
     }
 
     public void setNomeProdotto(String nomeProdotto) {
         this.nomeProdotto = nomeProdotto;
-    }
-
-    public double getQuantitaKg() {
-        return quantitaKg;
-    }
-
-    public void setQuantitaKg(double quantitaKg) {
-        this.quantitaKg = quantitaKg;
-    }
-
-    public LocalDate getDataArrivo() {
-        return dataArrivo;
-    }
-
-    public void setDataArrivo(LocalDate dataArrivo) {
-        this.dataArrivo = dataArrivo;
-    }
-
-    public LocalDate getDataScadenza() {
-        return dataScadenza;
-    }
-
-    public void setDataScadenza(LocalDate dataScadenza) {
-        this.dataScadenza = dataScadenza;
-    }
-
-    public double getCostoAcquisto() {
-        return costoAcquisto;
-    }
-
-    public void setCostoAcquisto(double costoAcquisto) {
-        this.costoAcquisto = costoAcquisto;
-    }
-
-    public double getPrezzoVendita() {
-        return prezzoVendita;
-    }
-
-    public void setPrezzoVendita(double prezzoVendita) {
-        this.prezzoVendita = prezzoVendita;
-    }
-
-    public boolean isScontoScadenzaAttivo() {
-        return scontoScadenzaAttivo;
-    }
-
-    public void setScontoScadenzaAttivo(boolean scontoScadenzaAttivo) {
-        this.scontoScadenzaAttivo = scontoScadenzaAttivo;
-    }
-
-    public double getPrezzoScontato() {
-        return prezzoScontato;
-    }
-
-    public void setPrezzoScontato(double prezzoScontato) {
-        this.prezzoScontato = prezzoScontato;
     }
 }

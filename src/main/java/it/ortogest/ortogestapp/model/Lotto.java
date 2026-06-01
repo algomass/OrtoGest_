@@ -6,29 +6,21 @@ import java.time.LocalDate;
  * Entità di Dominio: Rappresenta uno specifico carico di merce in entrata.
  * Raccoglie i dati fisici di una consegna (lotto) e si associa alla tipologia di Prodotto.
  */
-public class Lotto {
-    private String idLotto; // Codice inserito manualmente dal magazziniere leggendo il bancale
-    private String nomeFornitore;
+public class Lotto extends AbstractLotto {
     private Prodotto tipologiaProdotto;
-    private double quantitaKg;
-    private LocalDate dataArrivo;
-    private LocalDate dataScadenza;
-    private double costoAcquisto; // Costo di acquisto del lotto dal fornitore
-    private double prezzoVendita;
-    private boolean scontoScadenzaAttivo;
-    private double prezzoScontato;
 
     private Lotto(Builder builder) {
-        this.idLotto = builder.idLotto;
-        this.nomeFornitore = builder.nomeFornitore;
+        super();
+        this.setIdLotto(builder.idLotto);
+        this.setNomeFornitore(builder.nomeFornitore);
         this.tipologiaProdotto = builder.tipologiaProdotto;
-        this.quantitaKg = builder.quantitaKg;
-        this.dataArrivo = builder.dataArrivo;
-        this.dataScadenza = builder.dataScadenza;
-        this.costoAcquisto = builder.costoAcquisto;
-        this.prezzoVendita = builder.prezzoVendita;
-        this.scontoScadenzaAttivo = builder.scontoScadenzaAttivo;
-        this.prezzoScontato = builder.prezzoScontato;
+        this.setQuantitaKg(builder.quantitaKg);
+        this.setDataArrivo(builder.dataArrivo);
+        this.setDataScadenza(builder.dataScadenza);
+        this.setCostoAcquisto(builder.costoAcquisto);
+        this.setPrezzoVendita(builder.prezzoVendita);
+        this.setScontoScadenzaAttivo(builder.scontoScadenzaAttivo);
+        this.setPrezzoScontato(builder.prezzoScontato);
     }
 
     public static Builder builder() {
@@ -63,83 +55,11 @@ public class Lotto {
         }
     }
 
-    public String getIdLotto() {
-        return idLotto;
-    }
-
-    public void setIdLotto(String idLotto) {
-        this.idLotto = idLotto;
-    }
-
-    public String getNomeFornitore() {
-        return nomeFornitore;
-    }
-
-    public void setNomeFornitore(String nomeFornitore) {
-        this.nomeFornitore = nomeFornitore;
-    }
-
     public Prodotto getTipologiaProdotto() {
         return tipologiaProdotto;
     }
 
     public void setTipologiaProdotto(Prodotto tipologiaProdotto) {
         this.tipologiaProdotto = tipologiaProdotto;
-    }
-
-    public double getQuantitaKg() {
-        return quantitaKg;
-    }
-
-    public void setQuantitaKg(double quantitaKg) {
-        this.quantitaKg = quantitaKg;
-    }
-
-    public LocalDate getDataArrivo() {
-        return dataArrivo;
-    }
-
-    public void setDataArrivo(LocalDate dataArrivo) {
-        this.dataArrivo = dataArrivo;
-    }
-
-    public LocalDate getDataScadenza() {
-        return dataScadenza;
-    }
-
-    public void setDataScadenza(LocalDate dataScadenza) {
-        this.dataScadenza = dataScadenza;
-    }
-
-    public double getCostoAcquisto() {
-        return costoAcquisto;
-    }
-
-    public void setCostoAcquisto(double costoAcquisto) {
-        this.costoAcquisto = costoAcquisto;
-    }
-
-    public double getPrezzoVendita() {
-        return prezzoVendita;
-    }
-
-    public void setPrezzoVendita(double prezzoVendita) {
-        this.prezzoVendita = prezzoVendita;
-    }
-
-    public boolean isScontoScadenzaAttivo() {
-        return scontoScadenzaAttivo;
-    }
-
-    public void setScontoScadenzaAttivo(boolean scontoScadenzaAttivo) {
-        this.scontoScadenzaAttivo = scontoScadenzaAttivo;
-    }
-
-    public double getPrezzoScontato() {
-        return prezzoScontato;
-    }
-
-    public void setPrezzoScontato(double prezzoScontato) {
-        this.prezzoScontato = prezzoScontato;
     }
 }
