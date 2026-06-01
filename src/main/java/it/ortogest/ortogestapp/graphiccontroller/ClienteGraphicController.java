@@ -49,6 +49,8 @@ public class ClienteGraphicController extends BaseGraphicController {
     @FXML
     private ScrollPane scrollPaneCatalogo;
 
+    @FXML private TableView<ProdottoBean> catalogoTable;
+
     @FXML
     private VBox ordiniContainer;
 
@@ -473,8 +475,6 @@ public class ClienteGraphicController extends BaseGraphicController {
     }
 
     private void mostraMessaggio(String msg, boolean successo) {
-        errorLabel.setText(msg);
-        errorLabel.setTextFill(successo ? Color.web("#27ae60") : Color.web("#e74c3c"));
-        errorLabel.setVisible(true);
+        mostraStatusLabel(errorLabel, msg, successo);
     }
 }

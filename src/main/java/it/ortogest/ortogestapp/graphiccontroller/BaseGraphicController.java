@@ -5,6 +5,8 @@ import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.SceneManager;
 import it.ortogest.ortogestapp.utils.SessionManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
@@ -21,11 +23,30 @@ public abstract class BaseGraphicController {
         SessionManager.getInstance().logout();
         Printer.printf("Logout effettuato con successo. Ritorno alla schermata iniziale.");
 
-        // 2. Chiedo allo SceneManager di riportarmi alla view di Login
+        cambiaScenaSicuro(CostantiGUI.VIEW_LOGIN, "Errore critico durante il logout: impossibile ricaricare Login.fxml.");
+    }
+
+    /**
+     * Esegue il cambio di scena gestendo l'eccezione in modo sicuro.
+     * @param viewName Nome della vista da caricare.
+     * @param errorMessage Messaggio di errore se fallisce.
+     */
+    protected void cambiaScenaSicuro(String viewName, String errorMessage) {
         try {
-            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_LOGIN);
+            SceneManager.getInstance().cambiaScena(viewName);
         } catch (IOException e) {
-            Printer.perror("Errore critico durante il logout: impossibile ricaricare Login.fxml. " + e.getMessage());
+            Printer.perror(errorMessage + " " + e.getMessage());
+        }
+    }
+
+    /**
+     * Centralizza la logica di colorazione delle label di stato (verde se successo, rosso se errore).
+     */
+    protected void mostraStatusLabel(Label label, String messaggio, boolean successo) {
+        if (label != null) {
+            label.setText(messaggio);
+            label.setTextFill(successo ? Color.web("#27ae60") : Color.web("#e74c3c"));
+            label.setVisible(true);
         }
     }
 }

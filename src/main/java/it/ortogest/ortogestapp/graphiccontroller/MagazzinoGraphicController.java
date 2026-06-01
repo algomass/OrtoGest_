@@ -231,19 +231,11 @@ public class MagazzinoGraphicController extends BaseGraphicController {
 
     @FXML
     public void apriSegnalazioneAnomaliaAction() {
-        try {
-            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_SEGNALAZIONE_ANOMALIA);
-        } catch (IOException e) {
-            Printer.perror("Errore nell'apertura della schermata di segnalazione: " + e.getMessage());
-        }
+        cambiaScenaSicuro(CostantiGUI.VIEW_SEGNALAZIONE_ANOMALIA, "Errore nell'apertura della schermata di segnalazione:");
     }
 
     @FXML
     public void registraLottoAction() {
-        try {
-            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_REGISTRAZIONE_LOTTO);
-        } catch (IOException e) {
-            Printer.perror("Errore nell'apertura della schermata di registrazione lotto: " + e.getMessage());
-        }
+        cambiaScenaSicuro(CostantiGUI.VIEW_REGISTRAZIONE_LOTTO, "Errore nell'apertura della schermata di registrazione lotto:");
     }
 }

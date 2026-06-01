@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-public class ResponsabileGraphicController {
+public class ResponsabileGraphicController extends BaseGraphicController {
 
     @FXML private TableView<ProdottoBean> tabellaProdotti;
     @FXML private TableColumn<ProdottoBean, String> colNome;
@@ -204,22 +204,14 @@ public class ResponsabileGraphicController {
 
     @FXML
     public void logoutAction() {
-        try {
-            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_LOGIN);
-        } catch (IOException e) {
-            Printer.perror("Errore nel ritorno al login: " + e.getMessage());
-        }
+        super.logoutAction();
     }
 
     private void mostraErrore(String msg) {
-        messaggioLabel.setText(msg);
-        messaggioLabel.setTextFill(Color.web("#e74c3c")); // Rosso
-        messaggioLabel.setVisible(true);
+        mostraStatusLabel(messaggioLabel, msg, false);
     }
 
     private void mostraSuccesso(String msg) {
-        messaggioLabel.setText(msg);
-        messaggioLabel.setTextFill(Color.web("#27ae60")); // Verde
-        messaggioLabel.setVisible(true);
+        mostraStatusLabel(messaggioLabel, msg, true);
     }
 }

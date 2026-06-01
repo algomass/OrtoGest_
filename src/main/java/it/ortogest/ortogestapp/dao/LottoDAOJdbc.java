@@ -30,80 +30,28 @@ public class LottoDAOJdbc implements ILottoDAO {
                      "sconto_attivo = VALUES(sconto_attivo), " +
                      "prezzo_scontato = VALUES(prezzo_scontato)";
                      
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
-            stmt.setString(1, lotto.getIdLotto());
-            stmt.setString(2, lotto.getNomeFornitore());
-            stmt.setString(3, lotto.getTipologiaProdotto().getNome());
-            stmt.setDouble(4, lotto.getQuantitaKg());
-            stmt.setString(5, lotto.getDataArrivo().toString());
-            stmt.setString(6, lotto.getDataScadenza().toString());
-            stmt.setDouble(7, lotto.getCostoAcquisto());
-            stmt.setDouble(8, lotto.getPrezzoVendita());
-            stmt.setBoolean(9, lotto.isScontoScadenzaAttivo());
-            stmt.setDouble(10, lotto.getPrezzoScontato());
-            
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            Printer.perror("Errore in salvaLotto: " + e.getMessage());
-        }
+        DatabaseHelper.getInstance().executeUpdate(sql, "Errore in salvaLotto",
+            lotto.getIdLotto(), lotto.getNomeFornitore(), lotto.getTipologiaProdotto().getNome(),
+            lotto.getQuantitaKg(), lotto.getDataArrivo().toString(), lotto.getDataScadenza().toString(),
+            lotto.getCostoAcquisto(), lotto.getPrezzoVendita(), lotto.isScontoScadenzaAttivo(), lotto.getPrezzoScontato());
     }
 
     @Override
     public List<Lotto> getTuttiILotti() {
-        List<Lotto> lotti = new ArrayList<>();
         String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato FROM lotto";
-        
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-             
-            while (rs.next()) {
-                lotti.add(estraiLotto(rs));
-            }
-        } catch (SQLException e) {
-            Printer.perror("Errore in getTuttiILotti: " + e.getMessage());
-        }
-        return lotti;
+        return DatabaseHelper.getInstance().queryForList(sql, this::estraiLotto, "Errore in getTuttiILotti");
     }
 
     @Override
     public Lotto trovaPerId(String idLotto) {
         String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato FROM lotto WHERE id_lotto = ?";
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
-            stmt.setString(1, idLotto);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return estraiLotto(rs);
-                }
-            }
-        } catch (SQLException e) {
-            Printer.perror("Errore in trovaPerId: " + e.getMessage());
-        }
-        return null;
+        return DatabaseHelper.getInstance().queryForObject(sql, this::estraiLotto, "Errore in trovaPerId", idLotto);
     }
 
     @Override
     public List<Lotto> trovaPerProdotto(String nomeProdotto) {
-        List<Lotto> lotti = new ArrayList<>();
         String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato FROM lotto WHERE nome_prodotto = ?";
-        
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
-            stmt.setString(1, nomeProdotto);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    lotti.add(estraiLotto(rs));
-                }
-            }
-        } catch (SQLException e) {
-            Printer.perror("Errore in trovaPerProdotto: " + e.getMessage());
-        }
-        return lotti;
+        return DatabaseHelper.getInstance().queryForList(sql, this::estraiLotto, "Errore in trovaPerProdotto", nomeProdotto);
     }
     
     private Lotto estraiLotto(ResultSet rs) throws SQLException {
@@ -127,31 +75,13 @@ public class LottoDAOJdbc implements ILottoDAO {
     @Override
     public void eliminaLotto(String idLotto) {
         String sql = "DELETE FROM lotto WHERE id_lotto = ?";
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
-            stmt.setString(1, idLotto);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            Printer.perror("Errore in eliminaLotto: " + e.getMessage());
-        }
+        DatabaseHelper.getInstance().executeUpdate(sql, "Errore in eliminaLotto", idLotto);
     }
 
     @Override
     public double getPrezzoMedioAcquisto(String nomeProdotto) {
         String sql = "SELECT AVG(costo_acquisto) AS media FROM lotto WHERE nome_prodotto = ?";
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
-            stmt.setString(1, nomeProdotto);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getDouble("media");
-                }
-            }
-        } catch (SQLException e) {
-            Printer.perror("Errore in getPrezzoMedioAcquisto: " + e.getMessage());
-        }
-        return 0.0;
+        Double media = DatabaseHelper.getInstance().queryForObject(sql, rs -> rs.getDouble("media"), "Errore in getPrezzoMedioAcquisto", nomeProdotto);
+        return media != null ? media : 0.0;
     }
 }

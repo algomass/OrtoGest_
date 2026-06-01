@@ -89,9 +89,12 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
         }
     }
 
+    @FXML
+    public void indietroAction() {
+        cambiaScenaSicuro(CostantiGUI.VIEW_MAGAZZINO, "Errore tornando al Magazzino:");
+    }
+
     private void mostraStatus(String messaggio, boolean successo) {
-        statusLabel.setText(messaggio);
-        statusLabel.setTextFill(successo ? Color.web("#27ae60") : Color.web("#e74c3c"));
-        statusLabel.setVisible(true);
+        mostraStatusLabel(statusLabel, messaggio, successo);
     }
 }

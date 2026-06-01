@@ -2,8 +2,12 @@ package it.ortogest.ortogestapp.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe di supporto per la gestione della connessione al database MySQL.
@@ -113,6 +117,61 @@ public class DatabaseHelper {
             stmt.execute(sql);
         } catch (SQLException _) {
             // Ignora se la colonna esiste già
+        }
+    }
+
+    @FunctionalInterface
+    public interface ResultSetExtractor<T> {
+        T extract(ResultSet rs) throws SQLException;
+    }
+
+    public <T> T queryForObject(String sql, ResultSetExtractor<T> extractor, String errorMessage, Object... params) {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            for (int i = 0; i < params.length; i++) {
+                stmt.setObject(i + 1, params[i]);
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return extractor.extract(rs);
+                }
+            }
+        } catch (SQLException e) {
+            Printer.perror(errorMessage + ": " + e.getMessage());
+        }
+        return null;
+    }
+
+    public <T> List<T> queryForList(String sql, ResultSetExtractor<T> extractor, String errorMessage, Object... params) {
+        List<T> list = new ArrayList<>();
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            for (int i = 0; i < params.length; i++) {
+                stmt.setObject(i + 1, params[i]);
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(extractor.extract(rs));
+                }
+            }
+        } catch (SQLException e) {
+            Printer.perror(errorMessage + ": " + e.getMessage());
+        }
+        return list;
+    }
+
+    public void executeUpdate(String sql, String errorMessage, Object... params) {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            for (int i = 0; i < params.length; i++) {
+                stmt.setObject(i + 1, params[i]);
+            }
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            Printer.perror(errorMessage + ": " + e.getMessage());
         }
     }
 }

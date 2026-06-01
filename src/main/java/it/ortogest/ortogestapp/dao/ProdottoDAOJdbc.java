@@ -15,20 +15,8 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
 
     @Override
     public List<Prodotto> getTuttiIProdotti() {
-        List<Prodotto> prodotti = new ArrayList<>();
         String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto";
-        
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-             
-            while (rs.next()) {
-                prodotti.add(estraiProdotto(rs));
-            }
-        } catch (SQLException e) {
-            Printer.perror("Errore in getTuttiIProdotti: " + e.getMessage());
-        }
-        return prodotti;
+        return DatabaseHelper.getInstance().queryForList(sql, this::estraiProdotto, "Errore in getTuttiIProdotti");
     }
 
     @Override
@@ -41,57 +29,21 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
                      "categoria = VALUES(categoria), " +
                      "immagine_path = VALUES(immagine_path)";
                      
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
-            stmt.setString(1, prodotto.getNome());
-            stmt.setDouble(2, prodotto.getPrezzoAttuale());
-            stmt.setDouble(3, prodotto.getQuantitaTotaleDisponibile());
-            stmt.setString(4, prodotto.getCategoria());
-            stmt.setString(5, prodotto.getImmaginePath());
-            
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            Printer.perror("Errore in salvaProdotto: " + e.getMessage());
-        }
+        DatabaseHelper.getInstance().executeUpdate(sql, "Errore in salvaProdotto", 
+            prodotto.getNome(), prodotto.getPrezzoAttuale(), prodotto.getQuantitaTotaleDisponibile(), 
+            prodotto.getCategoria(), prodotto.getImmaginePath());
     }
 
     @Override
     public Prodotto trovaPerNome(String nome) {
         String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto WHERE nome = ?";
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
-            stmt.setString(1, nome);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return estraiProdotto(rs);
-                }
-            }
-        } catch (SQLException e) {
-            Printer.perror("Errore in trovaPerNome: " + e.getMessage());
-        }
-        return null;
+        return DatabaseHelper.getInstance().queryForObject(sql, this::estraiProdotto, "Errore in trovaPerNome", nome);
     }
 
     @Override
     public List<Prodotto> trovaPerCategoria(String categoria) {
-        List<Prodotto> prodotti = new ArrayList<>();
         String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto WHERE categoria = ?";
-        
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
-            stmt.setString(1, categoria);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    prodotti.add(estraiProdotto(rs));
-                }
-            }
-        } catch (SQLException e) {
-            Printer.perror("Errore in trovaPerCategoria: " + e.getMessage());
-        }
-        return prodotti;
+        return DatabaseHelper.getInstance().queryForList(sql, this::estraiProdotto, "Errore in trovaPerCategoria", categoria);
     }
     
     private Prodotto estraiProdotto(ResultSet rs) throws SQLException {
@@ -107,13 +59,6 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
     @Override
     public void eliminaProdotto(String nome) {
         String sql = "DELETE FROM prodotto WHERE nome = ?";
-        try (Connection conn = DatabaseHelper.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-             
-            stmt.setString(1, nome);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            Printer.perror("Errore in eliminaProdotto: " + e.getMessage());
-        }
+        DatabaseHelper.getInstance().executeUpdate(sql, "Errore in eliminaProdotto", nome);
     }
 }

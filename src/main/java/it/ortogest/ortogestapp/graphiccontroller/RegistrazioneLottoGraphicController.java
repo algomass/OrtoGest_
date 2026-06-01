@@ -17,7 +17,7 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.util.List;
 
-public class RegistrazioneLottoGraphicController {
+public class RegistrazioneLottoGraphicController extends BaseGraphicController {
 
     @FXML private TextField idLottoField;
     @FXML private TextField fornitoreField;
@@ -39,20 +39,12 @@ public class RegistrazioneLottoGraphicController {
 
     @FXML
     public void indietroAction() {
-        try {
-            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_MAGAZZINO);
-        } catch (IOException e) {
-            Printer.perror("Errore nel ritorno al magazzino: " + e.getMessage());
-        }
+        cambiaScenaSicuro(CostantiGUI.VIEW_MAGAZZINO, "Errore nel ritorno al magazzino:");
     }
 
     @FXML
     public void segnalaAnomaliaAction() {
-        try {
-            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_SEGNALAZIONE_ANOMALIA);
-        } catch (IOException e) {
-            Printer.perror("Errore nell'apertura della schermata di segnalazione: " + e.getMessage());
-        }
+        cambiaScenaSicuro(CostantiGUI.VIEW_SEGNALAZIONE_ANOMALIA, "Errore nell'apertura della schermata di segnalazione:");
     }
 
     @FXML
