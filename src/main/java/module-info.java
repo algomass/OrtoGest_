@@ -19,7 +19,10 @@ module it.ortogest.ortogestapp {
 
     // 3. Esporta i package utilizzati nelle firme pubbliche esportate
     exports it.ortogest.ortogestapp.beans;
+    exports it.ortogest.ortogestapp.model;
     exports it.ortogest.ortogestapp.utils;
 
+    opens it.ortogest.ortogestapp.beans to javafx.base;
+    opens it.ortogest.ortogestapp.model to javafx.base;
     opens it.ortogest.ortogestapp.utils to javafx.fxml;
 }
