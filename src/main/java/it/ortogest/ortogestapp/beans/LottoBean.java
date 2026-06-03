@@ -1,7 +1,6 @@
 package it.ortogest.ortogestapp.beans;
 
 import it.ortogest.ortogestapp.model.AbstractLotto;
-import java.time.LocalDate;
 
 /**
  * Data Transfer Object per trasportare i dati del Lotto
@@ -27,9 +26,9 @@ public class LottoBean extends AbstractLotto {
             return this;
         }
 
-        public Builder nomeProdotto(String nomeProdotto) { 
-            this.nomeProdotto = nomeProdotto; 
-            return this; 
+        public Builder nomeProdotto(String nomeProdotto) {
+            this.nomeProdotto = nomeProdotto;
+            return this;
         }
 
         @Override
@@ -38,7 +37,8 @@ public class LottoBean extends AbstractLotto {
         }
     }
 
-    public LottoBean() {}
+    public LottoBean() {
+    }
 
     public String getNomeProdotto() {
         return nomeProdotto;

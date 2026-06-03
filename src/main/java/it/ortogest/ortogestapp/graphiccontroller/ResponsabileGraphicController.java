@@ -218,6 +218,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     }
 
     @FXML
+    @Override
     public void logoutAction() {
         super.logoutAction();
     }

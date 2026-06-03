@@ -113,7 +113,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
     private double parseDoubleOrThrow(String value, String errorMessage) throws GestioneException {
         try {
             return Double.parseDouble(value);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             throw new GestioneException(errorMessage);
         }
     }

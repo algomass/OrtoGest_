@@ -1,10 +1,9 @@
 package it.ortogest.ortogestapp.model;
 
-import java.time.LocalDate;
-
 /**
  * Entità di Dominio: Rappresenta uno specifico carico di merce in entrata.
- * Raccoglie i dati fisici di una consegna (lotto) e si associa alla tipologia di Prodotto.
+ * Raccoglie i dati fisici di una consegna (lotto) e si associa alla tipologia
+ * di Prodotto.
  */
 public class Lotto extends AbstractLotto {
     private Prodotto tipologiaProdotto;
@@ -26,9 +25,9 @@ public class Lotto extends AbstractLotto {
             return this;
         }
 
-        public Builder tipologiaProdotto(Prodotto tipologiaProdotto) { 
-            this.tipologiaProdotto = tipologiaProdotto; 
-            return this; 
+        public Builder tipologiaProdotto(Prodotto tipologiaProdotto) {
+            this.tipologiaProdotto = tipologiaProdotto;
+            return this;
         }
 
         @Override

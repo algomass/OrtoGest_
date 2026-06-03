@@ -13,7 +13,7 @@ public abstract class AbstractLotto {
     private boolean scontoScadenzaAttivo;
     private double prezzoScontato;
 
-    public AbstractLotto() {}
+    protected AbstractLotto() {}
 
     protected AbstractLotto(AbstractBuilder<?, ?> builder) {
         this.idLotto = builder.idLotto;
