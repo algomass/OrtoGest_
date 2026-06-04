@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Controller Grafico (Boundary) per la schermata della Cassa.
@@ -47,7 +46,7 @@ public class CassaGraphicController extends BaseGraphicController {
         // Filtra solo quelli pronti per il ritiro
         List<OrdineBean> pronti = tuttiOrdini.stream()
                 .filter(o -> "Pronto per il Ritiro".equals(o.getStato()))
-                .collect(Collectors.toList());
+                .toList();
                 
         ObservableList<OrdineBean> data = FXCollections.observableArrayList(pronti);
         ordiniTable.setItems(data);

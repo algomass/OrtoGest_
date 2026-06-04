@@ -14,6 +14,8 @@ import java.util.List;
 
 public class OrdineDAOJdbc implements IOrdineDAO {
 
+    private static final String COLUMN_STATO = "stato";
+
     @Override
     public void salvaOrdine(Ordine ordine) {
         String sqlOrdine = "INSERT INTO ordine (id_ordine, email_cliente, stato) VALUES (?, ?, ?) " +
@@ -67,7 +69,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     String idOrdine = rs.getString("id_ordine");
-                    String stato = rs.getString("stato");
+                    String stato = rs.getString(COLUMN_STATO);
                     List<RigaOrdine> righe = caricaRigheOrdine(conn, idOrdine);
                     ordini.add(new Ordine(idOrdine, emailCliente, righe, stato));
                 }
@@ -107,7 +109,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     String emailCliente = rs.getString("email_cliente");
-                    String stato = rs.getString("stato");
+                    String stato = rs.getString(COLUMN_STATO);
                     List<RigaOrdine> righe = caricaRigheOrdine(conn, idOrdine);
                     return new Ordine(idOrdine, emailCliente, righe, stato);
                 }
@@ -154,7 +156,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
             while (rs.next()) {
                 String idOrdine = rs.getString("id_ordine");
                 String emailCliente = rs.getString("email_cliente");
-                String stato = rs.getString("stato");
+                String stato = rs.getString(COLUMN_STATO);
                 List<RigaOrdine> righe = caricaRigheOrdine(conn, idOrdine);
                 ordini.add(new Ordine(idOrdine, emailCliente, righe, stato));
             }
