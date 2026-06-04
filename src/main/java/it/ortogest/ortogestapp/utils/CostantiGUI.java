@@ -9,6 +9,7 @@ public final class CostantiGUI {
     public static final String VIEW_REGISTRAZIONE_LOTTO = "/GUI/RegistrazioneLotto.fxml";
     public static final String VIEW_SEGNALAZIONE_ANOMALIA = "/GUI/SegnalazioneAnomalia.fxml";
     public static final String VIEW_RIEPILOGO_ORDINE = "/GUI/RiepilogoOrdine.fxml";
+    public static final String VIEW_GESTIONE_ORDINI_ONLINE = "/GUI/GestioneOrdiniOnline.fxml";
 
     private CostantiGUI() {
         // Nasconde il costruttore di default

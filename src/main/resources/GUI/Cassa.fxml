@@ -9,6 +9,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
@@ -33,25 +35,49 @@
     <center>
         <SplitPane dividerPositions="0.65" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
-                <VBox spacing="15.0" style="-fx-background-color: white;">
-                    <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
-                    <children>
-                        <HBox spacing="10.0">
-                            <children>
-                                <TextField prefHeight="40.0" promptText="Codice a barre o nome prodotto..." HBox.hgrow="ALWAYS" />
-                                <Button prefHeight="40.0" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Aggiungi" />
-                            </children>
-                        </HBox>
-                        <TableView VBox.vgrow="ALWAYS">
-                            <columns>
-                                <TableColumn prefWidth="200.0" text="Prodotto" />
-                                <TableColumn prefWidth="75.0" text="Q.tà (Kg)" />
-                                <TableColumn prefWidth="100.0" text="Prezzo Un." />
-                                <TableColumn prefWidth="100.0" text="Subtotale" />
-                            </columns>
-                        </TableView>
-                    </children>
-                </VBox>
+                <TabPane tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab text="Cassa Fisica">
+                            <VBox spacing="15.0" style="-fx-background-color: white;">
+                                <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+                                <children>
+                                    <HBox spacing="10.0">
+                                        <children>
+                                            <TextField prefHeight="40.0" promptText="Codice a barre o nome prodotto..." HBox.hgrow="ALWAYS" />
+                                            <Button prefHeight="40.0" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Aggiungi" />
+                                        </children>
+                                    </HBox>
+                                    <TableView VBox.vgrow="ALWAYS">
+                                        <columns>
+                                            <TableColumn prefWidth="200.0" text="Prodotto" />
+                                            <TableColumn prefWidth="75.0" text="Q.tà (Kg)" />
+                                            <TableColumn prefWidth="100.0" text="Prezzo Un." />
+                                            <TableColumn prefWidth="100.0" text="Subtotale" />
+                                        </columns>
+                                    </TableView>
+                                </children>
+                            </VBox>
+                        </Tab>
+                        <Tab text="Ordini Online (Da Pagare)">
+                            <VBox spacing="15.0" style="-fx-background-color: white;">
+                                <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+                                <children>
+                                    <Label text="Seleziona un ordine Pronto per il Ritiro per effettuare il pagamento:" textFill="#7f8c8d" />
+                                    <TableView fx:id="ordiniTable" VBox.vgrow="ALWAYS">
+                                        <columns>
+                                            <TableColumn fx:id="colIdOrdine" prefWidth="100.0" text="N° Ordine" />
+                                            <TableColumn fx:id="colCliente" prefWidth="150.0" text="Cliente" />
+                                            <TableColumn fx:id="colTotale" prefWidth="100.0" text="Totale €" />
+                                        </columns>
+                                    </TableView>
+                                    <Button onAction="#caricaOrdineAction" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="CARICA ORDINE IN CASSA">
+                                        <font><Font name="System Bold" size="14.0" /></font>
+                                    </Button>
+                                </children>
+                            </VBox>
+                        </Tab>
+                    </tabs>
+                </TabPane>
 
                 <VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #ecf0f1;">
                     <padding><Insets bottom="30.0" left="20.0" right="20.0" top="40.0" /></padding>
@@ -59,7 +85,7 @@
                         <Label text="TOTALE DA PAGARE" textFill="#7f8c8d">
                             <font><Font size="18.0" /></font>
                         </Label>
-                        <Label text="€ 0,00" textFill="#27ae60">
+                        <Label fx:id="totaleLabel" text="€ 0,00" textFill="#27ae60">
                             <font><Font name="System Bold" size="48.0" /></font>
                         </Label>
 
@@ -82,10 +108,10 @@
                             </children>
                         </VBox>
 
-                        <Button prefHeight="60.0" prefWidth="269.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="EMETTI SCONTRINO">
+                        <Button fx:id="btnEmettiScontrino" onAction="#emettiScontrinoAction" prefHeight="60.0" prefWidth="269.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="EMETTI SCONTRINO">
                             <font><Font name="System Bold" size="18.0" /></font>
                         </Button>
-                        <Button prefHeight="40.0" prefWidth="271.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Annulla Operazione" />
+                        <Button onAction="#annullaOperazioneAction" prefHeight="40.0" prefWidth="271.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Annulla Operazione" />
                     </children>
                 </VBox>
             </items>

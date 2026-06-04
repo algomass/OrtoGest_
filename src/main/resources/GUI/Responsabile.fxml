@@ -19,8 +19,13 @@
 
     <!-- Header -->
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="60.0" style="-fx-background-color: #8e44ad;" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="15.0" style="-fx-background-color: #8e44ad;" BorderPane.alignment="CENTER">
             <children>
+                <Button onAction="#apriGestioneOrdiniAction" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Gestione Ordini Online">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
                 <Label text="Area Responsabile - Gestione Catalogo e Lotti" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="20.0" />

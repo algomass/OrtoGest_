@@ -8,4 +8,6 @@ public interface IOrdineDAO {
     List<Ordine> trovaOrdiniCliente(String emailCliente);
     Ordine trovaOrdinePerId(String idOrdine);
     void eliminaOrdine(String idOrdine);
+    List<Ordine> trovaTuttiOrdini();
+    void aggiornaStatoOrdine(String idOrdine, String nuovoStato);
 }

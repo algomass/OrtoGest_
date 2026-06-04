@@ -47,13 +47,13 @@
                             </children>
                         </HBox>
 
-                        <TableView VBox.vgrow="ALWAYS">
+                        <TableView fx:id="ordiniTable" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn prefWidth="90.0" text="N° Ordine" />
-                                <TableColumn prefWidth="121.5999755859375" text="Cliente" />
-                                <TableColumn prefWidth="88.800048828125" text="Orario Ritiro" />
-                                <TableColumn prefWidth="127.199951171875" text="Totale €" />
-                                <TableColumn prefWidth="123.20001220703125" text="Stato Attuale" />
+                                <TableColumn fx:id="colIdOrdine" prefWidth="90.0" text="N° Ordine" />
+                                <TableColumn fx:id="colCliente" prefWidth="121.5999755859375" text="Cliente" />
+                                <TableColumn fx:id="colOrario" prefWidth="88.800048828125" text="Orario Ritiro" />
+                                <TableColumn fx:id="colTotale" prefWidth="127.199951171875" text="Totale €" />
+                                <TableColumn fx:id="colStato" prefWidth="123.20001220703125" text="Stato Attuale" />
                             </columns>
                         </TableView>
 
@@ -96,10 +96,10 @@
                         <VBox spacing="5.0">
                             <children>
                                 <Label text="Cliente:" textFill="#7f8c8d" />
-                                <Label text="Mario Rossi (Ord. #1024)">
+                                <Label fx:id="dettaglioClienteLabel" text="Seleziona un ordine...">
                                     <font><Font name="System Bold" size="16.0" /></font>
                                 </Label>
-                                <Label text="Ritiro previsto: Oggi alle 17:30" textFill="#e74c3c">
+                                <Label fx:id="dettaglioOrarioLabel" text="" textFill="#e74c3c">
                                     <font><Font name="System Italic" size="12.0" /></font>
                                 </Label>
                             </children>
@@ -108,17 +108,17 @@
                         <VBox spacing="5.0" VBox.vgrow="ALWAYS">
                             <children>
                                 <Label text="Da inserire nel sacchetto:" textFill="#7f8c8d" />
-                                <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                <ListView fx:id="dettaglioProdottiList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                             </children>
                         </VBox>
 
+                        <Label fx:id="messaggioLabel" textFill="#e74c3c">
+                            <VBox.margin><Insets top="5.0" /></VBox.margin>
+                        </Label>
                         <Label text="Aggiorna Stato:" textFill="#7f8c8d">
                             <VBox.margin><Insets top="10.0" /></VBox.margin>
                         </Label>
-                        <Button prefHeight="45.0" prefWidth="260.0" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="📦 SEGNA COME PRONTO">
-                            <font><Font name="System Bold" size="14.0" /></font>
-                        </Button>
-                        <Button prefHeight="45.0" prefWidth="260.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="✅ CONSEGNA AL CLIENTE">
+                        <Button fx:id="btnSegnaPronto" onAction="#segnaComeProntoAction" prefHeight="45.0" prefWidth="260.0" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="📦 SEGNA COME PRONTO">
                             <font><Font name="System Bold" size="14.0" /></font>
                         </Button>
                     </children>

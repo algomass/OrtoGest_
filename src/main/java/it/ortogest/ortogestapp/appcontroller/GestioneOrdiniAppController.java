@@ -194,23 +194,50 @@ public class GestioneOrdiniAppController {
             throw new GestioneException("Ordine non trovato.");
         }
         
-        // Ripristina le giacenze dei prodotti e dei lotti
-        for (it.ortogest.ortogestapp.model.RigaOrdine riga : ordine.getRighe()) {
-            Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
-            if (p != null) {
-                p.aggiungiGiacenza(riga.getQuantita());
-                prodottoDAO.salvaProdotto(p);
+        if ("Pronto per il Ritiro".equals(ordine.getStato())) {
+            throw new GestioneException("l'ordine è in attesa di ritiro dunque non può essere annullato");
+        }
+        
+        // Se l'ordine è "Ritirato", lo eliminiamo (dallo storico del cliente) ma NON ripristiniamo le giacenze.
+        if (!"Ritirato".equals(ordine.getStato())) {
+            // Ripristina le giacenze dei prodotti e dei lotti solo se non è ancora stato ritirato
+            for (it.ortogest.ortogestapp.model.RigaOrdine riga : ordine.getRighe()) {
+                Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
+                if (p != null) {
+                    p.aggiungiGiacenza(riga.getQuantita());
+                    prodottoDAO.salvaProdotto(p);
 
-                // Ripristiniamo la giacenza nel lotto d'origine
-                Lotto l = lottoDAO.trovaPerId(riga.getIdLotto());
-                if (l != null) {
-                    l.setQuantitaKg(l.getQuantitaKg() + riga.getQuantita());
-                    lottoDAO.salvaLotto(l);
+                    // Ripristiniamo la giacenza nel lotto d'origine
+                    Lotto l = lottoDAO.trovaPerId(riga.getIdLotto());
+                    if (l != null) {
+                        l.setQuantitaKg(l.getQuantitaKg() + riga.getQuantita());
+                        lottoDAO.salvaLotto(l);
+                    }
                 }
             }
         }
         
         // Elimina l'ordine (e le righe associate) dal database
         ordineDAO.eliminaOrdine(idOrdine);
+    }
+    
+    public List<OrdineBean> getTuttiOrdini() {
+        List<Ordine> ordini = ordineDAO.trovaTuttiOrdini();
+        List<OrdineBean> ordineBeans = new ArrayList<>();
+        
+        for (Ordine o : ordini) {
+            ordineBeans.add(new OrdineBean(
+                o.getIdOrdine(), 
+                o.getRiepilogoProdotti(), 
+                o.getTotale(), 
+                o.getStato(),
+                o.getEmailCliente()
+            ));
+        }
+        return ordineBeans;
+    }
+    
+    public void aggiornaStatoOrdine(String idOrdine, String nuovoStato) {
+        ordineDAO.aggiornaStatoOrdine(idOrdine, nuovoStato);
     }
 }

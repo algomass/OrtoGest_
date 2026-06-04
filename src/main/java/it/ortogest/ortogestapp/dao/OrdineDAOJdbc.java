@@ -141,4 +141,41 @@ public class OrdineDAOJdbc implements IOrdineDAO {
             Printer.perror("Errore in eliminaOrdine: " + e.getMessage());
         }
     }
+
+    @Override
+    public List<Ordine> trovaTuttiOrdini() {
+        List<Ordine> ordini = new ArrayList<>();
+        String sql = "SELECT id_ordine, email_cliente, stato FROM ordine";
+        
+        try (Connection conn = DatabaseHelper.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+             
+            while (rs.next()) {
+                String idOrdine = rs.getString("id_ordine");
+                String emailCliente = rs.getString("email_cliente");
+                String stato = rs.getString("stato");
+                List<RigaOrdine> righe = caricaRigheOrdine(conn, idOrdine);
+                ordini.add(new Ordine(idOrdine, emailCliente, righe, stato));
+            }
+        } catch (SQLException e) {
+            Printer.perror("Errore in trovaTuttiOrdini: " + e.getMessage());
+        }
+        return ordini;
+    }
+
+    @Override
+    public void aggiornaStatoOrdine(String idOrdine, String nuovoStato) {
+        String sql = "UPDATE ordine SET stato = ? WHERE id_ordine = ?";
+        try (Connection conn = DatabaseHelper.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setString(1, nuovoStato);
+            stmt.setString(2, idOrdine);
+            stmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            Printer.perror("Errore in aggiornaStatoOrdine: " + e.getMessage());
+        }
+    }
 }

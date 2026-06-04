@@ -1,8 +1,115 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
+import it.ortogest.ortogestapp.appcontroller.GestioneOrdiniAppController;
+import it.ortogest.ortogestapp.beans.OrdineBean;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Controller Grafico (Boundary) per la schermata della Cassa.
  */
 public class CassaGraphicController extends BaseGraphicController {
 
+    @FXML private TableView<OrdineBean> ordiniTable;
+    @FXML private TableColumn<OrdineBean, String> colIdOrdine;
+    @FXML private TableColumn<OrdineBean, String> colCliente;
+    @FXML private TableColumn<OrdineBean, Double> colTotale;
+
+    @FXML private Label totaleLabel;
+    @FXML private Button btnEmettiScontrino;
+
+    private GestioneOrdiniAppController appController;
+    
+    // Memorizza l'ordine online correntemente in fase di pagamento
+    private OrdineBean ordineInPagamento = null;
+
+    @FXML
+    public void initialize() {
+        appController = new GestioneOrdiniAppController();
+
+        if (colIdOrdine != null) {
+            colIdOrdine.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrdine()));
+            colCliente.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmailCliente()));
+            colTotale.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("totale"));
+            
+            caricaOrdiniPronti();
+        }
+    }
+
+    private void caricaOrdiniPronti() {
+        List<OrdineBean> tuttiOrdini = appController.getTuttiOrdini();
+        // Filtra solo quelli pronti per il ritiro
+        List<OrdineBean> pronti = tuttiOrdini.stream()
+                .filter(o -> "Pronto per il Ritiro".equals(o.getStato()))
+                .collect(Collectors.toList());
+                
+        ObservableList<OrdineBean> data = FXCollections.observableArrayList(pronti);
+        ordiniTable.setItems(data);
+    }
+
+    @FXML
+    public void caricaOrdineAction() {
+        OrdineBean selected = ordiniTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            mostraAlertErrore("Seleziona un ordine Pronto per il Ritiro dalla tabella.");
+            return;
+        }
+
+        this.ordineInPagamento = selected;
+        totaleLabel.setText(String.format("€ %.2f", selected.getTotale()));
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ordine #" + selected.getIdOrdine() + " caricato in cassa.", ButtonType.OK);
+        alert.setHeaderText("Ordine Caricato");
+        alert.showAndWait();
+    }
+
+    @FXML
+    public void emettiScontrinoAction() {
+        if (ordineInPagamento != null) {
+            try {
+                // L'operatore fa pagare il cliente e l'ordine passa a "Ritirato"
+                appController.aggiornaStatoOrdine(ordineInPagamento.getIdOrdine(), "Ritirato");
+                
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Pagamento completato. L'ordine #" + ordineInPagamento.getIdOrdine() + " è ora Ritirato.", ButtonType.OK);
+                alert.setHeaderText("Transazione Eseguita");
+                alert.showAndWait();
+                
+                annullaOperazioneAction(); // Resetta la cassa
+                caricaOrdiniPronti(); // Aggiorna la tabella
+            } catch (Exception e) {
+                mostraAlertErrore("Errore durante il pagamento: " + e.getMessage());
+            }
+        } else {
+            // Logica per pagamento fisico normale (non richiesta specificatamente dalla user story, mostriamo solo un alert di esempio)
+            if ("€ 0,00".equals(totaleLabel.getText())) {
+                mostraAlertErrore("Nessun importo da pagare.");
+                return;
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Pagamento scontrino fisico completato.", ButtonType.OK);
+            alert.setHeaderText("Transazione Eseguita");
+            alert.showAndWait();
+            annullaOperazioneAction();
+        }
+    }
+    
+    @FXML
+    public void annullaOperazioneAction() {
+        this.ordineInPagamento = null;
+        totaleLabel.setText("€ 0,00");
+        if (ordiniTable != null) {
+            ordiniTable.getSelectionModel().clearSelection();
+        }
+    }
+    
+    private void mostraAlertErrore(String msg) {
+        Alert errAlert = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
+        errAlert.setHeaderText("Attenzione");
+        errAlert.showAndWait();
+    }
 }

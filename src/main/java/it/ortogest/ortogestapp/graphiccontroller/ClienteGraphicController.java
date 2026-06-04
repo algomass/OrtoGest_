@@ -210,7 +210,21 @@ public class ClienteGraphicController extends BaseGraphicController {
             return;
         }
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine() + "?\nLe quantità verranno ripristinate in magazzino.", ButtonType.YES, ButtonType.NO);
+        if ("Pronto per il Ritiro".equals(selected.getStato())) {
+            Alert errAlert = new Alert(Alert.AlertType.ERROR, "L'ordine è in attesa di ritiro dunque non può essere annullato.", ButtonType.OK);
+            errAlert.setHeaderText("Impossibile annullare l'ordine");
+            errAlert.showAndWait();
+            return;
+        }
+
+        String messaggioConferma;
+        if ("Ritirato".equals(selected.getStato())) {
+            messaggioConferma = "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine() + " dallo storico?";
+        } else {
+            messaggioConferma = "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine() + "?\nLe quantità verranno ripristinate in magazzino.";
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, messaggioConferma, ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
@@ -219,7 +233,9 @@ public class ClienteGraphicController extends BaseGraphicController {
                 mostraMessaggio("Ordine rimosso con successo.", true);
                 caricaOrdiniCliente();
             } catch (it.ortogest.ortogestapp.exception.GestioneException e) {
-                mostraMessaggio("Errore nella rimozione: " + e.getMessage(), false);
+                Alert errAlert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+                errAlert.setHeaderText("Impossibile annullare l'ordine");
+                errAlert.showAndWait();
             }
         }
     }

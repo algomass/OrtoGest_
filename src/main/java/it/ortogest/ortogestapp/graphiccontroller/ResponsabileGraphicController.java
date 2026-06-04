@@ -218,6 +218,15 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     }
 
     @FXML
+    public void apriGestioneOrdiniAction() {
+        try {
+            it.ortogest.ortogestapp.utils.SceneManager.getInstance().cambiaScena(it.ortogest.ortogestapp.utils.CostantiGUI.VIEW_GESTIONE_ORDINI_ONLINE);
+        } catch (java.io.IOException e) {
+            mostraErrore("Errore nell'apertura della gestione ordini: " + e.getMessage());
+        }
+    }
+
+    @FXML
     @Override
     public void logoutAction() {
         super.logoutAction();
