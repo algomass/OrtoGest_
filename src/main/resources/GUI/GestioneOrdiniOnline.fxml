@@ -118,7 +118,7 @@
                         <Label text="Aggiorna Stato:" textFill="#7f8c8d">
                             <VBox.margin><Insets top="10.0" /></VBox.margin>
                         </Label>
-                        <Button fx:id="btnSegnaPronto" onAction="#segnaComeProntoAction" prefHeight="45.0" prefWidth="260.0" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="📦 SEGNA COME PRONTO">
+                        <Button fx:id="btnSegnaPronto" onAction="#segnaComeProntoAction" prefHeight="45.0" prefWidth="260.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="📦 SEGNA COME PRONTO">
                             <font><Font name="System Bold" size="14.0" /></font>
                         </Button>
                     </children>

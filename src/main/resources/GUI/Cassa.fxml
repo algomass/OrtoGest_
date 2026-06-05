@@ -44,7 +44,7 @@
                                     <HBox spacing="10.0">
                                         <children>
                                             <TextField prefHeight="40.0" promptText="Codice a barre o nome prodotto..." HBox.hgrow="ALWAYS" />
-                                            <Button prefHeight="40.0" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Aggiungi" />
+                                            <Button prefHeight="40.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Aggiungi" />
                                         </children>
                                     </HBox>
                                     <TableView VBox.vgrow="ALWAYS">
@@ -70,7 +70,7 @@
                                             <TableColumn fx:id="colTotale" prefWidth="100.0" text="Totale €" />
                                         </columns>
                                     </TableView>
-                                    <Button onAction="#caricaOrdineAction" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="CARICA ORDINE IN CASSA">
+                                    <Button onAction="#caricaOrdineAction" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="CARICA ORDINE IN CASSA">
                                         <font><Font name="System Bold" size="14.0" /></font>
                                     </Button>
                                 </children>
@@ -111,7 +111,7 @@
                         <Button fx:id="btnEmettiScontrino" onAction="#emettiScontrinoAction" prefHeight="60.0" prefWidth="269.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="EMETTI SCONTRINO">
                             <font><Font name="System Bold" size="18.0" /></font>
                         </Button>
-                        <Button onAction="#annullaOperazioneAction" prefHeight="40.0" prefWidth="271.0" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Annulla Operazione" />
+                        <Button onAction="#annullaOperazioneAction" prefHeight="40.0" prefWidth="271.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Annulla Operazione" />
                     </children>
                 </VBox>
             </items>
