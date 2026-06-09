@@ -1,35 +1,49 @@
 package it.ortogest.ortogestapp.dao;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+
 /**
  * Abstract Factory per disaccoppiare l'App Controller dalle implementazioni concrete dei DAO.
+ * Ora supporta l'istanziazione dinamica basata su configurazione (JDBC o CSV).
  */
-@SuppressWarnings("java:S6548")
-public class DAOFactory {
+public abstract class DAOFactory {
     
     private static DAOFactory instance;
     
-    private DAOFactory() {}
+    public static final String JDBC = "jdbc";
+    public static final String CSV = "csv";
+    
+    protected DAOFactory() {}
     
     public static DAOFactory getInstance() {
         if (instance == null) {
-            instance = new DAOFactory();
+            String type = JDBC; // Valore di default
+            try {
+                File configFile = new File("config.properties");
+                if (configFile.exists()) {
+                    Properties props = new Properties();
+                    try (FileInputStream fis = new FileInputStream(configFile)) {
+                        props.load(fis);
+                        type = props.getProperty("persistence", JDBC).trim().toLowerCase();
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Errore nella lettura di config.properties. Uso JDBC di default.");
+            }
+            
+            if (CSV.equals(type)) {
+                instance = new FileSystemDAOFactory();
+            } else {
+                instance = new JdbcDAOFactory();
+            }
         }
         return instance;
     }
     
-    public IProdottoDAO getProdottoDAO() {
-        return new ProdottoDAOJdbc();
-    }
-    
-    public ILottoDAO getLottoDAO() {
-        return new LottoDAOJdbc();
-    }
-    
-    public IOrdineDAO getOrdineDAO() {
-        return new OrdineDAOJdbc();
-    }
-    
-    public IUtenteDAO getUtenteDAO() {
-        return new UtenteDAOJdbc();
-    }
+    public abstract IProdottoDAO getProdottoDAO();
+    public abstract ILottoDAO getLottoDAO();
+    public abstract IOrdineDAO getOrdineDAO();
+    public abstract IUtenteDAO getUtenteDAO();
 }

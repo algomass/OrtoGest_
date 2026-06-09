@@ -1,0 +1,9 @@
+nome,email,password,ruolo
+Admin,admin@ortogest.it,admin123,Responsabile
+Mario,mario@ortogest.it,mario123,Magazziniere
+Luigi,luigi@ortogest.it,luigi123,Operatore
+Cliente Test,cliente@test.it,cliente123,Cliente
+a,a,a,Responsabile
+a,a,a,Magazziniere
+a,a,a,Operatore
+a,a,a,Cliente
