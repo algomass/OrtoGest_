@@ -14,6 +14,7 @@ public abstract class DAOFactory {
     
     public static final String JDBC = "jdbc";
     public static final String CSV = "csv";
+    public static final String DEMO = "demo";
     
     protected DAOFactory() {}
     
@@ -33,7 +34,9 @@ public abstract class DAOFactory {
                 System.err.println("Errore nella lettura di config.properties. Uso JDBC di default.");
             }
             
-            if (CSV.equals(type)) {
+            if (DEMO.equals(type)) {
+                instance = new InMemoryDAOFactory();
+            } else if (CSV.equals(type)) {
                 instance = new FileSystemDAOFactory();
             } else {
                 instance = new JdbcDAOFactory();
