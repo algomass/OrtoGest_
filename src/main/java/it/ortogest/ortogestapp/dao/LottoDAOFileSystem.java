@@ -11,6 +11,7 @@ import java.util.List;
 public class LottoDAOFileSystem implements ILottoDAO {
 
     private static final String FILE_PATH = "data/lotti.csv";
+    private static final String ERRORE_IO_MSG = "Errore I/O in LottoDAOFileSystem: ";
 
     public LottoDAOFileSystem() {
         File dataDir = new File("data");
@@ -22,7 +23,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
             try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
                 pw.println("idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato");
             } catch (IOException e) {
-                it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in LottoDAOFileSystem: " + e.getMessage());
+                it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
             }
         }
     }
@@ -69,7 +70,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
                 }
             }
         } catch (IOException e) {
-            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in LottoDAOFileSystem: " + e.getMessage());
+            it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
         }
         return lotti;
     }
@@ -91,7 +92,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
                            l.getPrezzoScontato());
             }
         } catch (IOException e) {
-            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in LottoDAOFileSystem: " + e.getMessage());
+            it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
         }
     }
 

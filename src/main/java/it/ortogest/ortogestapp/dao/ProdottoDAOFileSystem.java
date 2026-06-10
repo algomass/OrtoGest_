@@ -9,6 +9,7 @@ import java.util.List;
 public class ProdottoDAOFileSystem implements IProdottoDAO {
 
     private static final String FILE_PATH = "data/prodotti.csv";
+    private static final String ERRORE_IO_MSG = "Errore I/O in ProdottoDAOFileSystem: ";
 
     public ProdottoDAOFileSystem() {
         File dataDir = new File("data");
@@ -23,7 +24,7 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
                 pw.println("Mela Golden,2.50,100.0,Frutta,/images/mela_golden.png");
                 pw.println("Zucchina Romana,1.80,50.0,Verdura,/images/zucchina.png");
             } catch (IOException e) {
-                it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in ProdottoDAOFileSystem: " + e.getMessage());
+                it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
             }
         }
     }
@@ -51,7 +52,7 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
                 }
             }
         } catch (IOException e) {
-            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in ProdottoDAOFileSystem: " + e.getMessage());
+            it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
         }
         return prodotti;
     }
@@ -64,7 +65,7 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
                            p.getQuantitaTotaleDisponibile() + "," + p.getCategoria() + "," + p.getImmaginePath());
             }
         } catch (IOException e) {
-            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in ProdottoDAOFileSystem: " + e.getMessage());
+            it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
         }
     }
 

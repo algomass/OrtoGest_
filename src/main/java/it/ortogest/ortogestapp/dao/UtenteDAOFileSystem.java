@@ -39,10 +39,8 @@ public class UtenteDAOFileSystem implements IUtenteDAO {
                     continue; // Skip header
                 }
                 String[] values = line.split(",");
-                if (values.length >= 4) {
-                    if (values[1].equals(email) && values[2].equals(password)) {
-                        return new Utente(values[0], values[1], values[2], values[3]);
-                    }
+                if (values.length >= 4 && values[1].equals(email) && values[2].equals(password)) {
+                    return new Utente(values[0], values[1], values[2], values[3]);
                 }
             }
         } catch (IOException e) {

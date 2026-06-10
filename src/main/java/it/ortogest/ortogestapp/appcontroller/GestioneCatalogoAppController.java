@@ -121,7 +121,7 @@ public class GestioneCatalogoAppController {
         ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
         List<Lotto> tuttiLotti = lottoDAO.getTuttiILotti();
         List<LottoBean> beans = new ArrayList<>();
-        java.time.LocalDate limite = java.time.LocalDate.now().plusDays(giorniPreavviso);
+        java.time.LocalDate limite = java.time.LocalDate.now(java.time.ZoneId.systemDefault()).plusDays(giorniPreavviso);
 
         for (Lotto l : tuttiLotti) {
             // Mostra i lotti se la loro scadenza è <= al limite e non sono già stati messi in sconto

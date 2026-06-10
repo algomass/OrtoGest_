@@ -10,6 +10,7 @@ import java.util.List;
 public class OrdineDAOFileSystem implements IOrdineDAO {
 
     private static final String FILE_PATH = "data/ordini.csv";
+    private static final String ERRORE_IO_MSG = "Errore I/O in OrdineDAOFileSystem: ";
 
     public OrdineDAOFileSystem() {
         File dataDir = new File("data");
@@ -21,7 +22,7 @@ public class OrdineDAOFileSystem implements IOrdineDAO {
             try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
                 pw.println("idOrdine,emailCliente,stato,righe");
             } catch (IOException e) {
-                it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in OrdineDAOFileSystem: " + e.getMessage());
+                it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
             }
         }
     }
@@ -38,33 +39,29 @@ public class OrdineDAOFileSystem implements IOrdineDAO {
                 }
                 String[] values = line.split(",", -1);
                 if (values.length >= 4) {
-                    String idOrdine = values[0];
-                    String emailCliente = values[1];
-                    String stato = values[2];
-                    String righeStr = values[3];
-
-                    List<RigaOrdine> righe = new ArrayList<>();
-                    if (!righeStr.isEmpty()) {
-                        String[] righeArray = righeStr.split("\\|");
-                        for (String rStr : righeArray) {
-                            String[] rVals = rStr.split(":");
-                            if (rVals.length == 4) {
-                                String nomeProdotto = rVals[0];
-                                String idLotto = rVals[1];
-                                double qta = Double.parseDouble(rVals[2]);
-                                double prezzo = Double.parseDouble(rVals[3]);
-                                righe.add(new RigaOrdine(nomeProdotto, idLotto, qta, prezzo));
-                            }
-                        }
-                    }
-
-                    ordini.add(new Ordine(idOrdine, emailCliente, righe, stato));
+                    List<RigaOrdine> righe = parseRigheOrdine(values[3]);
+                    ordini.add(new Ordine(values[0], values[1], righe, values[2]));
                 }
             }
         } catch (IOException e) {
-            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in OrdineDAOFileSystem: " + e.getMessage());
+            it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
         }
         return ordini;
+    }
+
+    private List<RigaOrdine> parseRigheOrdine(String righeStr) {
+        List<RigaOrdine> righe = new ArrayList<>();
+        if (righeStr.isEmpty()) {
+            return righe;
+        }
+        String[] righeArray = righeStr.split("\\|");
+        for (String rStr : righeArray) {
+            String[] rVals = rStr.split(":");
+            if (rVals.length == 4) {
+                righe.add(new RigaOrdine(rVals[0], rVals[1], Double.parseDouble(rVals[2]), Double.parseDouble(rVals[3])));
+            }
+        }
+        return righe;
     }
 
     private void scriviTutti(List<Ordine> ordini) {
@@ -89,7 +86,7 @@ public class OrdineDAOFileSystem implements IOrdineDAO {
                            righeSb.toString());
             }
         } catch (IOException e) {
-            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in OrdineDAOFileSystem: " + e.getMessage());
+            it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
         }
     }
 

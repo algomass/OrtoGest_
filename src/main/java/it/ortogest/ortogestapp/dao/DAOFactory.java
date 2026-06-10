@@ -30,8 +30,8 @@ public abstract class DAOFactory {
                         type = props.getProperty("persistence", JDBC).trim().toLowerCase();
                     }
                 }
-            } catch (Exception e) {
-                System.err.println("Errore nella lettura di config.properties. Uso JDBC di default.");
+            } catch (Exception _) {
+                it.ortogest.ortogestapp.utils.Printer.perror("Errore nella lettura di config.properties. Uso JDBC di default.");
             }
             
             if (DEMO.equals(type)) {
