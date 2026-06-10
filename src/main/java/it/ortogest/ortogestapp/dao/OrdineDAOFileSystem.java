@@ -21,7 +21,7 @@ public class OrdineDAOFileSystem implements IOrdineDAO {
             try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
                 pw.println("idOrdine,emailCliente,stato,righe");
             } catch (IOException e) {
-                e.printStackTrace();
+                it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in OrdineDAOFileSystem: " + e.getMessage());
             }
         }
     }
@@ -62,7 +62,7 @@ public class OrdineDAOFileSystem implements IOrdineDAO {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in OrdineDAOFileSystem: " + e.getMessage());
         }
         return ordini;
     }
@@ -89,7 +89,7 @@ public class OrdineDAOFileSystem implements IOrdineDAO {
                            righeSb.toString());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in OrdineDAOFileSystem: " + e.getMessage());
         }
     }
 

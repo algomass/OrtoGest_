@@ -22,7 +22,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
             try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
                 pw.println("idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato");
             } catch (IOException e) {
-                e.printStackTrace();
+                it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in LottoDAOFileSystem: " + e.getMessage());
             }
         }
     }
@@ -69,7 +69,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in LottoDAOFileSystem: " + e.getMessage());
         }
         return lotti;
     }
@@ -91,7 +91,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
                            l.getPrezzoScontato());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in LottoDAOFileSystem: " + e.getMessage());
         }
     }
 

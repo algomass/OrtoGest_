@@ -23,7 +23,7 @@ public class UtenteDAOFileSystem implements IUtenteDAO {
                 pw.println("Luigi,luigi@ortogest.it,luigi123,Operatore");
                 pw.println("Cliente Test,cliente@test.it,cliente123,Cliente");
             } catch (IOException e) {
-                e.printStackTrace();
+                it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in UtenteDAOFileSystem: " + e.getMessage());
             }
         }
     }
@@ -46,7 +46,7 @@ public class UtenteDAOFileSystem implements IUtenteDAO {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in UtenteDAOFileSystem: " + e.getMessage());
         }
         return null;
     }
