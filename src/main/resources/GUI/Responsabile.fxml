@@ -21,17 +21,22 @@
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="15.0" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
             <children>
-                <Button onAction="#apriGestioneOrdiniAction" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Gestione Ordini Online">
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                </Button>
                 <Label text="Area Responsabile - Gestione Catalogo e Lotti" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="20.0" />
                     </font>
                 </Label>
                 <Region HBox.hgrow="ALWAYS" />
+                <Button onAction="#apriGestioneOrdiniAction" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Gestione Ordini Online">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="btnToggleVista" onAction="#toggleVistaAction" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Prodotti da scontare">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
                 <Button onAction="#logoutAction" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Esci / Cambia Utente" />
             </children>
             <padding>
@@ -47,42 +52,46 @@
             </padding>
             <children>
 
-                <Label text="Elenco Prodotti a Sistema">
-                    <font>
-                        <Font name="System Bold" size="16.0" />
-                    </font>
-                </Label>
+                <VBox fx:id="sezioneSuperiore" spacing="15.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label text="Elenco Prodotti a Sistema">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
 
-                <!-- Tabella Prodotti -->
-                <TableView fx:id="tabellaProdotti" prefHeight="150.0" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="colNome" prefWidth="250.0" text="Nome Prodotto">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="nome" />
-                            </cellValueFactory>
-                        </TableColumn>
-                        <TableColumn fx:id="colCategoria" prefWidth="150.0" text="Categoria">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="categoria" />
-                            </cellValueFactory>
-                        </TableColumn>
-                        <TableColumn fx:id="colGiacenza" prefWidth="150.0" text="Giacenza Tot. (Kg)">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="giacenza" />
-                            </cellValueFactory>
-                        </TableColumn>
-                    </columns>
-                </TableView>
-                
-                <!-- Modifica Categoria Prodotto -->
-                <HBox alignment="CENTER" spacing="15.0" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 5;">
-                    <Label text="Prodotto Selezionato:" />
-                    <TextField fx:id="prodottoSelezionatoField" editable="false" prefWidth="150.0" promptText="Nessun prodotto" style="-fx-background-color: #f1f2f6;" />
-                    
-                    <Label text="Modifica Categoria:" />
-                    <ComboBox fx:id="nuovaCategoriaComboBox" prefWidth="120.0" promptText="Categoria" />
-                    <Button onAction="#aggiornaCategoriaAction" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Salva Categoria" />
-                </HBox>
+                        <!-- Tabella Prodotti -->
+                        <TableView fx:id="tabellaProdotti" prefHeight="150.0" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="colNome" prefWidth="250.0" text="Nome Prodotto">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="nome" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="colCategoria" prefWidth="150.0" text="Categoria">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="categoria" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="colGiacenza" prefWidth="150.0" text="Giacenza Tot. (Kg)">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="giacenza" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                        
+                        <!-- Modifica Categoria Prodotto -->
+                        <HBox alignment="CENTER" spacing="15.0" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 5;">
+                            <Label text="Prodotto Selezionato:" />
+                            <TextField fx:id="prodottoSelezionatoField" editable="false" prefWidth="150.0" promptText="Nessun prodotto" style="-fx-background-color: #f1f2f6;" />
+                            
+                            <Label text="Modifica Categoria:" />
+                            <ComboBox fx:id="nuovaCategoriaComboBox" prefWidth="120.0" promptText="Categoria" />
+                            <Button onAction="#aggiornaCategoriaAction" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Salva Categoria" />
+                        </HBox>
+                    </children>
+                </VBox>
 
                 <Label text="Lotti del Prodotto Selezionato">
                     <font>
@@ -93,12 +102,17 @@
                 <!-- Tabella Lotti -->
                 <TableView fx:id="tabellaLotti" prefHeight="150.0" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colIdLotto" prefWidth="100.0" text="ID Lotto">
+                        <TableColumn fx:id="colIdLotto" prefWidth="90.0" text="ID Lotto">
                             <cellValueFactory>
                                 <PropertyValueFactory property="idLotto" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colDataScadenza" prefWidth="100.0" text="Scadenza">
+                        <TableColumn fx:id="colNomeProdottoLotto" prefWidth="150.0" text="Prodotto">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="nomeProdotto" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="colDataScadenza" prefWidth="90.0" text="Scadenza">
                             <cellValueFactory>
                                 <PropertyValueFactory property="dataScadenza" />
                             </cellValueFactory>

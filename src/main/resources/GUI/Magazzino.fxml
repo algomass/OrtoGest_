@@ -34,7 +34,6 @@
                 <HBox spacing="15.0">
                     <children>
                         <TextField fx:id="searchField" onKeyReleased="#cercaProdottoAction" prefHeight="35.0" prefWidth="300.0" promptText="Cerca prodotto nell'inventario..." />
-                        <Button onAction="#cercaProdottoAction" prefHeight="35.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Cerca" />
                         <Region HBox.hgrow="ALWAYS" />
                         <Button onAction="#apriSegnalazioneAnomaliaAction" prefHeight="35.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Segnala Anomalia">
                             <font><Font name="System Bold" size="12.0" /></font>

@@ -150,6 +150,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         scrollPaneCatalogo.setVisible(true);
         ordiniContainer.setVisible(false);
         errorLabel.setVisible(false);
+        if (searchField != null) searchField.setVisible(true);
         aggiornaUIHeaderCarrello();
     }
 
@@ -157,6 +158,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         scrollPaneCatalogo.setVisible(false);
         ordiniContainer.setVisible(true);
         errorLabel.setVisible(false);
+        if (searchField != null) searchField.setVisible(false);
         aggiornaUIHeaderCarrello();
     }
 

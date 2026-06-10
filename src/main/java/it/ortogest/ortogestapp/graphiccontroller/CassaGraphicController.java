@@ -85,15 +85,7 @@ public class CassaGraphicController extends BaseGraphicController {
                 mostraAlertErrore("Errore durante il pagamento: " + e.getMessage());
             }
         } else {
-            // Logica per pagamento fisico normale (non richiesta specificatamente dalla user story, mostriamo solo un alert di esempio)
-            if ("€ 0,00".equals(totaleLabel.getText())) {
-                mostraAlertErrore("Nessun importo da pagare.");
-                return;
-            }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Pagamento scontrino fisico completato.", ButtonType.OK);
-            alert.setHeaderText("Transazione Eseguita");
-            alert.showAndWait();
-            annullaOperazioneAction();
+            mostraAlertErrore("Nessun ordine online selezionato per il pagamento.");
         }
     }
     

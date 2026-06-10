@@ -21,6 +21,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
     @FXML private TableColumn<OrdineBean, String> colOrario;
     @FXML private TableColumn<OrdineBean, Double> colTotale;
     @FXML private TableColumn<OrdineBean, String> colStato;
+    @FXML private ComboBox<String> filtroStatoComboBox;
 
     @FXML private Label dettaglioClienteLabel;
     @FXML private Label dettaglioOrarioLabel;
@@ -41,6 +42,10 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
         // Formattazione per la colonna totale
         colTotale.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("totale"));
         colStato.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("stato"));
+        
+        filtroStatoComboBox.getItems().addAll("Tutti gli stati", "Inviato", "Pronto per il Ritiro", "Ritirato");
+        filtroStatoComboBox.setValue("Tutti gli stati");
+        filtroStatoComboBox.setOnAction(e -> caricaOrdini());
 
         ordiniTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -53,7 +58,19 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
 
     private void caricaOrdini() {
         List<OrdineBean> tuttiOrdini = appController.getTuttiOrdini();
-        ObservableList<OrdineBean> data = FXCollections.observableArrayList(tuttiOrdini);
+        
+        String filtro = filtroStatoComboBox != null ? filtroStatoComboBox.getValue() : "Tutti gli stati";
+        List<OrdineBean> filtrati;
+        
+        if ("Tutti gli stati".equals(filtro) || filtro == null) {
+            filtrati = tuttiOrdini;
+        } else {
+            filtrati = tuttiOrdini.stream()
+                .filter(o -> filtro.equals(o.getStato()))
+                .collect(java.util.stream.Collectors.toList());
+        }
+
+        ObservableList<OrdineBean> data = FXCollections.observableArrayList(filtrati);
         ordiniTable.setItems(data);
         
         // Deseleziona e pulisci dettagli se la lista viene ricaricata
@@ -112,5 +129,14 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
 
     private void mostraSuccesso(String msg) {
         mostraStatusLabel(messaggioLabel, msg, true);
+    }
+
+    @FXML
+    public void tornaIndietroAction() {
+        try {
+            it.ortogest.ortogestapp.utils.SceneManager.getInstance().cambiaScena(it.ortogest.ortogestapp.utils.CostantiGUI.VIEW_RESPONSABILE);
+        } catch (java.io.IOException e) {
+            mostraErrore("Errore nel ritorno alla schermata Responsabile: " + e.getMessage());
+        }
     }
 }

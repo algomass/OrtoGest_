@@ -10,10 +10,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
+import javafx.scene.layout.VBox;
+
 import java.time.LocalDate;
 import java.util.List;
 
 public class ResponsabileGraphicController extends BaseGraphicController {
+
+    private boolean isVistaScontiAttiva = false;
+
+    @FXML
+    private Button btnToggleVista;
+
+    @FXML
+    private VBox sezioneSuperiore;
 
     @FXML
     private TableView<ProdottoBean> tabellaProdotti;
@@ -33,6 +43,8 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     private TableView<LottoBean> tabellaLotti;
     @FXML
     private TableColumn<LottoBean, String> colIdLotto;
+    @FXML
+    private TableColumn<LottoBean, String> colNomeProdottoLotto;
     @FXML
     private TableColumn<LottoBean, LocalDate> colDataScadenza;
     @FXML
@@ -192,6 +204,10 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             if (scontoAttivo) {
                 prezzoScontato = Double.parseDouble(prezzoScontatoField.getText());
+                if (prezzoScontato >= nuovoPrezzo) {
+                    mostraErrore("Il prezzo dello sconto deve essere più basso di quello di vendita.");
+                    return;
+                }
             }
 
             LottoBean bean = new LottoBean();
@@ -204,10 +220,15 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             mostraSuccesso("Prezzi del lotto aggiornati correttamente");
 
-            // Ricarichiamo i lotti del prodotto corrente
-            String prodSelezionato = prodottoSelezionatoField.getText();
-            if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
-                caricaLotti(prodSelezionato);
+            // Ricarichiamo i lotti del prodotto corrente o la lista scadenze
+            if (!isVistaScontiAttiva) {
+                String prodSelezionato = prodottoSelezionatoField.getText();
+                if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
+                    caricaLotti(prodSelezionato);
+                }
+            } else {
+                List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2);
+                tabellaLotti.setItems(FXCollections.observableArrayList(lottiInScadenza));
             }
 
         } catch (NumberFormatException _) {
@@ -223,6 +244,52 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             it.ortogest.ortogestapp.utils.SceneManager.getInstance().cambiaScena(it.ortogest.ortogestapp.utils.CostantiGUI.VIEW_GESTIONE_ORDINI_ONLINE);
         } catch (java.io.IOException e) {
             mostraErrore("Errore nell'apertura della gestione ordini: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void toggleVistaAction() {
+        messaggioLabel.setVisible(false);
+        
+        if (!isVistaScontiAttiva) {
+            // Passa alla vista "Prodotti da scontare"
+            try {
+                List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2); // 48 ore di preavviso
+                if (lottiInScadenza.isEmpty()) {
+                    mostraSuccesso("Nessun prodotto in scadenza nelle prossime 48 ore.");
+                } else {
+                    mostraSuccesso("Trovati " + lottiInScadenza.size() + " lotti da scontare.");
+                }
+                
+                // Popoliamo la tabella dei lotti
+                ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lottiInScadenza);
+                tabellaLotti.setItems(observableList);
+                
+                sezioneSuperiore.setVisible(false);
+                sezioneSuperiore.setManaged(false);
+                btnToggleVista.setText("Vista classica");
+                
+                // Deselezioniamo il prodotto corrente per indicare che stiamo vedendo una vista globale
+                tabellaProdotti.getSelectionModel().clearSelection();
+                prodottoSelezionatoField.clear();
+                nuovaCategoriaComboBox.setValue(null);
+                
+                pulisciFormLotto();
+                
+                isVistaScontiAttiva = true;
+                
+            } catch (Exception e) {
+                mostraErrore("Errore durante il recupero dei lotti: " + e.getMessage());
+            }
+        } else {
+            // Ritorna alla vista classica
+            sezioneSuperiore.setVisible(true);
+            sezioneSuperiore.setManaged(true);
+            btnToggleVista.setText("Prodotti da scontare");
+            isVistaScontiAttiva = false;
+            
+            pulisciFormLotto();
+            caricaCatalogo();
         }
     }
 

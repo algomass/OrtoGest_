@@ -113,4 +113,33 @@ public class GestioneCatalogoAppController {
 
         return bean;
     }
+
+    /**
+     * Recupera i lotti in scadenza entro il numero di giorni indicato, non ancora scontati.
+     */
+    public List<LottoBean> getLottiInScadenza(int giorniPreavviso) {
+        ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
+        List<Lotto> tuttiLotti = lottoDAO.getTuttiILotti();
+        List<LottoBean> beans = new ArrayList<>();
+        java.time.LocalDate limite = java.time.LocalDate.now().plusDays(giorniPreavviso);
+
+        for (Lotto l : tuttiLotti) {
+            // Mostra i lotti se la loro scadenza è <= al limite e non sono già stati messi in sconto
+            if (!l.isScontoScadenzaAttivo() && !l.getDataScadenza().isAfter(limite)) {
+                beans.add(LottoBean.builder()
+                        .idLotto(l.getIdLotto())
+                        .nomeFornitore(l.getNomeFornitore())
+                        .nomeProdotto(l.getTipologiaProdotto().getNome())
+                        .quantitaKg(l.getQuantitaKg())
+                        .dataArrivo(l.getDataArrivo())
+                        .dataScadenza(l.getDataScadenza())
+                        .costoAcquisto(l.getCostoAcquisto())
+                        .prezzoVendita(l.getPrezzoVendita())
+                        .scontoScadenzaAttivo(l.isScontoScadenzaAttivo())
+                        .prezzoScontato(l.getPrezzoScontato())
+                        .build());
+            }
+        }
+        return beans;
+    }
 }
