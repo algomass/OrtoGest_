@@ -22,7 +22,6 @@ public class AppStarterCLI {
             
         } catch (Exception e) {
             Printer.perror("Errore fatale: " + e.getMessage());
-            e.printStackTrace();
         }
 
         Printer.print("Arrivederci!");
