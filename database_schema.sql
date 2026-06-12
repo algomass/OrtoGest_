@@ -47,8 +47,12 @@ CREATE TABLE IF NOT EXISTS utente (
 
 -- Inserimento di un utente di default per poter accedere al sistema (Responsabile)
 INSERT IGNORE INTO utente (email, password, ruolo) VALUES ('a', 'a', 'Responsabile');
+INSERT IGNORE INTO utente (email, password, ruolo) VALUES ('b', 'b', 'Cliente');
+INSERT IGNORE INTO utente (email, password, ruolo) VALUES ('c', 'c', 'Magazziniere');
+INSERT IGNORE INTO utente (email, password, ruolo) VALUES ('d', 'd', 'Operatore');
 
 -- Inserimento di qualche prodotto di base per avere un catalogo iniziale
-INSERT IGNORE INTO prodotto (nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path) VALUES 
+INSERT IGNORE INTO prodotto (nome, prezzo_attuale, quantita_disponib1
+ile, categoria, immagine_path) VALUES 
 ('Mele Golden', 1.50, 120.0, 'Frutta', '/images/mele_golden.png'),
 ('Zucchine', 2.00, 70.0, 'Verdura', '/images/zucchine.png');

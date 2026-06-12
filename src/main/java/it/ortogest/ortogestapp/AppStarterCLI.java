@@ -1,33 +1,30 @@
 package it.ortogest.ortogestapp;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import java.util.Scanner;
 
-import java.io.IOException;
+import it.ortogest.ortogestapp.graphiccontrollercli.LoginGraphicControllerCLI;
+import it.ortogest.ortogestapp.utils.Printer;
 
-import it.ortogest.ortogestapp.utils.*;
-
-public class AppStarterCLI extends Application {
-
-    @Override
-    public void start(Stage stage)  {
-        try {
-            // Aggiunta consigliata: imposta il titolo della finestra dell'app
-            stage.setTitle("OrtoGest");
-
-            // 3. Cambia il percorso per puntare al tuo file FXML iniziale
-            SceneManager sceneManager = SceneManager.getInstance();
-            sceneManager.initStage(stage);
-            sceneManager.cambiaScena(CostantiGUI.VIEW_LOGIN);
-
-            stage.show();
-        } catch (IOException e) {
-            // 4. Assicurati di avere la classe Printer, altrimenti usa System.err.println
-            Printer.perror(e.getMessage());
-        }
-    }
+/**
+ * Entry point per l'applicazione versione Command Line Interface (CLI).
+ */
+public class AppStarterCLI {
 
     public static void main(String[] args) {
-        launch(args);
+        Printer.print("Avvio OrtoGest CLI in corso...");
+
+        // Istanziamo un unico Scanner per tutta l'esecuzione dell'app
+        try (Scanner scanner = new Scanner(System.in)) {
+            
+            // Il primo controller ad essere chiamato è sempre il Login
+            LoginGraphicControllerCLI loginController = new LoginGraphicControllerCLI();
+            loginController.start(scanner);
+            
+        } catch (Exception e) {
+            Printer.perror("Errore fatale: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        Printer.print("Arrivederci!");
     }
 }

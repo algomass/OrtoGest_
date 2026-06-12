@@ -1,30 +1,19 @@
 package it.ortogest.ortogestapp.utils;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class Printer {
 
-    private static final Logger LOGGER = Logger.getLogger(Printer.class.getName());
+    private Printer() {
+    }
 
-    private Printer () {}
-
-    public static void printf(String s) {
-        printCLI(String.format("%s%n", s));
+    public static void printf(String format, Object... args) {
+        System.out.print(String.format(format, args));
     }
 
     public static void print(String s) {
-        printCLI(s);
+        System.out.println(s);
     }
 
-    public static void perror(String s){
-        printCLI("\033[31m" + s + "\033[0m" + "\n");
+    public static void perror(String s) {
+        System.out.println("\033[31m" + s + "\033[0m");
     }
-
-    private static void printCLI(String s) {
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info(s);
-        }
-    }
-
 }
