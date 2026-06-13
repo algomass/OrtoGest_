@@ -92,67 +92,75 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
                 return;
             }
             String nomeProdotto = inventario.get(numProd - 1).getNome();
-            List<LottoBean> lotti = appController.getLottiPerProdotto(nomeProdotto);
+            gestioneLottiProdotto(scanner, nomeProdotto);
             
-            if (lotti.isEmpty()) {
-                Printer.print("Nessun lotto trovato per " + nomeProdotto);
-                return;
-            }
-
-            Printer.printf("\n--- Lotti per %s ---\n", nomeProdotto);
-            Printer.printf("%-5s %-15s %-15s %-15s %-15s\n", "NUM", "ID LOTTO", "SCADENZA", "GIACENZA", "FORNITORE");
-            Printer.print("-------------------------------------------------------------------------");
-            for (int i = 0; i < lotti.size(); i++) {
-                LottoBean l = lotti.get(i);
-                Printer.printf("%-5d %-15s %-15s %-15.2f %-15s\n",
-                        (i+1),
-                        l.getIdLotto(),
-                        l.getDataScadenza().toString(),
-                        l.getQuantitaKg(),
-                        l.getNomeFornitore());
-            }
-
-            Printer.print("\nVuoi modificare (M) o eliminare (E) un lotto? (oppure INVIO per annullare): ");
-            String azione = scanner.nextLine().trim().toUpperCase();
-            if (azione.isEmpty()) return;
-
-            if (!azione.equals("M") && !azione.equals("E")) {
-                Printer.perror("Scelta non valida.");
-                return;
-            }
-
-            Printer.print("Inserisci il NUM del lotto: ");
-            int numLotto = Integer.parseInt(scanner.nextLine().trim());
-            if (numLotto < 1 || numLotto > lotti.size()) {
-                Printer.perror("Numero non valido.");
-                return;
-            }
-            LottoBean lottoDaModificare = lotti.get(numLotto - 1);
-
-            if (azione.equals("E")) {
-                appController.eliminaLotto(lottoDaModificare.getIdLotto());
-                Printer.print("[SUCCESS] Lotto eliminato.");
-            } else if (azione.equals("M")) {
-                Printer.print("Nuovo Fornitore (attuale: " + lottoDaModificare.getNomeFornitore() + ") [Invio per mantenere]: ");
-                String nuovoFornitore = scanner.nextLine().trim();
-                if (!nuovoFornitore.isEmpty()) lottoDaModificare.setNomeFornitore(nuovoFornitore);
-                
-                Printer.print("Nuova Quantità (attuale: " + lottoDaModificare.getQuantitaKg() + ") [Invio per mantenere]: ");
-                String nuovaQuantita = scanner.nextLine().trim();
-                if (!nuovaQuantita.isEmpty()) lottoDaModificare.setQuantitaKg(Double.parseDouble(nuovaQuantita));
-                
-                Printer.print("Nuovo Costo Acquisto (attuale: " + lottoDaModificare.getCostoAcquisto() + ") [Invio per mantenere]: ");
-                String nuovoCosto = scanner.nextLine().trim();
-                if (!nuovoCosto.isEmpty()) lottoDaModificare.setCostoAcquisto(Double.parseDouble(nuovoCosto));
-                
-                appController.modificaLotto(lottoDaModificare);
-                Printer.print("[SUCCESS] Lotto modificato.");
-            }
-
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Printer.perror("[ERRORE] Formato numerico non valido.");
         } catch (GestioneException e) {
             Printer.perror("[ERRORE] " + e.getMessage());
+        }
+    }
+
+    private void gestioneLottiProdotto(Scanner scanner, String nomeProdotto) throws GestioneException {
+        List<LottoBean> lotti = appController.getLottiPerProdotto(nomeProdotto);
+        
+        if (lotti.isEmpty()) {
+            Printer.print("Nessun lotto trovato per " + nomeProdotto);
+            return;
+        }
+
+        Printer.printf("\n--- Lotti per %s ---\n", nomeProdotto);
+        Printer.printf("%-5s %-15s %-15s %-15s %-15s\n", "NUM", "ID LOTTO", "SCADENZA", "GIACENZA", "FORNITORE");
+        Printer.print("-------------------------------------------------------------------------");
+        for (int i = 0; i < lotti.size(); i++) {
+            LottoBean l = lotti.get(i);
+            Printer.printf("%-5d %-15s %-15s %-15.2f %-15s\n",
+                    (i+1),
+                    l.getIdLotto(),
+                    l.getDataScadenza().toString(),
+                    l.getQuantitaKg(),
+                    l.getNomeFornitore());
+        }
+
+        Printer.print("\nVuoi modificare (M) o eliminare (E) un lotto? (oppure INVIO per annullare): ");
+        String azione = scanner.nextLine().trim().toUpperCase();
+        if (azione.isEmpty()) return;
+
+        if (!azione.equals("M") && !azione.equals("E")) {
+            Printer.perror("Scelta non valida.");
+            return;
+        }
+
+        Printer.print("Inserisci il NUM del lotto: ");
+        int numLotto = Integer.parseInt(scanner.nextLine().trim());
+        if (numLotto < 1 || numLotto > lotti.size()) {
+            Printer.perror("Numero non valido.");
+            return;
+        }
+        
+        LottoBean lottoDaModificare = lotti.get(numLotto - 1);
+        eseguiAzioneSuLotto(scanner, lottoDaModificare, azione);
+    }
+
+    private void eseguiAzioneSuLotto(Scanner scanner, LottoBean lottoDaModificare, String azione) throws GestioneException {
+        if (azione.equals("E")) {
+            appController.eliminaLotto(lottoDaModificare.getIdLotto());
+            Printer.print("[SUCCESS] Lotto eliminato.");
+        } else if (azione.equals("M")) {
+            Printer.print("Nuovo Fornitore (attuale: " + lottoDaModificare.getNomeFornitore() + ") [Invio per mantenere]: ");
+            String nuovoFornitore = scanner.nextLine().trim();
+            if (!nuovoFornitore.isEmpty()) lottoDaModificare.setNomeFornitore(nuovoFornitore);
+            
+            Printer.print("Nuova Quantità (attuale: " + lottoDaModificare.getQuantitaKg() + ") [Invio per mantenere]: ");
+            String nuovaQuantita = scanner.nextLine().trim();
+            if (!nuovaQuantita.isEmpty()) lottoDaModificare.setQuantitaKg(Double.parseDouble(nuovaQuantita));
+            
+            Printer.print("Nuovo Costo Acquisto (attuale: " + lottoDaModificare.getCostoAcquisto() + ") [Invio per mantenere]: ");
+            String nuovoCosto = scanner.nextLine().trim();
+            if (!nuovoCosto.isEmpty()) lottoDaModificare.setCostoAcquisto(Double.parseDouble(nuovoCosto));
+            
+            appController.modificaLotto(lottoDaModificare);
+            Printer.print("[SUCCESS] Lotto modificato.");
         }
     }
 
@@ -190,7 +198,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             appController.registraLotto(lottoBean);
             Printer.print("[SUCCESS] Lotto registrato correttamente!");
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Printer.perror("[ERRORE] Formato numerico non valido per Quantità o Costo.");
         } catch (GestioneException e) {
             Printer.perror("[ERRORE] Impossibile registrare il lotto: " + e.getMessage());
@@ -219,12 +227,12 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             String risultato = appController.inoltraSegnalazione(anomalia);
             Printer.print("[ESITO] " + risultato);
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Printer.perror("[ERRORE] Formato numerico non valido per la Quantità.");
         }
     }
 
-    private LocalDate leggiData(Scanner scanner, String messaggio) throws Exception {
+    private LocalDate leggiData(Scanner scanner, String messaggio) {
         while (true) {
             Printer.print(messaggio);
             String input = scanner.nextLine();

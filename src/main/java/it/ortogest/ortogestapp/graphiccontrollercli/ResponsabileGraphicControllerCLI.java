@@ -12,6 +12,10 @@ import it.ortogest.ortogestapp.utils.SessionManager;
 
 public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
 
+    private static final String ROW_FORMAT = "%-5s %-15s %-15s %-15s %-15s\n";
+    private static final String MSG_NUM_NON_VALIDO = "Numero non valido.";
+    private static final String MSG_ERRORE = "[ERRORE] ";
+
     private final GestioneCatalogoAppController appController;
 
     public ResponsabileGraphicControllerCLI() {
@@ -70,7 +74,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             return catalogo;
         }
 
-        Printer.printf("%-5s %-15s %-15s %-15s %-15s\n", "NUM", "PRODOTTO", "CATEGORIA", "GIACENZA TOT", "COSTO MEDIO");
+        Printer.printf(ROW_FORMAT, "NUM", "PRODOTTO", "CATEGORIA", "GIACENZA TOT", "COSTO MEDIO");
         Printer.print("-----------------------------------------------------------------");
         for (int i = 0; i < catalogo.size(); i++) {
             ProdottoBean p = catalogo.get(i);
@@ -93,7 +97,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             int numProd = Integer.parseInt(scanner.nextLine().trim());
             if (numProd == 0) return;
             if (numProd < 1 || numProd > catalogo.size()) {
-                Printer.perror("Numero non valido.");
+                Printer.perror(MSG_NUM_NON_VALIDO);
                 return;
             }
             String nomeProdotto = catalogo.get(numProd - 1).getNome();
@@ -105,7 +109,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
                 return;
             }
 
-            Printer.printf("%-5s %-15s %-15s %-15s %-15s\n", "NUM", "ID LOTTO", "COSTO ACQ.", "PREZZO VENDITA", "SCONTO ATTIVO");
+            Printer.printf(ROW_FORMAT, "NUM", "ID LOTTO", "COSTO ACQ.", "PREZZO VENDITA", "SCONTO ATTIVO");
             Printer.print("-------------------------------------------------------------------");
             for (int i = 0; i < lotti.size(); i++) {
                 LottoBean l = lotti.get(i);
@@ -121,7 +125,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             int numLotto = Integer.parseInt(scanner.nextLine().trim());
             if (numLotto == 0) return;
             if (numLotto < 1 || numLotto > lotti.size()) {
-                Printer.perror("Numero non valido.");
+                Printer.perror(MSG_NUM_NON_VALIDO);
                 return;
             }
 
@@ -137,10 +141,10 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             appController.aggiornaPrezzoLotto(lottoScelto);
             Printer.print("[SUCCESS] Prezzo aggiornato correttamente.");
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Printer.perror("Formato numerico non valido.");
         } catch (GestioneException e) {
-            Printer.perror("[ERRORE] " + e.getMessage());
+            Printer.perror(MSG_ERRORE + e.getMessage());
         }
     }
 
@@ -154,7 +158,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             return;
         }
 
-        Printer.printf("%-5s %-15s %-15s %-15s %-15s\n", "NUM", "ID LOTTO", "PRODOTTO", "SCADENZA", "PREZZO ATTUALE");
+        Printer.printf(ROW_FORMAT, "NUM", "ID LOTTO", "PRODOTTO", "SCADENZA", "PREZZO ATTUALE");
         Printer.print("-------------------------------------------------------------------------");
         for (int i = 0; i < lottiInScadenza.size(); i++) {
             LottoBean l = lottiInScadenza.get(i);
@@ -171,7 +175,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             int num = Integer.parseInt(scanner.nextLine().trim());
             if (num == 0) return;
             if (num < 1 || num > lottiInScadenza.size()) {
-                Printer.perror("Numero non valido.");
+                Printer.perror(MSG_NUM_NON_VALIDO);
                 return;
             }
             
@@ -185,10 +189,10 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             appController.aggiornaPrezzoLotto(l);
             Printer.print("[SUCCESS] Sconto applicato per il lotto " + l.getIdLotto());
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Printer.perror("Valore non numerico, sconto annullato.");
         } catch (GestioneException e) {
-            Printer.perror("[ERRORE] " + e.getMessage());
+            Printer.perror(MSG_ERRORE + e.getMessage());
         }
     }
 
@@ -201,7 +205,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             int numProd = Integer.parseInt(scanner.nextLine().trim());
             if (numProd == 0) return;
             if (numProd < 1 || numProd > catalogo.size()) {
-                Printer.perror("Numero non valido.");
+                Printer.perror(MSG_NUM_NON_VALIDO);
                 return;
             }
             String nomeProdotto = catalogo.get(numProd - 1).getNome();
@@ -214,12 +218,12 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             int sceltaCat = Integer.parseInt(scanner.nextLine().trim());
             if (sceltaCat == 0) return;
             
-            String nuovaCategoria;
-            if (sceltaCat == 1) {
-                nuovaCategoria = "FRUTTA";
-            } else if (sceltaCat == 2) {
-                nuovaCategoria = "VERDURA";
-            } else {
+            String nuovaCategoria = switch (sceltaCat) {
+                case 1 -> "FRUTTA";
+                case 2 -> "VERDURA";
+                default -> null;
+            };
+            if (nuovaCategoria == null) {
                 Printer.perror("Scelta non valida.");
                 return;
             }
@@ -229,10 +233,10 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
 
             appController.aggiornaCategoriaProdotto(bean);
             Printer.print("[SUCCESS] Categoria aggiornata per " + nomeProdotto);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Printer.perror("Formato numerico non valido.");
         } catch (GestioneException e) {
-            Printer.perror("[ERRORE] " + e.getMessage());
+            Printer.perror(MSG_ERRORE + e.getMessage());
         }
     }
 }

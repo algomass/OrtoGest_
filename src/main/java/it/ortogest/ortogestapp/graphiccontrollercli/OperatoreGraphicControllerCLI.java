@@ -1,4 +1,4 @@
-﻿package it.ortogest.ortogestapp.graphiccontrollercli;
+package it.ortogest.ortogestapp.graphiccontrollercli;
 
 import java.util.List;
 import java.util.Scanner;
@@ -89,30 +89,34 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
             
             OrdineBean ordineDaEvadere = pronti.get(numOrdine - 1);
 
-        Printer.print("\n--- Riepilogo Ordine #" + ordineDaEvadere.getIdOrdine() + " ---");
-        Printer.print("Cliente: " + ordineDaEvadere.getEmailCliente());
-        Printer.print("Prodotti: " + ordineDaEvadere.getRiepilogoProdotti());
-        Printer.printf("TOTALE DA INCASSARE: %.2f â‚¬\n", ordineDaEvadere.getTotale());
-        Printer.print("Confermi l'avvenuto pagamento? (S/N): ");
-        
-        String conferma = scanner.nextLine().trim().toUpperCase();
-        if ("S".equals(conferma)) {
-            try {
-                appController.aggiornaStatoOrdine(ordineDaEvadere.getIdOrdine(), "Ritirato");
-                Printer.print("\n**************************************");
-                Printer.print("         SCONTRINO EMESSO             ");
-                Printer.print(" Ordine: " + ordineDaEvadere.getIdOrdine());
-                Printer.printf(" Pagato: %.2f â‚¬\n", ordineDaEvadere.getTotale());
-                Printer.print("**************************************");
-                Printer.print("[SUCCESS] Ordine completato e passato allo stato 'Ritirato'.");
-            } catch (Exception e) {
-                Printer.perror("[ERRORE] Impossibile aggiornare lo stato dell'ordine: " + e.getMessage());
+            Printer.print("\n--- Riepilogo Ordine #" + ordineDaEvadere.getIdOrdine() + " ---");
+            Printer.print("Cliente: " + ordineDaEvadere.getEmailCliente());
+            Printer.print("Prodotti: " + ordineDaEvadere.getRiepilogoProdotti());
+            Printer.printf("TOTALE DA INCASSARE: %.2f â‚¬\n", ordineDaEvadere.getTotale());
+            Printer.print("Confermi l'avvenuto pagamento? (S/N): ");
+            
+            String conferma = scanner.nextLine().trim().toUpperCase();
+            if ("S".equals(conferma)) {
+                confermaEmettiScontrino(ordineDaEvadere);
+            } else {
+                Printer.print("Operazione annullata.");
             }
-        } else {
-            Printer.print("Operazione annullata.");
-        }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Printer.perror("[ERRORE] Formato numerico non valido.");
+        }
+    }
+
+    private void confermaEmettiScontrino(OrdineBean ordineDaEvadere) {
+        try {
+            appController.aggiornaStatoOrdine(ordineDaEvadere.getIdOrdine(), "Ritirato");
+            Printer.print("\n**************************************");
+            Printer.print("         SCONTRINO EMESSO             ");
+            Printer.print(" Ordine: " + ordineDaEvadere.getIdOrdine());
+            Printer.printf(" Pagato: %.2f â‚¬\n", ordineDaEvadere.getTotale());
+            Printer.print("**************************************");
+            Printer.print("[SUCCESS] Ordine completato e passato allo stato 'Ritirato'.");
+        } catch (Exception e) {
+            Printer.perror("[ERRORE] Impossibile aggiornare lo stato dell'ordine: " + e.getMessage());
         }
     }
 

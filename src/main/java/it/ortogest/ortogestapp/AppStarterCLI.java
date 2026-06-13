@@ -10,7 +10,7 @@ import it.ortogest.ortogestapp.utils.Printer;
  */
 public class AppStarterCLI {
 
-    public static void main(String[] args) {
+    public static void main() {
         Printer.print("Avvio OrtoGest CLI in corso...");
 
         // Istanziamo un unico Scanner per tutta l'esecuzione dell'app

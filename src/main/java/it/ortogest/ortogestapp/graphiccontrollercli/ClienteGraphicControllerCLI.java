@@ -111,7 +111,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
             ProdottoBean scelto = catalogo.get(sceltaProd - 1);
             scegliLottoEQuantita(scelto, scanner);
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Printer.perror("Inserire un numero valido.");
         }
     }
@@ -165,7 +165,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
             SessionManager.getInstance().getCarrelloCorrente().add(riga);
             Printer.print("[SUCCESS] Prodotto aggiunto al carrello!");
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             Printer.perror("Inserire un valore numerico valido.");
         }
     }

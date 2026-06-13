@@ -15,6 +15,9 @@ import java.util.List;
  */
 public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController {
 
+    private static final String STATO_INVIATO = "Inviato";
+    private static final String FILTRO_TUTTI = "Tutti gli stati";
+
     @FXML private TableView<OrdineBean> ordiniTable;
     @FXML private TableColumn<OrdineBean, String> colIdOrdine;
     @FXML private TableColumn<OrdineBean, String> colCliente;
@@ -43,8 +46,8 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
         colTotale.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("totale"));
         colStato.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("stato"));
         
-        filtroStatoComboBox.getItems().addAll("Tutti gli stati", "Inviato", "Pronto per il Ritiro", "Ritirato");
-        filtroStatoComboBox.setValue("Tutti gli stati");
+        filtroStatoComboBox.getItems().addAll(FILTRO_TUTTI, STATO_INVIATO, "Pronto per il Ritiro", "Ritirato");
+        filtroStatoComboBox.setValue(FILTRO_TUTTI);
         filtroStatoComboBox.setOnAction(e -> caricaOrdini());
 
         ordiniTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -59,15 +62,15 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
     private void caricaOrdini() {
         List<OrdineBean> tuttiOrdini = appController.getTuttiOrdini();
         
-        String filtro = filtroStatoComboBox != null ? filtroStatoComboBox.getValue() : "Tutti gli stati";
+        String filtro = filtroStatoComboBox != null ? filtroStatoComboBox.getValue() : FILTRO_TUTTI;
         List<OrdineBean> filtrati;
         
-        if ("Tutti gli stati".equals(filtro) || filtro == null) {
+        if (FILTRO_TUTTI.equals(filtro) || filtro == null) {
             filtrati = tuttiOrdini;
         } else {
             filtrati = tuttiOrdini.stream()
                 .filter(o -> filtro.equals(o.getStato()))
-                .collect(java.util.stream.Collectors.toList());
+                .toList();
         }
 
         ObservableList<OrdineBean> data = FXCollections.observableArrayList(filtrati);
@@ -89,7 +92,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
         }
         
         // Abilita il pulsante solo se l'ordine è "Inviato"
-        btnSegnaPronto.setDisable(!"Inviato".equals(ordine.getStato()));
+        btnSegnaPronto.setDisable(!STATO_INVIATO.equals(ordine.getStato()));
         messaggioLabel.setText("");
     }
     
@@ -109,7 +112,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
             return;
         }
         
-        if (!"Inviato".equals(selected.getStato())) {
+        if (!STATO_INVIATO.equals(selected.getStato())) {
             mostraErrore("L'ordine non è nello stato Inviato.");
             return;
         }
