@@ -16,6 +16,8 @@ import it.ortogest.ortogestapp.utils.SessionManager;
 
 public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
 
+    private static final String MSG_INVIO_MANTENERE = ") [Invio per mantenere]: ";
+
     private final GestioneMagazzinoAppController appController;
     private final DateTimeFormatter dateFormatter;
 
@@ -147,15 +149,15 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             appController.eliminaLotto(lottoDaModificare.getIdLotto());
             Printer.print("[SUCCESS] Lotto eliminato.");
         } else if (azione.equals("M")) {
-            Printer.print("Nuovo Fornitore (attuale: " + lottoDaModificare.getNomeFornitore() + ") [Invio per mantenere]: ");
+            Printer.print("Nuovo Fornitore (attuale: " + lottoDaModificare.getNomeFornitore() + MSG_INVIO_MANTENERE);
             String nuovoFornitore = scanner.nextLine().trim();
             if (!nuovoFornitore.isEmpty()) lottoDaModificare.setNomeFornitore(nuovoFornitore);
             
-            Printer.print("Nuova Quantità (attuale: " + lottoDaModificare.getQuantitaKg() + ") [Invio per mantenere]: ");
+            Printer.print("Nuova Quantità (attuale: " + lottoDaModificare.getQuantitaKg() + MSG_INVIO_MANTENERE);
             String nuovaQuantita = scanner.nextLine().trim();
             if (!nuovaQuantita.isEmpty()) lottoDaModificare.setQuantitaKg(Double.parseDouble(nuovaQuantita));
             
-            Printer.print("Nuovo Costo Acquisto (attuale: " + lottoDaModificare.getCostoAcquisto() + ") [Invio per mantenere]: ");
+            Printer.print("Nuovo Costo Acquisto (attuale: " + lottoDaModificare.getCostoAcquisto() + MSG_INVIO_MANTENERE);
             String nuovoCosto = scanner.nextLine().trim();
             if (!nuovoCosto.isEmpty()) lottoDaModificare.setCostoAcquisto(Double.parseDouble(nuovoCosto));
             
@@ -238,7 +240,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             String input = scanner.nextLine();
             try {
                 return LocalDate.parse(input, dateFormatter);
-            } catch (DateTimeParseException e) {
+            } catch (DateTimeParseException _) {
                 Printer.perror("[ERRORE] Formato data non valido. Assicurati di usare il formato YYYY-MM-DD (es. 2024-05-20). Riprova.");
                 // Continua il loop per far riprovare
             }
