@@ -3,7 +3,7 @@ package it.ortogest.ortogestapp.beans;
 /**
  * UtenteBean rappresenta l'utente loggato nel sistema.
  * Segue il pattern JavaBean: incapsula i dati e fornisce i metodi di accesso (getter/setter).
- * Questa classe ha l'unica responsabilitÃƒÆ’Ã‚Â  di trasportare i dati dell'utente, 
+ * Questa classe ha l'unica responsabilitÃƒÂ  di trasportare i dati dell'utente, 
  * isolandoli dalla logica di business e dalla UI.
  */
 public class UtenteBean {

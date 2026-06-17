@@ -1,7 +1,7 @@
 package it.ortogest.ortogestapp.model;
 
 /**
- * EntitÃƒÆ’Ã‚Â  di Dominio che rappresenta l'Utente.
+ * EntitÃƒÂ  di Dominio che rappresenta l'Utente.
  * Contiene lo stato reale e le logiche di business (se presenti).
  * NON deve mai essere passata alla View.
  */

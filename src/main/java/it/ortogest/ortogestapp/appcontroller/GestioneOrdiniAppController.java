@@ -119,15 +119,15 @@ public class GestioneOrdiniAppController {
      * Crea un nuovo ordine a partire da una lista di prodotti nel carrello.
      * 
      * @param emailCliente L'email del cliente che effettua l'ordine.
-     * @param carrello     La lista di prodotti e quantitÃƒÆ’Ã‚Â  selezionate.
+     * @param carrello     La lista di prodotti e quantitÃƒÂ  selezionate.
      * @return Messaggio di conferma con l'ID dell'ordine.
-     * @throws GestioneException Se un prodotto non ÃƒÆ’Ã‚Â¨ trovato o la giacenza ÃƒÆ’Ã‚Â¨
+     * @throws GestioneException Se un prodotto non ÃƒÂ¨ trovato o la giacenza ÃƒÂ¨
      *                           insufficiente.
      */
     public String creaOrdine(String emailCliente, List<it.ortogest.ortogestapp.beans.RigaOrdineBean> carrello)
             throws GestioneException {
         if (carrello == null || carrello.isEmpty()) {
-            throw new GestioneException("Il carrello ÃƒÆ’Ã‚Â¨ vuoto.");
+            throw new GestioneException("Il carrello ÃƒÂ¨ vuoto.");
         }
 
         List<it.ortogest.ortogestapp.model.RigaOrdine> righeModello = new ArrayList<>();
@@ -171,9 +171,9 @@ public class GestioneOrdiniAppController {
                 l.setQuantitaKg(l.getQuantitaKg() - riga.getQuantita());
                 lottoDAO.salvaLotto(l);
             } else {
-                // Se non c'ÃƒÆ’Ã‚Â¨ abbastanza quantitÃƒÆ’Ã‚Â  o non esiste, ÃƒÆ’Ã‚Â¨ un problema di concorrenza
+                // Se non c'ÃƒÂ¨ abbastanza quantitÃƒÂ  o non esiste, ÃƒÂ¨ un problema di concorrenza
                 throw new GestioneException(
-                        "QuantitÃƒÆ’Ã‚Â  non disponibile nel lotto selezionato per: " + riga.getNomeProdotto());
+                        "QuantitÃƒÂ  non disponibile nel lotto selezionato per: " + riga.getNomeProdotto());
             }
         }
 
@@ -201,13 +201,13 @@ public class GestioneOrdiniAppController {
         }
 
         if ("Pronto per il Ritiro".equals(ordine.getStato())) {
-            throw new GestioneException("l'ordine ÃƒÆ’Ã‚Â¨ in attesa di ritiro dunque non puÃƒÆ’Ã‚Â² essere annullato");
+            throw new GestioneException("l'ordine ÃƒÂ¨ in attesa di ritiro dunque non puÃƒÂ² essere annullato");
         }
 
-        // Se l'ordine ÃƒÆ’Ã‚Â¨ "Ritirato", lo eliminiamo (dallo storico del cliente) ma NON
+        // Se l'ordine ÃƒÂ¨ "Ritirato", lo eliminiamo (dallo storico del cliente) ma NON
         // ripristiniamo le giacenze.
         if (!"Ritirato".equals(ordine.getStato())) {
-            // Ripristina le giacenze dei prodotti e dei lotti solo se non ÃƒÆ’Ã‚Â¨ ancora stato
+            // Ripristina le giacenze dei prodotti e dei lotti solo se non ÃƒÂ¨ ancora stato
             // ritirato
             for (it.ortogest.ortogestapp.model.RigaOrdine riga : ordine.getRighe()) {
                 Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());

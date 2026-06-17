@@ -34,7 +34,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
                 stmtOrdine.executeUpdate();
             }
 
-            // Per semplicitÃƒÆ’Ã‚Â  e pulizia in caso di aggiornamento, cancelliamo le righe
+            // Per semplicitÃƒÂ  e pulizia in caso di aggiornamento, cancelliamo le righe
             // vecchie se esistono e le reinseriamo
             try (PreparedStatement stmtDelete = conn.prepareStatement("DELETE FROM riga_ordine WHERE id_ordine = ?")) {
                 stmtDelete.setString(1, ordine.getIdOrdine());

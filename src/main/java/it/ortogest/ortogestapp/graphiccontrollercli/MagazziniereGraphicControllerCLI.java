@@ -70,7 +70,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
         List<ProdottoBean> inventario = appController.getInventario();
 
         if (inventario.isEmpty()) {
-            Printer.print("Il magazzino ÃƒÆ’Ã‚Â¨ vuoto.");
+            Printer.print("Il magazzino ÃƒÂ¨ vuoto.");
             return;
         }
 
@@ -153,7 +153,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             String nuovoFornitore = scanner.nextLine().trim();
             if (!nuovoFornitore.isEmpty()) lottoDaModificare.setNomeFornitore(nuovoFornitore);
             
-            Printer.print("Nuova QuantitÃƒÆ’Ã‚Â  (attuale: " + lottoDaModificare.getQuantitaKg() + MSG_INVIO_MANTENERE);
+            Printer.print("Nuova QuantitÃƒÂ  (attuale: " + lottoDaModificare.getQuantitaKg() + MSG_INVIO_MANTENERE);
             String nuovaQuantita = scanner.nextLine().trim();
             if (!nuovaQuantita.isEmpty()) lottoDaModificare.setQuantitaKg(Double.parseDouble(nuovaQuantita));
             
@@ -178,10 +178,10 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("Nome Prodotto (es. Mele, Zucchine): ");
             String prodotto = scanner.nextLine();
 
-            Printer.print("QuantitÃƒÆ’Ã‚Â  (in Kg): ");
+            Printer.print("QuantitÃƒÂ  (in Kg): ");
             double quantita = Double.parseDouble(scanner.nextLine());
 
-            Printer.print("Costo di Acquisto Totale (ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬): ");
+            Printer.print("Costo di Acquisto Totale (ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬): ");
             double costo = Double.parseDouble(scanner.nextLine());
 
             LocalDate dataArrivo = leggiData(scanner, "Data di Arrivo (YYYY-MM-DD): ");
@@ -201,7 +201,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("[SUCCESS] Lotto registrato correttamente!");
 
         } catch (NumberFormatException _) {
-            Printer.perror("[ERRORE] Formato numerico non valido per QuantitÃƒÆ’Ã‚Â  o Costo.");
+            Printer.perror("[ERRORE] Formato numerico non valido per QuantitÃƒÂ  o Costo.");
         } catch (GestioneException e) {
             Printer.perror("[ERRORE] Impossibile registrare il lotto: " + e.getMessage());
         } catch (Exception e) {
@@ -218,7 +218,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("Nome del Prodotto interessato: ");
             String prodotto = scanner.nextLine();
 
-            Printer.print("QuantitÃƒÆ’Ã‚Â  interessata (Kg): ");
+            Printer.print("QuantitÃƒÂ  interessata (Kg): ");
             double quantita = Double.parseDouble(scanner.nextLine());
 
             Printer.print("Note aggiuntive: ");
@@ -230,7 +230,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("[ESITO] " + risultato);
 
         } catch (NumberFormatException _) {
-            Printer.perror("[ERRORE] Formato numerico non valido per la QuantitÃƒÆ’Ã‚Â .");
+            Printer.perror("[ERRORE] Formato numerico non valido per la QuantitÃƒÂ .");
         }
     }
 

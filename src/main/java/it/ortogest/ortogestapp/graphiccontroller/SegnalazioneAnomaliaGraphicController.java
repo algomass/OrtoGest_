@@ -59,7 +59,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
             if (quantita <= 0)
                 throw new NumberFormatException();
         } catch (NumberFormatException _) {
-            mostraStatus("Inserire una quantitÃƒÆ’Ã‚Â  numerica valida (maggiore di 0).", false);
+            mostraStatus("Inserire una quantitÃƒÂ  numerica valida (maggiore di 0).", false);
             return;
         }
 

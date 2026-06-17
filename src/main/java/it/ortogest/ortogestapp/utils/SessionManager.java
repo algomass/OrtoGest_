@@ -3,8 +3,8 @@ package it.ortogest.ortogestapp.utils;
 import it.ortogest.ortogestapp.beans.UtenteBean;
 
 /**
- * SessionManager ÃƒÆ’Ã‚Â¨ un Singleton che gestisce i dati di sessione (es. l'utente attualmente loggato).
- * La sua singola responsabilitÃƒÆ’Ã‚Â  ÃƒÆ’Ã‚Â¨ mantenere lo stato globale della sessione utente.
+ * SessionManager ÃƒÂ¨ un Singleton che gestisce i dati di sessione (es. l'utente attualmente loggato).
+ * La sua singola responsabilitÃƒÂ  ÃƒÂ¨ mantenere lo stato globale della sessione utente.
  * In questo modo si disaccoppiano i controller, evitando di dover passare le informazioni 
  * dell'utente di scena in scena tramite costruttori o metodi ad hoc.
  */

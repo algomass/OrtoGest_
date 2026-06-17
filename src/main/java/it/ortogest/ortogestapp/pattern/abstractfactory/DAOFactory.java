@@ -18,7 +18,7 @@ import it.ortogest.ortogestapp.dao.interfacedao.IUtenteDAO;
  * PATTERN APPLICATI:
  * 1. Abstract Factory: Questa classe astratta definisce le "fabbriche" per
  * creare oggetti DAO (Data Access Object).
- * 2. Singleton: L'intero sistema userÃƒÆ’Ã‚Â  una sola e unica istanza di questa
+ * 2. Singleton: L'intero sistema userÃƒÂ  una sola e unica istanza di questa
  * Factory.
  */
 public abstract class DAOFactory {
@@ -44,7 +44,7 @@ public abstract class DAOFactory {
         // ancora, inizio a crearla.
         if (instance == null) {
 
-            // Passo 2: Imposto il Database relazionale (JDBC) come modalitÃƒÆ’Ã‚Â  predefinita
+            // Passo 2: Imposto il Database relazionale (JDBC) come modalitÃƒÂ  predefinita
             String type = JDBC;
 
             try {
@@ -58,12 +58,12 @@ public abstract class DAOFactory {
                     try (FileInputStream fis = new FileInputStream(configFile)) {
                         props.load(fis);
 
-                        // Passo 5: Leggo la proprietÃƒÆ’Ã‚Â  "persistence". Se manca, uso "JDBC"
+                        // Passo 5: Leggo la proprietÃƒÂ  "persistence". Se manca, uso "JDBC"
                         type = props.getProperty("persistence", JDBC).trim().toLowerCase();
                     }
                 }
             } catch (Exception _) {
-                // Passo 6: Fallback sicuro. Se il file ÃƒÆ’Ã‚Â¨ corrotto, avviso e proseguo con il
+                // Passo 6: Fallback sicuro. Se il file ÃƒÂ¨ corrotto, avviso e proseguo con il
                 // database di default
                 it.ortogest.ortogestapp.utils.Printer
                         .perror("Errore nella lettura di config.properties. Uso JDBC di default.");
@@ -72,14 +72,14 @@ public abstract class DAOFactory {
             // Passo 7: Polymorphism (Polimorfismo). In base al tipo configurato, istanzio
             // la Factory concreta
             if (DEMO.equals(type)) {
-                // ModalitÃƒÆ’Ã‚Â  "demo": Nessun salvataggio permanente, usa solo la memoria RAM
+                // ModalitÃƒÂ  "demo": Nessun salvataggio permanente, usa solo la memoria RAM
                 // (ottimo per i test)
                 instance = new InMemoryDAOFactory();
             } else if (CSV.equals(type)) {
-                // ModalitÃƒÆ’Ã‚Â  "csv": Salva e legge i dati su file di testo (.csv)
+                // ModalitÃƒÂ  "csv": Salva e legge i dati su file di testo (.csv)
                 instance = new FileSystemDAOFactory();
             } else {
-                // ModalitÃƒÆ’Ã‚Â  "jdbc": Connessione reale al database MySQL
+                // ModalitÃƒÂ  "jdbc": Connessione reale al database MySQL
                 instance = new JdbcDAOFactory();
             }
         }

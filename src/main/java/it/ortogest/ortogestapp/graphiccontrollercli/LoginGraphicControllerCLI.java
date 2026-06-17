@@ -109,7 +109,7 @@ public class LoginGraphicControllerCLI implements GraphicControllerCLI {
         if (nextView != null) {
             nextView.start(scanner);
         } else {
-            // Se la vista non ÃƒÆ’Ã‚Â¨ implementata, facciamo il logout preventivo e torniamo indietro
+            // Se la vista non ÃƒÂ¨ implementata, facciamo il logout preventivo e torniamo indietro
             SessionManager.getInstance().logout();
         }
     }
