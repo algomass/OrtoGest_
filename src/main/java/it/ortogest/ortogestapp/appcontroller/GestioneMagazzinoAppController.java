@@ -145,7 +145,7 @@ public class GestioneMagazzinoAppController {
 
         if (prodotto == null) {
             // Creiamo un nuovo prodotto dinamicamente se non esiste
-            // Categoria di default FRUTTA Ã¢â‚¬â€�? il responsabile potrà modificarla in seguito
+            // Categoria di default FRUTTA Ã¢â‚¬âEUR�? il responsabile potrà modificarla in seguito
             prodotto = new Prodotto(bean.getNomeProdotto(), 0.0, 0.0, CategoriaProdotto.FRUTTA,
                     "/images/placeholder.png");
             prodottoDAO.salvaProdotto(prodotto);

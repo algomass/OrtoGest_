@@ -61,7 +61,7 @@ public class CassaGraphicController extends BaseGraphicController {
         }
 
         this.ordineInPagamento = selected;
-        totaleLabel.setText(String.format("€ %.2f", selected.getTotale()));
+        totaleLabel.setText(String.format("EUR %.2f", selected.getTotale()));
         
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ordine #" + selected.getIdOrdine() + " caricato in cassa.", ButtonType.OK);
         alert.setHeaderText("Ordine Caricato");
@@ -92,7 +92,7 @@ public class CassaGraphicController extends BaseGraphicController {
     @FXML
     public void annullaOperazioneAction() {
         this.ordineInPagamento = null;
-        totaleLabel.setText("€ 0,00");
+        totaleLabel.setText("EUR 0,00");
         if (ordiniTable != null) {
             ordiniTable.getSelectionModel().clearSelection();
         }

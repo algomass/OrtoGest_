@@ -191,7 +191,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
             totale += riga.getSubtotale();
         }
         Printer.print("-----------------------------------------------------------------");
-        Printer.printf("TOTALE: %.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬\n", totale);
+        Printer.printf("TOTALE: %.2f EUR\n", totale);
     }
 
     private void inviaOrdine() {
@@ -226,7 +226,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         }
 
         for (OrdineBean o : ordini) {
-            Printer.print("\nID Ordine: " + o.getIdOrdine() + " | Stato: " + o.getStato() + " | Totale: " + o.getTotale() + " ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬");
+            Printer.print("\nID Ordine: " + o.getIdOrdine() + " | Stato: " + o.getStato() + " | Totale: " + o.getTotale() + " EUR");
             Printer.print("Contenuto: " + o.getRiepilogoProdotti());
         }
     }

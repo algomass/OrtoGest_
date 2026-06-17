@@ -8,7 +8,7 @@ public class RigaOrdine {
     private String nomeProdotto;
     private String idLotto;
     private double quantita;       // In Kg
-    private double prezzoUnitario; // €/Kg al momento dell'ordine
+    private double prezzoUnitario; // EUR/Kg al momento dell'ordine
 
     public RigaOrdine(String nomeProdotto, String idLotto, double quantita, double prezzoUnitario) {
         this.nomeProdotto = nomeProdotto;

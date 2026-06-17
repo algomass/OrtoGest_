@@ -35,7 +35,7 @@ public class DatabaseHelper {
 
     /**
      * Restituisce una nuova connessione al database.
-     * ÃƒË† responsabilità di chi chiama questo metodo chiudere la connessione.
+     * È responsabilità di chi chiama questo metodo chiudere la connessione.
      */
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);

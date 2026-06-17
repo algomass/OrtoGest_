@@ -15,11 +15,11 @@ public class AppStarterCLI {
 
         // Istanziamo un unico Scanner per tutta l'esecuzione dell'app
         try (Scanner scanner = new Scanner(System.in)) {
-            
+
             // Il primo controller ad essere chiamato è sempre il Login
             LoginGraphicControllerCLI loginController = new LoginGraphicControllerCLI();
             loginController.start(scanner);
-            
+
         } catch (Exception e) {
             Printer.perror("Errore fatale: " + e.getMessage());
         }

@@ -181,7 +181,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("Quantità (in Kg): ");
             double quantita = Double.parseDouble(scanner.nextLine());
 
-            Printer.print("Costo di Acquisto Totale (ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬): ");
+            Printer.print("Costo di Acquisto Totale (EUR): ");
             double costo = Double.parseDouble(scanner.nextLine());
 
             LocalDate dataArrivo = leggiData(scanner, "Data di Arrivo (YYYY-MM-DD): ");

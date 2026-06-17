@@ -78,7 +78,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
         Printer.print("-----------------------------------------------------------------");
         for (int i = 0; i < catalogo.size(); i++) {
             ProdottoBean p = catalogo.get(i);
-            Printer.printf("%-5d %-15s %-15s %-15.2f %-15.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬\n",
+            Printer.printf("%-5d %-15s %-15s %-15.2f %-15.2f EUR\n",
                     (i+1),
                     p.getNome(),
                     p.getCategoria(),
@@ -113,12 +113,12 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("-------------------------------------------------------------------");
             for (int i = 0; i < lotti.size(); i++) {
                 LottoBean l = lotti.get(i);
-                Printer.printf("%-5d %-15s %-15.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ %-15.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ %-15s\n",
+                Printer.printf("%-5d %-15s %-15.2f EUR %-15.2f EUR %-15s\n",
                         (i+1),
                         l.getIdLotto(),
                         l.getCostoAcquisto(),
                         l.getPrezzoVendita(),
-                        l.isScontoScadenzaAttivo() ? "SI (" + l.getPrezzoScontato() + " ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬)" : "NO");
+                        l.isScontoScadenzaAttivo() ? "SI (" + l.getPrezzoScontato() + " EUR)" : "NO");
             }
 
             Printer.print("\nInserisci il NUM del lotto da modificare (oppure 0 per annullare): ");
@@ -131,8 +131,8 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
 
             LottoBean lottoScelto = lotti.get(numLotto - 1);
 
-            Printer.print("Attuale costo di acquisto: " + lottoScelto.getCostoAcquisto() + " ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬");
-            Printer.print("Nuovo Prezzo di Vendita al pubblico (ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬): ");
+            Printer.print("Attuale costo di acquisto: " + lottoScelto.getCostoAcquisto() + " EUR");
+            Printer.print("Nuovo Prezzo di Vendita al pubblico (EUR): ");
             double nuovoPrezzo = Double.parseDouble(scanner.nextLine());
 
             // Il bean viene usato come trasportatore dei dati modificati

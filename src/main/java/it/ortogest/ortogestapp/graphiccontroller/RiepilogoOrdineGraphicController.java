@@ -135,7 +135,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
         for (RigaOrdineBean r : carrello) {
             totale += r.getSubtotale();
         }
-        recapTotaleLabel.setText(String.format("%.2f €", totale));
+        recapTotaleLabel.setText(String.format("%.2f EUR", totale));
     }
 
     @FXML

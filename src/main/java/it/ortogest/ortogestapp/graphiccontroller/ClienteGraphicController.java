@@ -115,7 +115,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     public void mostraFruttaAction() {
         if (searchField != null) searchField.clear();
         aggiornaStileSidebar(btnFrutta);
-        titoloSezione.setText("Catalogo Ã¢â‚¬â€�? Frutta");
+        titoloSezione.setText("Catalogo Ã¢â‚¬âEUR�? Frutta");
         mostraCatalogo();
         caricaProdottiPerCategoria(CategoriaProdotto.FRUTTA);
     }
@@ -124,7 +124,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     public void mostraVerduraAction() {
         if (searchField != null) searchField.clear();
         aggiornaStileSidebar(btnVerdura);
-        titoloSezione.setText("Catalogo Ã¢â‚¬â€�? Verdura");
+        titoloSezione.setText("Catalogo Ã¢â‚¬âEUR�? Verdura");
         mostraCatalogo();
         caricaProdottiPerCategoria(CategoriaProdotto.VERDURA);
     }
@@ -283,7 +283,7 @@ public class ClienteGraphicController extends BaseGraphicController {
             scadeLabel.setStyle("-fx-font-weight: bold;");
             
             double prezzoReale = (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato() : l.getPrezzoVendita();
-            Label prezzoLabel = new Label(String.format("Prezzo: %.2f €/Kg", prezzoReale));
+            Label prezzoLabel = new Label(String.format("Prezzo: %.2f EUR/Kg", prezzoReale));
             if (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) {
                 prezzoLabel.setTextFill(Color.web("#e74c3c"));
             }
@@ -414,7 +414,7 @@ public class ClienteGraphicController extends BaseGraphicController {
                 totale += r.getSubtotale();
                 pezzi++;
             }
-            cartSummaryLabel.setText(String.format("%d prod. Ã¢â‚¬â€�? Tot: %.2f €", pezzi, totale));
+            cartSummaryLabel.setText(String.format("%d prod. Ã¢â‚¬âEUR�? Tot: %.2f EUR", pezzi, totale));
             btnConfermaOrdine.setVisible(true);
             btnSvuotaCarrello.setVisible(true);
         }
@@ -450,14 +450,14 @@ public class ClienteGraphicController extends BaseGraphicController {
         prezziBox.setAlignment(Pos.CENTER);
         
         if (prodotto.getPrezzoMin() == prodotto.getPrezzoMax()) {
-            Label prezzoLabel = new Label(String.format("%.2f €/Kg", prodotto.getPrezzoMin()));
+            Label prezzoLabel = new Label(String.format("%.2f EUR/Kg", prodotto.getPrezzoMin()));
             prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 14;");
             prezziBox.getChildren().add(prezzoLabel);
         } else {
             Label badgeVari = new Label("Lotti Multipli");
             badgeVari.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 3 6; -fx-background-radius: 4; -fx-font-size: 10; -fx-font-weight: bold;");
             
-            Label prezzoLabel = new Label(String.format("Da %.2f € a %.2f €", prodotto.getPrezzoMin(), prodotto.getPrezzoMax()));
+            Label prezzoLabel = new Label(String.format("Da %.2f EUR a %.2f EUR", prodotto.getPrezzoMin(), prodotto.getPrezzoMax()));
             prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 13;");
             prezziBox.getChildren().addAll(badgeVari, prezzoLabel);
         }
@@ -483,7 +483,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         return card;
     }
 
-    // ==================== UTILITÃƒâ‚¬ ====================
+    // ==================== UTILITÀ ====================
 
     private void aggiornaStileSidebar(Button attivo) {
         btnFrutta.setStyle(STILE_BTN_INATTIVO);
