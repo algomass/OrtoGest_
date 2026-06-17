@@ -6,7 +6,10 @@ import org.apache.commons.mail.SimpleEmail;
 
 /**
  * Concrete Adapter per l'invio di Email.
- * Adatta la libreria esterna Apache Commons Email (l'Adaptee ÃƒÆ’Ã‚Â¨ SimpleEmail)
+ * Adatta la libreria esterna Apache Commons Email (l'Adaptee è Simple
+ * 
+ * 
+ * mail)
  * all'interfaccia Target (EmailAdapter) del nostro sistema.
  */
 public class ApacheCommonsEmailAdapter implements EmailTarget {
@@ -14,9 +17,9 @@ public class ApacheCommonsEmailAdapter implements EmailTarget {
     @Override
     public boolean inviaEmail(String destinatario, String oggetto, String corpo) {
         try {
-            // L'Adaptee ÃƒÆ’Ã‚Â¨ l'oggetto SimpleEmail.
+            // L'Adaptee è l'oggetto SimpleEmail.
             // Notare come l'interfaccia dell'Adaptee (setHostName, setSubject, setMsg)
-            // ÃƒÆ’Ã‚Â¨ completamente diversa dal nostro metodo Target "inviaEmail".
+            // è completamente diversa dal nostro metodo Target "inviaEmail".
             // L'Adapter ha proprio il compito di tradurre!
             Email email = new SimpleEmail();
 
@@ -33,8 +36,11 @@ public class ApacheCommonsEmailAdapter implements EmailTarget {
             email.addTo(destinatario);
 
             // IMPORTANTE: Per evitare che l'applicazione vada in crash al runtime
+            //
             // a causa di credenziali fittizie, commentiamo il vero e proprio invio fisico.
-            // BasterÃƒÆ’Ã‚Â  inserire le credenziali corrette e decommentare la riga sotto per
+            //
+            // Basterà inserire le credenziali corrette e decommentare la riga sotto per
+            //
             // inviare davvero.
             // email.send();
 
