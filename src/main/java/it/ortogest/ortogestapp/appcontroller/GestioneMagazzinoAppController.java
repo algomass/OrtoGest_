@@ -1,17 +1,17 @@
 package it.ortogest.ortogestapp.appcontroller;
 
 import it.ortogest.ortogestapp.beans.AnomaliaBean;
-import it.ortogest.ortogestapp.pattern.ApacheCommonsEmailAdapter;
-import it.ortogest.ortogestapp.pattern.EmailTarget;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
-import it.ortogest.ortogestapp.dao.DAOFactory;
-import it.ortogest.ortogestapp.dao.ILottoDAO;
-import it.ortogest.ortogestapp.dao.IProdottoDAO;
+import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
 import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.model.CategoriaProdotto;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Prodotto;
+import it.ortogest.ortogestapp.pattern.AbstractFactory.DAOFactory;
+import it.ortogest.ortogestapp.pattern.Adapter.ApacheCommonsEmailAdapter;
+import it.ortogest.ortogestapp.pattern.Adapter.EmailTarget;
 
 import java.util.ArrayList;
 import java.util.List;

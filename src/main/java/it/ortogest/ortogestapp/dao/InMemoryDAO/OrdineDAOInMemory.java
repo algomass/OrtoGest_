@@ -1,5 +1,6 @@
-package it.ortogest.ortogestapp.dao;
+package it.ortogest.ortogestapp.dao.InMemoryDAO;
 
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IOrdineDAO;
 import it.ortogest.ortogestapp.model.Ordine;
 
 import java.util.ArrayList;
@@ -11,7 +12,8 @@ public class OrdineDAOInMemory implements IOrdineDAO {
 
     public OrdineDAOInMemory() {
         this.ordini = new ArrayList<>();
-        // Per gli ordini non carichiamo nulla di base per la demo, o se si vuole si può aggiungere
+        // Per gli ordini non carichiamo nulla di base per la demo, o se si vuole si può
+        // aggiungere
     }
 
     @Override

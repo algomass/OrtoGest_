@@ -1,5 +1,6 @@
-package it.ortogest.ortogestapp.dao;
+package it.ortogest.ortogestapp.dao.FileSystemDAO;
 
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
 import it.ortogest.ortogestapp.model.Prodotto;
 
 import java.io.*;
@@ -46,8 +47,7 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
                             Double.parseDouble(values[1]),
                             Double.parseDouble(values[2]),
                             values[3],
-                            values[4]
-                    );
+                            values[4]);
                     prodotti.add(p);
                 }
             }
@@ -62,7 +62,7 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
             pw.println("nome,prezzoAttuale,quantitaTotaleDisponibile,categoria,immaginePath");
             for (Prodotto p : prodotti) {
                 pw.println(p.getNome() + "," + p.getPrezzoAttuale() + "," +
-                           p.getQuantitaTotaleDisponibile() + "," + p.getCategoria() + "," + p.getImmaginePath());
+                        p.getQuantitaTotaleDisponibile() + "," + p.getCategoria() + "," + p.getImmaginePath());
             }
         } catch (IOException e) {
             it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());

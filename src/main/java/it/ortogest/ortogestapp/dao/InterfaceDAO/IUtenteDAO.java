@@ -1,4 +1,4 @@
-package it.ortogest.ortogestapp.dao;
+package it.ortogest.ortogestapp.dao.InterfaceDAO;
 
 import it.ortogest.ortogestapp.model.Utente;
 

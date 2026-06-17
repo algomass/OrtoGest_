@@ -1,5 +1,6 @@
-package it.ortogest.ortogestapp.dao;
+package it.ortogest.ortogestapp.dao.InMemoryDAO;
 
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
 import it.ortogest.ortogestapp.model.Prodotto;
 
 import java.util.ArrayList;

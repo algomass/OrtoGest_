@@ -1,7 +1,9 @@
-package it.ortogest.ortogestapp.dao;
+package it.ortogest.ortogestapp.dao.FileSystemDAO;
 
+import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Prodotto;
+import it.ortogest.ortogestapp.pattern.AbstractFactory.DAOFactory;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -21,7 +23,8 @@ public class LottoDAOFileSystem implements ILottoDAO {
         File f = new File(FILE_PATH);
         if (!f.exists()) {
             try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
-                pw.println("idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato");
+                pw.println(
+                        "idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato");
             } catch (IOException e) {
                 it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
             }
@@ -52,7 +55,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
                     double prezzoScontato = Double.parseDouble(values[9]);
 
                     Prodotto prodotto = DAOFactory.getInstance().getProdottoDAO().trovaPerNome(nomeProdotto);
-                    
+
                     Lotto lotto = Lotto.builder()
                             .idLotto(idLotto)
                             .nomeFornitore(nomeFornitore)
@@ -77,19 +80,20 @@ public class LottoDAOFileSystem implements ILottoDAO {
 
     private void scriviTutti(List<Lotto> lotti) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_PATH))) {
-            pw.println("idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato");
+            pw.println(
+                    "idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato");
             for (Lotto l : lotti) {
                 String pName = l.getTipologiaProdotto() != null ? l.getTipologiaProdotto().getNome() : "";
                 pw.println(l.getIdLotto() + "," +
-                           l.getNomeFornitore() + "," +
-                           pName + "," +
-                           l.getQuantitaKg() + "," +
-                           l.getDataArrivo() + "," +
-                           l.getDataScadenza() + "," +
-                           l.getCostoAcquisto() + "," +
-                           l.getPrezzoVendita() + "," +
-                           l.isScontoScadenzaAttivo() + "," +
-                           l.getPrezzoScontato());
+                        l.getNomeFornitore() + "," +
+                        pName + "," +
+                        l.getQuantitaKg() + "," +
+                        l.getDataArrivo() + "," +
+                        l.getDataScadenza() + "," +
+                        l.getCostoAcquisto() + "," +
+                        l.getPrezzoVendita() + "," +
+                        l.isScontoScadenzaAttivo() + "," +
+                        l.getPrezzoScontato());
             }
         } catch (IOException e) {
             it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
@@ -129,7 +133,8 @@ public class LottoDAOFileSystem implements ILottoDAO {
     @Override
     public List<Lotto> trovaPerProdotto(String nomeProdotto) {
         return leggiTutti().stream()
-                .filter(l -> l.getTipologiaProdotto() != null && l.getTipologiaProdotto().getNome().equalsIgnoreCase(nomeProdotto))
+                .filter(l -> l.getTipologiaProdotto() != null
+                        && l.getTipologiaProdotto().getNome().equalsIgnoreCase(nomeProdotto))
                 .toList();
     }
 
@@ -143,7 +148,8 @@ public class LottoDAOFileSystem implements ILottoDAO {
     @Override
     public double getPrezzoMedioAcquisto(String nomeProdotto) {
         List<Lotto> lotti = trovaPerProdotto(nomeProdotto);
-        if (lotti.isEmpty()) return 0.0;
+        if (lotti.isEmpty())
+            return 0.0;
         double sum = 0;
         for (Lotto l : lotti) {
             sum += l.getCostoAcquisto();

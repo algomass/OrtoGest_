@@ -1,5 +1,6 @@
-package it.ortogest.ortogestapp.dao;
+package it.ortogest.ortogestapp.dao.FileSystemDAO;
 
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IOrdineDAO;
 import it.ortogest.ortogestapp.model.Ordine;
 import it.ortogest.ortogestapp.model.RigaOrdine;
 
@@ -58,7 +59,8 @@ public class OrdineDAOFileSystem implements IOrdineDAO {
         for (String rStr : righeArray) {
             String[] rVals = rStr.split(":");
             if (rVals.length == 4) {
-                righe.add(new RigaOrdine(rVals[0], rVals[1], Double.parseDouble(rVals[2]), Double.parseDouble(rVals[3])));
+                righe.add(
+                        new RigaOrdine(rVals[0], rVals[1], Double.parseDouble(rVals[2]), Double.parseDouble(rVals[3])));
             }
         }
         return righe;
@@ -73,17 +75,17 @@ public class OrdineDAOFileSystem implements IOrdineDAO {
                     RigaOrdine r = o.getRighe().get(i);
                     // formato: nome:idLotto:qta:prezzo
                     righeSb.append(r.getNomeProdotto()).append(":")
-                           .append(r.getIdLotto()).append(":")
-                           .append(r.getQuantita()).append(":")
-                           .append(r.getPrezzoUnitario());
+                            .append(r.getIdLotto()).append(":")
+                            .append(r.getQuantita()).append(":")
+                            .append(r.getPrezzoUnitario());
                     if (i < o.getRighe().size() - 1) {
                         righeSb.append("|");
                     }
                 }
                 pw.println(o.getIdOrdine() + "," +
-                           o.getEmailCliente() + "," +
-                           o.getStato() + "," +
-                           righeSb.toString());
+                        o.getEmailCliente() + "," +
+                        o.getStato() + "," +
+                        righeSb.toString());
             }
         } catch (IOException e) {
             it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());

@@ -1,5 +1,6 @@
-package it.ortogest.ortogestapp.dao;
+package it.ortogest.ortogestapp.dao.jdbcDAO;
 
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IUtenteDAO;
 import it.ortogest.ortogestapp.model.Utente;
 import it.ortogest.ortogestapp.utils.DatabaseHelper;
 import java.sql.ResultSet;

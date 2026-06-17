@@ -2,14 +2,14 @@ package it.ortogest.ortogestapp.appcontroller;
 
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
-import it.ortogest.ortogestapp.dao.DAOFactory;
-import it.ortogest.ortogestapp.dao.IOrdineDAO;
-import it.ortogest.ortogestapp.dao.IProdottoDAO;
+import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IOrdineDAO;
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
 import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Ordine;
 import it.ortogest.ortogestapp.model.Prodotto;
-import it.ortogest.ortogestapp.dao.ILottoDAO;
+import it.ortogest.ortogestapp.pattern.AbstractFactory.DAOFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,7 +34,7 @@ public class GestioneOrdiniAppController {
     public List<ProdottoBean> getCatalogoDisponibile() {
         List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
         List<ProdottoBean> catalogoBeans = new ArrayList<>();
-        
+
         for (Prodotto p : prodotti) {
             ProdottoBean bean = elaboraProdottoRiepilogo(p);
             if (bean != null) {
@@ -58,10 +58,11 @@ public class GestioneOrdiniAppController {
     }
 
     private ProdottoBean elaboraProdottoRiepilogo(Prodotto p) {
-        if (p.getQuantitaTotaleDisponibile() <= 0) return null;
+        if (p.getQuantitaTotaleDisponibile() <= 0)
+            return null;
 
         List<Lotto> lotti = lottoDAO.trovaPerProdotto(p.getNome());
-        
+
         double minPrice = Double.MAX_VALUE;
         double maxPrice = 0.0;
         double validGiacenza = 0.0;
@@ -71,24 +72,26 @@ public class GestioneOrdiniAppController {
             if (isLottoValido(l)) {
                 hasValidLots = true;
                 double prezzo = getPrezzoEffettivo(l);
-                if (prezzo < minPrice) minPrice = prezzo;
-                if (prezzo > maxPrice) maxPrice = prezzo;
+                if (prezzo < minPrice)
+                    minPrice = prezzo;
+                if (prezzo > maxPrice)
+                    maxPrice = prezzo;
                 validGiacenza += l.getQuantitaKg();
             }
         }
-        
-        if (!hasValidLots) return null;
+
+        if (!hasValidLots)
+            return null;
 
         ProdottoBean bean = new ProdottoBean(
                 p.getNome(),
                 minPrice,
                 validGiacenza,
                 p.getCategoria(),
-                p.getImmaginePath()
-        );
+                p.getImmaginePath());
         bean.setPrezzoMin(minPrice);
         bean.setPrezzoMax(maxPrice);
-        
+
         return bean;
     }
 
@@ -114,12 +117,15 @@ public class GestioneOrdiniAppController {
 
     /**
      * Crea un nuovo ordine a partire da una lista di prodotti nel carrello.
+     * 
      * @param emailCliente L'email del cliente che effettua l'ordine.
-     * @param carrello La lista di prodotti e quantità selezionate.
+     * @param carrello     La lista di prodotti e quantità selezionate.
      * @return Messaggio di conferma con l'ID dell'ordine.
-     * @throws GestioneException Se un prodotto non è trovato o la giacenza è insufficiente.
+     * @throws GestioneException Se un prodotto non è trovato o la giacenza è
+     *                           insufficiente.
      */
-    public String creaOrdine(String emailCliente, List<it.ortogest.ortogestapp.beans.RigaOrdineBean> carrello) throws GestioneException {
+    public String creaOrdine(String emailCliente, List<it.ortogest.ortogestapp.beans.RigaOrdineBean> carrello)
+            throws GestioneException {
         if (carrello == null || carrello.isEmpty()) {
             throw new GestioneException("Il carrello è vuoto.");
         }
@@ -137,23 +143,23 @@ public class GestioneOrdiniAppController {
             }
             // Creiamo la riga per il modello di dominio, passando anche idLotto
             righeModello.add(new it.ortogest.ortogestapp.model.RigaOrdine(
-                    p.getNome(), 
+                    p.getNome(),
                     rigaBean.getIdLotto(),
-                    rigaBean.getQuantita(), 
-                    rigaBean.getPrezzoUnitario()
-            ));
+                    rigaBean.getQuantita(),
+                    rigaBean.getPrezzoUnitario()));
         }
 
         // Simula la creazione dell'ID univoco
         String idOrdine = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        
+
         // Creazione ordine
         Ordine nuovoOrdine = new Ordine(idOrdine, emailCliente, righeModello, "Inviato");
-        
+
         // Salviamo nel DB
         ordineDAO.salvaOrdine(nuovoOrdine);
-        
-        // Scaliamo le giacenze per ogni prodotto nell'ordine applicando il FEFO sui lotti
+
+        // Scaliamo le giacenze per ogni prodotto nell'ordine applicando il FEFO sui
+        // lotti
         for (it.ortogest.ortogestapp.model.RigaOrdine riga : righeModello) {
             Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
             p.sottraiGiacenza(riga.getQuantita());
@@ -166,24 +172,24 @@ public class GestioneOrdiniAppController {
                 lottoDAO.salvaLotto(l);
             } else {
                 // Se non c'è abbastanza quantità o non esiste, è un problema di concorrenza
-                throw new GestioneException("Quantità non disponibile nel lotto selezionato per: " + riga.getNomeProdotto());
+                throw new GestioneException(
+                        "Quantità non disponibile nel lotto selezionato per: " + riga.getNomeProdotto());
             }
         }
-        
+
         return "Ordine completato con ID: " + idOrdine;
     }
 
     public List<OrdineBean> getOrdiniCliente(String emailCliente) {
         List<Ordine> ordini = ordineDAO.trovaOrdiniCliente(emailCliente);
         List<OrdineBean> ordineBeans = new ArrayList<>();
-        
+
         for (Ordine o : ordini) {
             ordineBeans.add(new OrdineBean(
-                o.getIdOrdine(), 
-                o.getRiepilogoProdotti(), 
-                o.getTotale(), 
-                o.getStato()
-            ));
+                    o.getIdOrdine(),
+                    o.getRiepilogoProdotti(),
+                    o.getTotale(),
+                    o.getStato()));
         }
         return ordineBeans;
     }
@@ -193,14 +199,16 @@ public class GestioneOrdiniAppController {
         if (ordine == null) {
             throw new GestioneException("Ordine non trovato.");
         }
-        
+
         if ("Pronto per il Ritiro".equals(ordine.getStato())) {
             throw new GestioneException("l'ordine è in attesa di ritiro dunque non può essere annullato");
         }
-        
-        // Se l'ordine è "Ritirato", lo eliminiamo (dallo storico del cliente) ma NON ripristiniamo le giacenze.
+
+        // Se l'ordine è "Ritirato", lo eliminiamo (dallo storico del cliente) ma NON
+        // ripristiniamo le giacenze.
         if (!"Ritirato".equals(ordine.getStato())) {
-            // Ripristina le giacenze dei prodotti e dei lotti solo se non è ancora stato ritirato
+            // Ripristina le giacenze dei prodotti e dei lotti solo se non è ancora stato
+            // ritirato
             for (it.ortogest.ortogestapp.model.RigaOrdine riga : ordine.getRighe()) {
                 Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
                 if (p != null) {
@@ -216,27 +224,26 @@ public class GestioneOrdiniAppController {
                 }
             }
         }
-        
+
         // Elimina l'ordine (e le righe associate) dal database
         ordineDAO.eliminaOrdine(idOrdine);
     }
-    
+
     public List<OrdineBean> getTuttiOrdini() {
         List<Ordine> ordini = ordineDAO.trovaTuttiOrdini();
         List<OrdineBean> ordineBeans = new ArrayList<>();
-        
+
         for (Ordine o : ordini) {
             ordineBeans.add(new OrdineBean(
-                o.getIdOrdine(), 
-                o.getRiepilogoProdotti(), 
-                o.getTotale(), 
-                o.getStato(),
-                o.getEmailCliente()
-            ));
+                    o.getIdOrdine(),
+                    o.getRiepilogoProdotti(),
+                    o.getTotale(),
+                    o.getStato(),
+                    o.getEmailCliente()));
         }
         return ordineBeans;
     }
-    
+
     public void aggiornaStatoOrdine(String idOrdine, String nuovoStato) {
         ordineDAO.aggiornaStatoOrdine(idOrdine, nuovoStato);
     }

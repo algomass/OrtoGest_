@@ -1,12 +1,11 @@
 package it.ortogest.ortogestapp.appcontroller;
 
 import it.ortogest.ortogestapp.beans.ProdottoBean;
-import it.ortogest.ortogestapp.dao.DAOFactory;
-import it.ortogest.ortogestapp.dao.IProdottoDAO;
+import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
 import it.ortogest.ortogestapp.exception.GestioneException;
-import it.ortogest.ortogestapp.dao.ILottoDAO;
 import it.ortogest.ortogestapp.model.Prodotto;
-
+import it.ortogest.ortogestapp.pattern.AbstractFactory.DAOFactory;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.model.Lotto;
 
@@ -14,12 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Application Controller per la gestione del Catalogo Prodotti (lato Responsabile).
+ * Application Controller per la gestione del Catalogo Prodotti (lato
+ * Responsabile).
  */
 public class GestioneCatalogoAppController {
 
     /**
-     * Recupera tutto il catalogo per la visualizzazione nella dashboard del Responsabile.
+     * Recupera tutto il catalogo per la visualizzazione nella dashboard del
+     * Responsabile.
+     * 
      * @return Lista di ProdottoBean
      */
     public List<ProdottoBean> getTuttiIProdotti() {
@@ -34,8 +36,7 @@ public class GestioneCatalogoAppController {
                     p.getPrezzoAttuale(),
                     p.getQuantitaTotaleDisponibile(),
                     p.getCategoria(),
-                    p.getImmaginePath()
-            );
+                    p.getImmaginePath());
             bean.setPrezzoAcquistoMedio(lottoDAO.getPrezzoMedioAcquisto(p.getNome()));
             beans.add(bean);
         }
@@ -69,7 +70,7 @@ public class GestioneCatalogoAppController {
         ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
         List<Lotto> lotti = lottoDAO.trovaPerProdotto(nomeProdotto);
         List<LottoBean> beans = new ArrayList<>();
-        
+
         for (Lotto l : lotti) {
             beans.add(LottoBean.builder()
                     .idLotto(l.getIdLotto())
@@ -115,16 +116,19 @@ public class GestioneCatalogoAppController {
     }
 
     /**
-     * Recupera i lotti in scadenza entro il numero di giorni indicato, non ancora scontati.
+     * Recupera i lotti in scadenza entro il numero di giorni indicato, non ancora
+     * scontati.
      */
     public List<LottoBean> getLottiInScadenza(int giorniPreavviso) {
         ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
         List<Lotto> tuttiLotti = lottoDAO.getTuttiILotti();
         List<LottoBean> beans = new ArrayList<>();
-        java.time.LocalDate limite = java.time.LocalDate.now(java.time.ZoneId.systemDefault()).plusDays(giorniPreavviso);
+        java.time.LocalDate limite = java.time.LocalDate.now(java.time.ZoneId.systemDefault())
+                .plusDays(giorniPreavviso);
 
         for (Lotto l : tuttiLotti) {
-            // Mostra i lotti se la loro scadenza è <= al limite e non sono già stati messi in sconto
+            // Mostra i lotti se la loro scadenza è <= al limite e non sono già stati messi
+            // in sconto
             if (!l.isScontoScadenzaAttivo() && !l.getDataScadenza().isAfter(limite)) {
                 beans.add(LottoBean.builder()
                         .idLotto(l.getIdLotto())

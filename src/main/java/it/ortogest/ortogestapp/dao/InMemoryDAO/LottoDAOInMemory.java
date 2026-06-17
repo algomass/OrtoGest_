@@ -1,5 +1,7 @@
-package it.ortogest.ortogestapp.dao;
+package it.ortogest.ortogestapp.dao.InMemoryDAO;
 
+import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
+import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Prodotto;
 
@@ -79,7 +81,8 @@ public class LottoDAOInMemory implements ILottoDAO {
     @Override
     public List<Lotto> trovaPerProdotto(String nomeProdotto) {
         return lotti.stream()
-                .filter(l -> l.getTipologiaProdotto() != null && l.getTipologiaProdotto().getNome().equalsIgnoreCase(nomeProdotto))
+                .filter(l -> l.getTipologiaProdotto() != null
+                        && l.getTipologiaProdotto().getNome().equalsIgnoreCase(nomeProdotto))
                 .toList();
     }
 
@@ -91,7 +94,8 @@ public class LottoDAOInMemory implements ILottoDAO {
     @Override
     public double getPrezzoMedioAcquisto(String nomeProdotto) {
         List<Lotto> lottiFiltrati = trovaPerProdotto(nomeProdotto);
-        if (lottiFiltrati.isEmpty()) return 0.0;
+        if (lottiFiltrati.isEmpty())
+            return 0.0;
         double sum = 0;
         for (Lotto l : lottiFiltrati) {
             sum += l.getCostoAcquisto();

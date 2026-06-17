@@ -1,4 +1,4 @@
-package it.ortogest.ortogestapp.pattern;
+package it.ortogest.ortogestapp.pattern.Adapter;
 
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
