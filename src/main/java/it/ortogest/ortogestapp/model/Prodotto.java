@@ -1,7 +1,7 @@
 package it.ortogest.ortogestapp.model;
 
 /**
- * EntitÃƒÂ  di Dominio: Rappresenta un prodotto presente nel sistema.
+ * Entità di Dominio: Rappresenta un prodotto presente nel sistema.
  */
 public class Prodotto {
     private String nome;

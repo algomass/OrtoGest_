@@ -3,7 +3,7 @@ package it.ortogest.ortogestapp.beans;
 /**
  * DTO per trasportare i dati di un Ordine dal backend alla vista
  * (Tracciamento).
- * Ogni ordine contiene una o piÃƒÂ¹ righe (prodotti ordinati).
+ * Ogni ordine contiene una o più righe (prodotti ordinati).
  */
 public class OrdineBean {
     private String idOrdine;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * EntitÃƒÂ  di Dominio: Rappresenta un Ordine effettuato dal Cliente.
- * Un ordine contiene una lista di righe (prodotti con quantitÃƒÂ  e prezzo).
+ * Entità di Dominio: Rappresenta un Ordine effettuato dal Cliente.
+ * Un ordine contiene una lista di righe (prodotti con quantità e prezzo).
  */
 public class Ordine {
     private String idOrdine;

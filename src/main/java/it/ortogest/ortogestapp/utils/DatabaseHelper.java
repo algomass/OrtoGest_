@@ -35,14 +35,14 @@ public class DatabaseHelper {
 
     /**
      * Restituisce una nuova connessione al database.
-     * ÃƒË† responsabilitÃƒÂ  di chi chiama questo metodo chiudere la connessione.
+     * ÃƒË† responsabilità di chi chiama questo metodo chiudere la connessione.
      */
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
     }
 
     /**
-     * Crea le tabelle se non esistono giÃƒÂ .
+     * Crea le tabelle se non esistono già.
      */
     private void inizializzaDatabase() {
         String sqlProdotto = "CREATE TABLE IF NOT EXISTS prodotto (" +
@@ -116,7 +116,7 @@ public class DatabaseHelper {
         try {
             stmt.execute(sql);
         } catch (SQLException _) {
-            // Ignora se la colonna esiste giÃƒÂ 
+            // Ignora se la colonna esiste già
         }
     }
 

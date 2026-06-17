@@ -152,11 +152,11 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
             Lotto lottoScelto = lotti.get(sceltaLotto - 1);
             double prezzoScelto = lottoScelto.isScontoScadenzaAttivo() && lottoScelto.getPrezzoScontato() > 0 ? lottoScelto.getPrezzoScontato() : lottoScelto.getPrezzoVendita();
 
-            Printer.print("QuantitÃƒÂ  da acquistare (Kg) (Max " + lottoScelto.getQuantitaKg() + "): ");
+            Printer.print("Quantità da acquistare (Kg) (Max " + lottoScelto.getQuantitaKg() + "): ");
             double quantita = Double.parseDouble(scanner.nextLine());
 
             if (quantita <= 0 || quantita > lottoScelto.getQuantitaKg()) {
-                Printer.perror("QuantitÃƒÂ  non valida o superiore alla giacenza.");
+                Printer.perror("Quantità non valida o superiore alla giacenza.");
                 return;
             }
 
@@ -175,7 +175,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         List<RigaOrdineBean> carrello = SessionManager.getInstance().getCarrelloCorrente();
 
         if (carrello == null || carrello.isEmpty()) {
-            Printer.print("Il carrello ÃƒÂ¨ vuoto.");
+            Printer.print("Il carrello è vuoto.");
             return;
         }
 

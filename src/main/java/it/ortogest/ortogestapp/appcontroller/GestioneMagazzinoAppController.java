@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * Application Controller per la gestione delle operazioni di Magazzino.
- * CoordinerÃƒÂ  l'inserimento dei lotti e le segnalazioni di anomalie.
+ * Coordinerà l'inserimento dei lotti e le segnalazioni di anomalie.
  */
 public class GestioneMagazzinoAppController {
 
@@ -89,7 +89,7 @@ public class GestioneMagazzinoAppController {
     public String inoltraSegnalazione(AnomaliaBean anomaliaBean) {
 
         // Costruire il messaggio dell'email
-        // Nella realtÃƒÂ , l'email del fornitore verrebbe recuperata dal DB tramite il
+        // Nella realtà, l'email del fornitore verrebbe recuperata dal DB tramite il
         // FornitoreDAO
         // associato a quel lotto/prodotto. Per ora simuliamo.
         String emailFornitore = EMAIL_FORNITORE_DEFAULT;
@@ -100,7 +100,7 @@ public class GestioneMagazzinoAppController {
 
                 Con la presente segnaliamo un'anomalia relativa all'ultima consegna.
                 Prodotto: %s
-                QuantitÃƒÂ  %s: %.2f Kg
+                Quantità %s: %.2f Kg
                 Note aggiuntive: %s
 
                 In attesa di un vostro riscontro, porgiamo cordiali saluti.
@@ -116,28 +116,28 @@ public class GestioneMagazzinoAppController {
         if (successo) {
             return "Segnalazione inoltrata con successo via Mail.";
         } else {
-            return "Errore di connessione al server Mail. Riprovare piÃƒÂ¹ tardi.";
+            return "Errore di connessione al server Mail. Riprovare più tardi.";
         }
     }
 
     public LottoBean registraLotto(LottoBean bean) throws GestioneException {
         // 1. Validazione base
         if (bean.getIdLotto() == null || bean.getIdLotto().trim().isEmpty()) {
-            throw new GestioneException("L'ID del Lotto non puÃƒÂ² essere vuoto.");
+            throw new GestioneException("L'ID del Lotto non può essere vuoto.");
         }
         if (bean.getQuantitaKg() <= 0) {
-            throw new GestioneException("La quantitÃƒÂ  deve essere maggiore di zero.");
+            throw new GestioneException("La quantità deve essere maggiore di zero.");
         }
         if (bean.getDataArrivo() == null || bean.getDataScadenza() == null) {
             throw new GestioneException("Le date di arrivo e scadenza sono obbligatorie.");
         }
         if (bean.getDataScadenza().isBefore(bean.getDataArrivo())) {
-            throw new GestioneException("La data di scadenza non puÃƒÂ² essere precedente alla data di arrivo.");
+            throw new GestioneException("La data di scadenza non può essere precedente alla data di arrivo.");
         }
 
         // 2. Controllo duplicato del lotto
         if (lottoDAO.trovaPerId(bean.getIdLotto()) != null) {
-            throw new GestioneException("Esiste giÃƒÂ  un lotto registrato con ID: " + bean.getIdLotto());
+            throw new GestioneException("Esiste già un lotto registrato con ID: " + bean.getIdLotto());
         }
 
         // 3. Ricerca del prodotto
@@ -145,13 +145,13 @@ public class GestioneMagazzinoAppController {
 
         if (prodotto == null) {
             // Creiamo un nuovo prodotto dinamicamente se non esiste
-            // Categoria di default FRUTTA Ã¢â‚¬â€�? il responsabile potrÃƒÂ  modificarla in seguito
+            // Categoria di default FRUTTA Ã¢â‚¬â€�? il responsabile potrà modificarla in seguito
             prodotto = new Prodotto(bean.getNomeProdotto(), 0.0, 0.0, CategoriaProdotto.FRUTTA,
                     "/images/placeholder.png");
             prodottoDAO.salvaProdotto(prodotto);
         }
 
-        // 4. Creazione dell'EntitÃƒÂ  Lotto
+        // 4. Creazione dell'Entità Lotto
         Lotto lotto = Lotto.builder()
                 .idLotto(bean.getIdLotto())
                 .nomeFornitore(bean.getNomeFornitore())
@@ -181,13 +181,13 @@ public class GestioneMagazzinoAppController {
 
         Prodotto prodotto = lotto.getTipologiaProdotto();
 
-        // Verifica se ÃƒÂ¨ l'ultimo lotto per questo prodotto
+        // Verifica se è l'ultimo lotto per questo prodotto
         List<Lotto> lottiEsistenti = lottoDAO.trovaPerProdotto(prodotto.getNome());
         boolean isUltimoLotto = (lottiEsistenti.size() == 1 && lottiEsistenti.get(0).getIdLotto().equals(idLotto));
 
         lottoDAO.eliminaLotto(idLotto);
 
-        // Sottrai sempre la quantitÃƒÂ , assicurandoti che non diventi negativa
+        // Sottrai sempre la quantità, assicurandoti che non diventi negativa
         prodotto.sottraiGiacenza(lotto.getQuantitaKg());
         if (prodotto.getQuantitaTotaleDisponibile() < 0) {
             prodotto.setQuantitaTotaleDisponibile(0);

@@ -61,7 +61,7 @@ public class CassaGraphicController extends BaseGraphicController {
         }
 
         this.ordineInPagamento = selected;
-        totaleLabel.setText(String.format("Ã¢â€šÂ¬ %.2f", selected.getTotale()));
+        totaleLabel.setText(String.format("€ %.2f", selected.getTotale()));
         
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Ordine #" + selected.getIdOrdine() + " caricato in cassa.", ButtonType.OK);
         alert.setHeaderText("Ordine Caricato");
@@ -75,7 +75,7 @@ public class CassaGraphicController extends BaseGraphicController {
                 // L'operatore fa pagare il cliente e l'ordine passa a "Ritirato"
                 appController.aggiornaStatoOrdine(ordineInPagamento.getIdOrdine(), "Ritirato");
                 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Pagamento completato. L'ordine #" + ordineInPagamento.getIdOrdine() + " ÃƒÂ¨ ora Ritirato.", ButtonType.OK);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Pagamento completato. L'ordine #" + ordineInPagamento.getIdOrdine() + " è ora Ritirato.", ButtonType.OK);
                 alert.setHeaderText("Transazione Eseguita");
                 alert.showAndWait();
                 
@@ -92,7 +92,7 @@ public class CassaGraphicController extends BaseGraphicController {
     @FXML
     public void annullaOperazioneAction() {
         this.ordineInPagamento = null;
-        totaleLabel.setText("Ã¢â€šÂ¬ 0,00");
+        totaleLabel.setText("€ 0,00");
         if (ordiniTable != null) {
             ordiniTable.getSelectionModel().clearSelection();
         }

@@ -48,7 +48,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
 
     @FXML
     public void initialize() {
-        // Configurazione delle colonne con le proprietÃƒÂ  del ProdottoBean
+        // Configurazione delle colonne con le proprietà del ProdottoBean
         colNome.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNome()));
         colPrezzo.setCellValueFactory(
                 cellData -> new SimpleDoubleProperty(cellData.getValue().getPrezzoAcquistoMedio()));
@@ -118,7 +118,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         TableColumn<LottoBean, String> colFornitore = new TableColumn<>("Fornitore");
         colFornitore.setCellValueFactory(new PropertyValueFactory<>("nomeFornitore"));
 
-        TableColumn<LottoBean, Double> colQuantita = new TableColumn<>("QuantitÃƒÂ  (Kg)");
+        TableColumn<LottoBean, Double> colQuantita = new TableColumn<>("Quantità (Kg)");
         colQuantita.setCellValueFactory(new PropertyValueFactory<>("quantitaKg"));
 
         TableColumn<LottoBean, LocalDate> colArrivo = new TableColumn<>("Arrivo");
@@ -197,7 +197,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         VBox vbox = new VBox(10);
         vbox.getChildren().addAll(
                 new Label("Fornitore:"), txtFornitore,
-                new Label("QuantitÃƒÂ  (Kg):"), txtQuantita,
+                new Label("Quantità (Kg):"), txtQuantita,
                 new Label("Data Arrivo:"), dpArrivo,
                 new Label("Data Scadenza:"), dpScadenza,
                 new Label("Costo Acquisto:"), txtCosto);

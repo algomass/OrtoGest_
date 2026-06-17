@@ -205,7 +205,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             if (scontoAttivo) {
                 prezzoScontato = Double.parseDouble(prezzoScontatoField.getText());
                 if (prezzoScontato >= nuovoPrezzo) {
-                    mostraErrore("Il prezzo dello sconto deve essere piÃƒÂ¹ basso di quello di vendita.");
+                    mostraErrore("Il prezzo dello sconto deve essere più basso di quello di vendita.");
                     return;
                 }
             }

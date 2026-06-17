@@ -70,7 +70,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
         List<ProdottoBean> catalogo = appController.getTuttiIProdotti();
 
         if (catalogo.isEmpty()) {
-            Printer.print("Il catalogo ÃƒÂ¨ vuoto.");
+            Printer.print("Il catalogo è vuoto.");
             return catalogo;
         }
 
