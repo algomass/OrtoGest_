@@ -6,7 +6,7 @@ import it.ortogest.ortogestapp.utils.Printer;
  * Implementazione concreta (Simulatore) dell'EmailAdapter.
  * Stampa l'email nella console invece di inviarla realmente tramite rete.
  */
-public class DummyEmailService implements EmailAdapter {
+public class DummyEmailService implements EmailTarget {
 
     @Override
     public boolean inviaEmail(String destinatario, String oggetto, String corpo) {
@@ -18,8 +18,8 @@ public class DummyEmailService implements EmailAdapter {
         Printer.printf("--------------------------------------------------");
         Printer.printf(corpo);
         Printer.printf("==================================================\n");
-        
+
         // Simuliamo che vada sempre a buon fine
-        return true; 
+        return true;
     }
 }

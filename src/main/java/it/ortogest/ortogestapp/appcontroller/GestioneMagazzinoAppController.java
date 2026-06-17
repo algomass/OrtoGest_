@@ -1,8 +1,8 @@
 package it.ortogest.ortogestapp.appcontroller;
 
 import it.ortogest.ortogestapp.beans.AnomaliaBean;
-import it.ortogest.ortogestapp.pattern.DummyEmailService;
-import it.ortogest.ortogestapp.pattern.EmailAdapter;
+import it.ortogest.ortogestapp.pattern.ApacheCommonsEmailAdapter;
+import it.ortogest.ortogestapp.pattern.EmailTarget;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.dao.DAOFactory;
@@ -23,16 +23,16 @@ import java.util.List;
 public class GestioneMagazzinoAppController {
 
     // Utilizziamo l'interfaccia Adapter per l'invio delle email
-    private EmailAdapter emailAdapter;
+    private EmailTarget emailAdapter;
     private ILottoDAO lottoDAO;
     private IProdottoDAO prodottoDAO;
-    
+
     private static final String EMAIL_FORNITORE_DEFAULT = "assistenza@fornitore-ortofrutta.it";
 
     public GestioneMagazzinoAppController() {
         // In futuro potremmo usare la Dependency Injection (es. tramite un Factory)
-        // per instanziare il servizio reale. Per ora usiamo il Dummy.
-        this.emailAdapter = new DummyEmailService();
+        // per instanziare il servizio reale. Per ora usiamo l'Adapter reale.
+        this.emailAdapter = new ApacheCommonsEmailAdapter();
         this.lottoDAO = DAOFactory.getInstance().getLottoDAO();
         this.prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
     }
@@ -44,7 +44,8 @@ public class GestioneMagazzinoAppController {
             // Mostra solo i prodotti che hanno almeno un lotto registrato
             List<Lotto> lotti = lottoDAO.trovaPerProdotto(p.getNome());
             if (!lotti.isEmpty()) {
-                ProdottoBean bean = new ProdottoBean(p.getNome(), p.getPrezzoAttuale(), p.getQuantitaTotaleDisponibile(), p.getCategoria(), p.getImmaginePath());
+                ProdottoBean bean = new ProdottoBean(p.getNome(), p.getPrezzoAttuale(),
+                        p.getQuantitaTotaleDisponibile(), p.getCategoria(), p.getImmaginePath());
                 bean.setPrezzoAcquistoMedio(lottoDAO.getPrezzoMedioAcquisto(p.getNome()));
                 beans.add(bean);
             }
@@ -79,31 +80,34 @@ public class GestioneMagazzinoAppController {
     }
 
     /**
-     * Segnala un'anomalia di fornitura (merce mancante o danneggiata) e invia una mail al fornitore.
+     * Segnala un'anomalia di fornitura (merce mancante o danneggiata) e invia una
+     * mail al fornitore.
+     * 
      * @param anomaliaBean I dati inseriti dalla vista.
      * @return Messaggio di conferma o errore.
      */
     public String inoltraSegnalazione(AnomaliaBean anomaliaBean) {
-        
+
         // Costruire il messaggio dell'email
-        // Nella realtà, l'email del fornitore verrebbe recuperata dal DB tramite il FornitoreDAO 
+        // Nella realtà, l'email del fornitore verrebbe recuperata dal DB tramite il
+        // FornitoreDAO
         // associato a quel lotto/prodotto. Per ora simuliamo.
         String emailFornitore = EMAIL_FORNITORE_DEFAULT;
         String oggetto = "Segnalazione Anomalia: Merce " + anomaliaBean.getTipoAnomalia();
-        
+
         String corpo = String.format("""
                 Spett.le Fornitore,
-                
+
                 Con la presente segnaliamo un'anomalia relativa all'ultima consegna.
                 Prodotto: %s
                 Quantità %s: %.2f Kg
                 Note aggiuntive: %s
-                
+
                 In attesa di un vostro riscontro, porgiamo cordiali saluti.
-                Il team di OrtoGest.""", 
-                anomaliaBean.getNomeProdotto(), 
-                anomaliaBean.getTipoAnomalia().toLowerCase(), 
-                anomaliaBean.getQuantita(), 
+                Il team di OrtoGest.""",
+                anomaliaBean.getNomeProdotto(),
+                anomaliaBean.getTipoAnomalia().toLowerCase(),
+                anomaliaBean.getQuantita(),
                 anomaliaBean.getNote());
 
         // 3. Inviare l'email tramite l'Adapter
@@ -115,7 +119,7 @@ public class GestioneMagazzinoAppController {
             return "Errore di connessione al server Mail. Riprovare più tardi.";
         }
     }
-    
+
     public LottoBean registraLotto(LottoBean bean) throws GestioneException {
         // 1. Validazione base
         if (bean.getIdLotto() == null || bean.getIdLotto().trim().isEmpty()) {
@@ -138,11 +142,12 @@ public class GestioneMagazzinoAppController {
 
         // 3. Ricerca del prodotto
         Prodotto prodotto = prodottoDAO.trovaPerNome(bean.getNomeProdotto());
-        
+
         if (prodotto == null) {
             // Creiamo un nuovo prodotto dinamicamente se non esiste
             // Categoria di default FRUTTA — il responsabile potrà modificarla in seguito
-            prodotto = new Prodotto(bean.getNomeProdotto(), 0.0, 0.0, CategoriaProdotto.FRUTTA, "/images/placeholder.png");
+            prodotto = new Prodotto(bean.getNomeProdotto(), 0.0, 0.0, CategoriaProdotto.FRUTTA,
+                    "/images/placeholder.png");
             prodottoDAO.salvaProdotto(prodotto);
         }
 
@@ -173,22 +178,22 @@ public class GestioneMagazzinoAppController {
         if (lotto == null) {
             throw new GestioneException("Lotto non trovato.");
         }
-        
+
         Prodotto prodotto = lotto.getTipologiaProdotto();
-        
+
         // Verifica se è l'ultimo lotto per questo prodotto
         List<Lotto> lottiEsistenti = lottoDAO.trovaPerProdotto(prodotto.getNome());
         boolean isUltimoLotto = (lottiEsistenti.size() == 1 && lottiEsistenti.get(0).getIdLotto().equals(idLotto));
-        
+
         lottoDAO.eliminaLotto(idLotto);
-        
+
         // Sottrai sempre la quantità, assicurandoti che non diventi negativa
         prodotto.sottraiGiacenza(lotto.getQuantitaKg());
         if (prodotto.getQuantitaTotaleDisponibile() < 0) {
             prodotto.setQuantitaTotaleDisponibile(0);
         }
         prodottoDAO.salvaProdotto(prodotto);
-        
+
         if (isUltimoLotto) {
             // Elimina il prodotto dalla tabella principale se era l'ultimo lotto
             prodottoDAO.eliminaProdotto(prodotto.getNome());
@@ -200,24 +205,24 @@ public class GestioneMagazzinoAppController {
         if (lottoVecchio == null) {
             throw new GestioneException("Lotto non trovato.");
         }
-        
+
         double diff = beanNuovo.getQuantitaKg() - lottoVecchio.getQuantitaKg();
-        
+
         Prodotto prodotto = lottoVecchio.getTipologiaProdotto();
         prodotto.aggiungiGiacenza(diff);
-        
+
         // Evita che la giacenza diventi negativa
         if (prodotto.getQuantitaTotaleDisponibile() < 0) {
             prodotto.setQuantitaTotaleDisponibile(0);
         }
         prodottoDAO.salvaProdotto(prodotto);
-        
+
         lottoVecchio.setNomeFornitore(beanNuovo.getNomeFornitore());
         lottoVecchio.setQuantitaKg(beanNuovo.getQuantitaKg());
         lottoVecchio.setDataArrivo(beanNuovo.getDataArrivo());
         lottoVecchio.setDataScadenza(beanNuovo.getDataScadenza());
         lottoVecchio.setCostoAcquisto(beanNuovo.getCostoAcquisto());
-        
+
         lottoDAO.salvaLotto(lottoVecchio);
     }
 }

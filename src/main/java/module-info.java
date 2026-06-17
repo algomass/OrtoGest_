@@ -6,6 +6,9 @@ module it.ortogest.ortogestapp {
 
     // Se usi JDBC per il database, decommenta la riga sotto:
     requires transitive java.sql;
+    
+    // Libreria di terze parti per le email
+    requires commons.email;
 
     // 1. Apri ed esporta il package root (dove si trova AppStarter)
     exports it.ortogest.ortogestapp;
