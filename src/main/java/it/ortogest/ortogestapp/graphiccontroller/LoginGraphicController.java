@@ -22,7 +22,7 @@ import javafx.scene.control.TextField;
  * Implementa un design pulito ed a basso accoppiamento:
  * - Delega la persistenza dello stato (utente) al SessionManager.
  * - Delega la navigazione (cambio scena) allo SceneManager.
- * In questo modo il controller ha la singola responsabilità di orchestrare le
+ * In questo modo il controller ha la singola responsabilitÃƒÆ’Ã‚Â  di orchestrare le
  * azioni della GUI.
  */
 public class LoginGraphicController {
@@ -71,7 +71,7 @@ public class LoginGraphicController {
             // dell'utente
             UtenteBean utenteLoggato = appController.login(credenziali);
 
-            // Per ora il ruolo lo forziamo se non l'ha scelto, nella realtà potrebbe essere
+            // Per ora il ruolo lo forziamo se non l'ha scelto, nella realtÃƒÆ’Ã‚Â  potrebbe essere
             // un controllo extra
             if (ruoloSelezionato != null) {
                 utenteLoggato.setRuolo(ruoloSelezionato);

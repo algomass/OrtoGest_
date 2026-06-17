@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * SceneManager è un Singleton che si occupa esclusivamente della gestione dello Stage primario
+ * SceneManager ÃƒÆ’Ã‚Â¨ un Singleton che si occupa esclusivamente della gestione dello Stage primario
  * e del caricamento delle scene FXML.
  * Separando questa logica dai controller e dalla gestione dei dati (SessionManager),
- * rispettiamo il principio di Singola Responsabilità e riduciamo l'accoppiamento.
+ * rispettiamo il principio di Singola ResponsabilitÃƒÆ’Ã‚Â  e riduciamo l'accoppiamento.
  * I controller chiederanno un cambio scena senza doversi preoccupare di *come* esso avvenga
  * o di dover configurare lo Stage in prima persona.
  */

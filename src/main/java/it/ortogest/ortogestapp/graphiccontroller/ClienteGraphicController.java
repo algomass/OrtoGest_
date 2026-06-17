@@ -115,7 +115,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     public void mostraFruttaAction() {
         if (searchField != null) searchField.clear();
         aggiornaStileSidebar(btnFrutta);
-        titoloSezione.setText("Catalogo — Frutta");
+        titoloSezione.setText("Catalogo ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Frutta");
         mostraCatalogo();
         caricaProdottiPerCategoria(CategoriaProdotto.FRUTTA);
     }
@@ -124,7 +124,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     public void mostraVerduraAction() {
         if (searchField != null) searchField.clear();
         aggiornaStileSidebar(btnVerdura);
-        titoloSezione.setText("Catalogo — Verdura");
+        titoloSezione.setText("Catalogo ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Verdura");
         mostraCatalogo();
         caricaProdottiPerCategoria(CategoriaProdotto.VERDURA);
     }
@@ -174,7 +174,7 @@ public class ClienteGraphicController extends BaseGraphicController {
                 continue;
             }
             trovati = true;
-            // Sottrai la quantità già presente nel carrello
+            // Sottrai la quantitÃƒÆ’Ã‚Â  giÃƒÆ’Ã‚Â  presente nel carrello
             double giacenzaResidua = prodotto.getGiacenza();
             for (RigaOrdineBean r : carrello) {
                 if (r.getNomeProdotto().equals(prodotto.getNome())) {
@@ -213,7 +213,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
 
         if ("Pronto per il Ritiro".equals(selected.getStato())) {
-            Alert errAlert = new Alert(Alert.AlertType.ERROR, "L'ordine è in attesa di ritiro dunque non può essere annullato.", ButtonType.OK);
+            Alert errAlert = new Alert(Alert.AlertType.ERROR, "L'ordine ÃƒÆ’Ã‚Â¨ in attesa di ritiro dunque non puÃƒÆ’Ã‚Â² essere annullato.", ButtonType.OK);
             errAlert.setHeaderText("Impossibile annullare l'ordine");
             errAlert.showAndWait();
             return;
@@ -223,7 +223,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         if ("Ritirato".equals(selected.getStato())) {
             messaggioConferma = "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine() + " dallo storico?";
         } else {
-            messaggioConferma = "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine() + "?\nLe quantità verranno ripristinate in magazzino.";
+            messaggioConferma = "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine() + "?\nLe quantitÃƒÆ’Ã‚Â  verranno ripristinate in magazzino.";
         }
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, messaggioConferma, ButtonType.YES, ButtonType.NO);
@@ -269,7 +269,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         root.getChildren().add(title);
         
         for (it.ortogest.ortogestapp.model.Lotto l : lotti) {
-            // Calcola disponibilità residua del lotto rispetto al carrello
+            // Calcola disponibilitÃƒÆ’Ã‚Â  residua del lotto rispetto al carrello
             double giacenzaResidua = calcolaGiacenzaResidua(l);
             
             if (giacenzaResidua <= 0) continue;
@@ -283,7 +283,7 @@ public class ClienteGraphicController extends BaseGraphicController {
             scadeLabel.setStyle("-fx-font-weight: bold;");
             
             double prezzoReale = (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato() : l.getPrezzoVendita();
-            Label prezzoLabel = new Label(String.format("Prezzo: %.2f €/Kg", prezzoReale));
+            Label prezzoLabel = new Label(String.format("Prezzo: %.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬/Kg", prezzoReale));
             if (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) {
                 prezzoLabel.setTextFill(Color.web("#e74c3c"));
             }
@@ -308,7 +308,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
         
         if (root.getChildren().size() == 1) {
-            Label noLotti = new Label("Nessun lotto disponibile o quantità già nel carrello.");
+            Label noLotti = new Label("Nessun lotto disponibile o quantitÃƒÆ’Ã‚Â  giÃƒÆ’Ã‚Â  nel carrello.");
             root.getChildren().add(noLotti);
         }
         
@@ -329,7 +329,7 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     private void aggiungiLottoAlCarrello(String idLotto, String nomeProdotto, String qtaStr, double prezzoUnitario, double maxAcquistabile, Stage popupStage) {
         if (qtaStr == null || qtaStr.trim().isEmpty()) {
-            mostraMessaggio("Inserisci la quantità.", false);
+            mostraMessaggio("Inserisci la quantitÃƒÆ’Ã‚Â .", false);
             return;
         }
 
@@ -338,12 +338,12 @@ public class ClienteGraphicController extends BaseGraphicController {
             qta = Double.parseDouble(qtaStr);
             if (qta <= 0) throw new NumberFormatException();
         } catch (NumberFormatException _) {
-            mostraMessaggio("Quantità non valida (deve essere > 0).", false);
+            mostraMessaggio("QuantitÃƒÆ’Ã‚Â  non valida (deve essere > 0).", false);
             return;
         }
 
         if (qta > maxAcquistabile) {
-            mostraMessaggio("Quantità superiore alla disponibilità del lotto (" + maxAcquistabile + " Kg).", false);
+            mostraMessaggio("QuantitÃƒÆ’Ã‚Â  superiore alla disponibilitÃƒÆ’Ã‚Â  del lotto (" + maxAcquistabile + " Kg).", false);
             return;
         }
 
@@ -414,7 +414,7 @@ public class ClienteGraphicController extends BaseGraphicController {
                 totale += r.getSubtotale();
                 pezzi++;
             }
-            cartSummaryLabel.setText(String.format("%d prod. — Tot: %.2f €", pezzi, totale));
+            cartSummaryLabel.setText(String.format("%d prod. ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Tot: %.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬", pezzi, totale));
             btnConfermaOrdine.setVisible(true);
             btnSvuotaCarrello.setVisible(true);
         }
@@ -450,14 +450,14 @@ public class ClienteGraphicController extends BaseGraphicController {
         prezziBox.setAlignment(Pos.CENTER);
         
         if (prodotto.getPrezzoMin() == prodotto.getPrezzoMax()) {
-            Label prezzoLabel = new Label(String.format("%.2f €/Kg", prodotto.getPrezzoMin()));
+            Label prezzoLabel = new Label(String.format("%.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬/Kg", prodotto.getPrezzoMin()));
             prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 14;");
             prezziBox.getChildren().add(prezzoLabel);
         } else {
             Label badgeVari = new Label("Lotti Multipli");
             badgeVari.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 3 6; -fx-background-radius: 4; -fx-font-size: 10; -fx-font-weight: bold;");
             
-            Label prezzoLabel = new Label(String.format("Da %.2f € a %.2f €", prodotto.getPrezzoMin(), prodotto.getPrezzoMax()));
+            Label prezzoLabel = new Label(String.format("Da %.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ a %.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬", prodotto.getPrezzoMin(), prodotto.getPrezzoMax()));
             prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 13;");
             prezziBox.getChildren().addAll(badgeVari, prezzoLabel);
         }
@@ -483,7 +483,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         return card;
     }
 
-    // ==================== UTILITÀ ====================
+    // ==================== UTILITÃƒÆ’Ã¢â€šÂ¬ ====================
 
     private void aggiornaStileSidebar(Button attivo) {
         btnFrutta.setStyle(STILE_BTN_INATTIVO);

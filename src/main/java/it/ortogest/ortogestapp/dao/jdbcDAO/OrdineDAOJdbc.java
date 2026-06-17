@@ -1,6 +1,6 @@
-package it.ortogest.ortogestapp.dao.jdbcDAO;
+package it.ortogest.ortogestapp.dao.jdbcdao;
 
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IOrdineDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IOrdineDAO;
 import it.ortogest.ortogestapp.model.Ordine;
 import it.ortogest.ortogestapp.model.RigaOrdine;
 import it.ortogest.ortogestapp.utils.DatabaseHelper;
@@ -34,7 +34,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
                 stmtOrdine.executeUpdate();
             }
 
-            // Per semplicità e pulizia in caso di aggiornamento, cancelliamo le righe
+            // Per semplicitÃƒÆ’Ã‚Â  e pulizia in caso di aggiornamento, cancelliamo le righe
             // vecchie se esistono e le reinseriamo
             try (PreparedStatement stmtDelete = conn.prepareStatement("DELETE FROM riga_ordine WHERE id_ordine = ?")) {
                 stmtDelete.setString(1, ordine.getIdOrdine());

@@ -1,13 +1,14 @@
-package it.ortogest.ortogestapp.pattern.AbstractFactory;
+package it.ortogest.ortogestapp.pattern.abstractfactory;
 
-import it.ortogest.ortogestapp.dao.FileSystemDAO.LottoDAOFileSystem;
-import it.ortogest.ortogestapp.dao.FileSystemDAO.OrdineDAOFileSystem;
-import it.ortogest.ortogestapp.dao.FileSystemDAO.ProdottoDAOFileSystem;
-import it.ortogest.ortogestapp.dao.FileSystemDAO.UtenteDAOFileSystem;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IOrdineDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IUtenteDAO;
+import it.ortogest.ortogestapp.dao.filesystemdao.LottoDAOFileSystem;
+import it.ortogest.ortogestapp.dao.filesystemdao.OrdineDAOFileSystem;
+import it.ortogest.ortogestapp.dao.filesystemdao.ProdottoDAOFileSystem;
+import it.ortogest.ortogestapp.dao.filesystemdao.UtenteDAOFileSystem;
+import it.ortogest.ortogestapp.dao.interfacedao.ILottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IOrdineDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IProdottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IUtenteDAO;
+
 
 /**
  * Concrete Factory per la famiglia di oggetti DAO basati su File System (CSV).

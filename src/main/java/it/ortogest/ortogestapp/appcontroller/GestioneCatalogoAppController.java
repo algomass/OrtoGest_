@@ -1,11 +1,11 @@
 package it.ortogest.ortogestapp.appcontroller;
 
 import it.ortogest.ortogestapp.beans.ProdottoBean;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.ILottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IProdottoDAO;
 import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.model.Prodotto;
-import it.ortogest.ortogestapp.pattern.AbstractFactory.DAOFactory;
+import it.ortogest.ortogestapp.pattern.abstractfactory.DAOFactory;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.model.Lotto;
 
@@ -93,10 +93,10 @@ public class GestioneCatalogoAppController {
      */
     public LottoBean aggiornaPrezzoLotto(LottoBean bean) throws GestioneException {
         if (bean.getPrezzoVendita() < 0) {
-            throw new GestioneException("Il prezzo di vendita non può essere negativo.");
+            throw new GestioneException("Il prezzo di vendita non puÃƒÆ’Ã‚Â² essere negativo.");
         }
         if (bean.isScontoScadenzaAttivo() && bean.getPrezzoScontato() < 0) {
-            throw new GestioneException("Il prezzo scontato non può essere negativo.");
+            throw new GestioneException("Il prezzo scontato non puÃƒÆ’Ã‚Â² essere negativo.");
         }
 
         ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
@@ -127,7 +127,7 @@ public class GestioneCatalogoAppController {
                 .plusDays(giorniPreavviso);
 
         for (Lotto l : tuttiLotti) {
-            // Mostra i lotti se la loro scadenza è <= al limite e non sono già stati messi
+            // Mostra i lotti se la loro scadenza ÃƒÆ’Ã‚Â¨ <= al limite e non sono giÃƒÆ’Ã‚Â  stati messi
             // in sconto
             if (!l.isScontoScadenzaAttivo() && !l.getDataScadenza().isAfter(limite)) {
                 beans.add(LottoBean.builder()

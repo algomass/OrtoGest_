@@ -1,4 +1,4 @@
-﻿package it.ortogest.ortogestapp.graphiccontrollercli;
+package it.ortogest.ortogestapp.graphiccontrollercli;
 
 import java.util.Scanner;
 

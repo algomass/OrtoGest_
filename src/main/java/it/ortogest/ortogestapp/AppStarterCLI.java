@@ -16,7 +16,7 @@ public class AppStarterCLI {
         // Istanziamo un unico Scanner per tutta l'esecuzione dell'app
         try (Scanner scanner = new Scanner(System.in)) {
             
-            // Il primo controller ad essere chiamato è sempre il Login
+            // Il primo controller ad essere chiamato ÃƒÆ’Ã‚Â¨ sempre il Login
             LoginGraphicControllerCLI loginController = new LoginGraphicControllerCLI();
             loginController.start(scanner);
             

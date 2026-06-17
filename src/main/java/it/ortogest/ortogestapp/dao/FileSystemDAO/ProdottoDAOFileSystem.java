@@ -1,6 +1,6 @@
-package it.ortogest.ortogestapp.dao.FileSystemDAO;
+package it.ortogest.ortogestapp.dao.filesystemdao;
 
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IProdottoDAO;
 import it.ortogest.ortogestapp.model.Prodotto;
 
 import java.io.*;

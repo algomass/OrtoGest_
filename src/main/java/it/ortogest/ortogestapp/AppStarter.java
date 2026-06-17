@@ -10,8 +10,8 @@ import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
 
 /**
- * AppStarter è il punto di ingresso dell'applicazione JavaFX.
- * Il suo unico scopo è avviare l'infrastruttura di base, configurare lo
+ * AppStarter ÃƒÆ’Ã‚Â¨ il punto di ingresso dell'applicazione JavaFX.
+ * Il suo unico scopo ÃƒÆ’Ã‚Â¨ avviare l'infrastruttura di base, configurare lo
  * SceneManager
  * e delegare a quest'ultimo il caricamento della prima schermata.
  * Non contiene alcuna logica di business o gestione di sessione.
@@ -26,7 +26,7 @@ public class AppStarter extends Application {
             sceneManager.initStage(stage);
 
             // 2. Carico la schermata iniziale di login.
-            // N.B: Uso il path in CostantiGUI perché Maven posiziona le risorse
+            // N.B: Uso il path in CostantiGUI perchÃƒÆ’Ã‚Â© Maven posiziona le risorse
             // direttamente nella root "target/classes/GUI" durante la compilazione.
             sceneManager.cambiaScena(CostantiGUI.VIEW_LOGIN);
 

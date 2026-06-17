@@ -64,7 +64,7 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
         Printer.print("---------------------------------------------------------------");
         for (int i = 0; i < pronti.size(); i++) {
             OrdineBean o = pronti.get(i);
-            Printer.printf("%-5d %-15s %-30s %-15.2f â‚¬\n", 
+            Printer.printf("%-5d %-15s %-30s %-15.2f ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬\n", 
                 (i+1),
                 o.getIdOrdine(), 
                 o.getEmailCliente(), 
@@ -92,7 +92,7 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("\n--- Riepilogo Ordine #" + ordineDaEvadere.getIdOrdine() + " ---");
             Printer.print("Cliente: " + ordineDaEvadere.getEmailCliente());
             Printer.print("Prodotti: " + ordineDaEvadere.getRiepilogoProdotti());
-            Printer.printf("TOTALE DA INCASSARE: %.2f â‚¬\n", ordineDaEvadere.getTotale());
+            Printer.printf("TOTALE DA INCASSARE: %.2f ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬\n", ordineDaEvadere.getTotale());
             Printer.print("Confermi l'avvenuto pagamento? (S/N): ");
             
             String conferma = scanner.nextLine().trim().toUpperCase();
@@ -112,7 +112,7 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("\n**************************************");
             Printer.print("         SCONTRINO EMESSO             ");
             Printer.print(" Ordine: " + ordineDaEvadere.getIdOrdine());
-            Printer.printf(" Pagato: %.2f â‚¬\n", ordineDaEvadere.getTotale());
+            Printer.printf(" Pagato: %.2f ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬\n", ordineDaEvadere.getTotale());
             Printer.print("**************************************");
             Printer.print("[SUCCESS] Ordine completato e passato allo stato 'Ritirato'.");
         } catch (Exception e) {

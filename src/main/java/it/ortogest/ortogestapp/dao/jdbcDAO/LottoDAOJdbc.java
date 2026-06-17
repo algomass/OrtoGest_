@@ -1,9 +1,9 @@
-package it.ortogest.ortogestapp.dao.jdbcDAO;
+package it.ortogest.ortogestapp.dao.jdbcdao;
 
-import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.ILottoDAO;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Prodotto;
-import it.ortogest.ortogestapp.pattern.AbstractFactory.DAOFactory;
+import it.ortogest.ortogestapp.pattern.abstractfactory.DAOFactory;
 import it.ortogest.ortogestapp.utils.DatabaseHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;

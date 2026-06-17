@@ -1,4 +1,4 @@
-package it.ortogest.ortogestapp.pattern.Adapter;
+package it.ortogest.ortogestapp.pattern.adapter;
 
 /**
  * Interfaccia Target del pattern Adapter per l'invio di Email.

@@ -1,13 +1,13 @@
-package it.ortogest.ortogestapp.pattern.AbstractFactory;
+package it.ortogest.ortogestapp.pattern.abstractfactory;
 
-import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IOrdineDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IUtenteDAO;
-import it.ortogest.ortogestapp.dao.jdbcDAO.LottoDAOJdbc;
-import it.ortogest.ortogestapp.dao.jdbcDAO.OrdineDAOJdbc;
-import it.ortogest.ortogestapp.dao.jdbcDAO.ProdottoDAOJdbc;
-import it.ortogest.ortogestapp.dao.jdbcDAO.UtenteDAOJdbc;
+import it.ortogest.ortogestapp.dao.interfacedao.ILottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IOrdineDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IProdottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IUtenteDAO;
+import it.ortogest.ortogestapp.dao.jdbcdao.LottoDAOJdbc;
+import it.ortogest.ortogestapp.dao.jdbcdao.OrdineDAOJdbc;
+import it.ortogest.ortogestapp.dao.jdbcdao.ProdottoDAOJdbc;
+import it.ortogest.ortogestapp.dao.jdbcdao.UtenteDAOJdbc;
 
 /**
  * Concrete Factory per la famiglia di oggetti DAO JDBC (Database).

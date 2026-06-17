@@ -2,10 +2,10 @@ package it.ortogest.ortogestapp.appcontroller;
 
 import it.ortogest.ortogestapp.beans.CredenzialiBean;
 import it.ortogest.ortogestapp.beans.UtenteBean;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IUtenteDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IUtenteDAO;
 import it.ortogest.ortogestapp.exception.LoginFallitoException;
 import it.ortogest.ortogestapp.model.Utente;
-import it.ortogest.ortogestapp.pattern.AbstractFactory.DAOFactory;
+import it.ortogest.ortogestapp.pattern.abstractfactory.DAOFactory;
 
 /**
  * Controller Applicativo (Il vero controller del pattern BCE).

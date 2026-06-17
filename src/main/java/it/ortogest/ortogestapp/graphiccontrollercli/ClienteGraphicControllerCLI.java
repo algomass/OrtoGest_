@@ -152,11 +152,11 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
             Lotto lottoScelto = lotti.get(sceltaLotto - 1);
             double prezzoScelto = lottoScelto.isScontoScadenzaAttivo() && lottoScelto.getPrezzoScontato() > 0 ? lottoScelto.getPrezzoScontato() : lottoScelto.getPrezzoVendita();
 
-            Printer.print("Quantità da acquistare (Kg) (Max " + lottoScelto.getQuantitaKg() + "): ");
+            Printer.print("QuantitÃƒÆ’Ã‚Â  da acquistare (Kg) (Max " + lottoScelto.getQuantitaKg() + "): ");
             double quantita = Double.parseDouble(scanner.nextLine());
 
             if (quantita <= 0 || quantita > lottoScelto.getQuantitaKg()) {
-                Printer.perror("Quantità non valida o superiore alla giacenza.");
+                Printer.perror("QuantitÃƒÆ’Ã‚Â  non valida o superiore alla giacenza.");
                 return;
             }
 
@@ -175,7 +175,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         List<RigaOrdineBean> carrello = SessionManager.getInstance().getCarrelloCorrente();
 
         if (carrello == null || carrello.isEmpty()) {
-            Printer.print("Il carrello è vuoto.");
+            Printer.print("Il carrello ÃƒÆ’Ã‚Â¨ vuoto.");
             return;
         }
 
@@ -191,7 +191,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
             totale += riga.getSubtotale();
         }
         Printer.print("-----------------------------------------------------------------");
-        Printer.printf("TOTALE: %.2f â‚¬\n", totale);
+        Printer.printf("TOTALE: %.2f ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬\n", totale);
     }
 
     private void inviaOrdine() {
@@ -226,7 +226,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         }
 
         for (OrdineBean o : ordini) {
-            Printer.print("\nID Ordine: " + o.getIdOrdine() + " | Stato: " + o.getStato() + " | Totale: " + o.getTotale() + " â‚¬");
+            Printer.print("\nID Ordine: " + o.getIdOrdine() + " | Stato: " + o.getStato() + " | Totale: " + o.getTotale() + " ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬");
             Printer.print("Contenuto: " + o.getRiepilogoProdotti());
         }
     }

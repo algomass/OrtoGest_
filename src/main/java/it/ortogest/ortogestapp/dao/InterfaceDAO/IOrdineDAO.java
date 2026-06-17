@@ -1,4 +1,4 @@
-package it.ortogest.ortogestapp.dao.InterfaceDAO;
+package it.ortogest.ortogestapp.dao.interfacedao;
 
 import it.ortogest.ortogestapp.model.Ordine;
 import java.util.List;

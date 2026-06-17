@@ -1,6 +1,6 @@
-package it.ortogest.ortogestapp.dao.FileSystemDAO;
+package it.ortogest.ortogestapp.dao.filesystemdao;
 
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IOrdineDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IOrdineDAO;
 import it.ortogest.ortogestapp.model.Ordine;
 import it.ortogest.ortogestapp.model.RigaOrdine;
 

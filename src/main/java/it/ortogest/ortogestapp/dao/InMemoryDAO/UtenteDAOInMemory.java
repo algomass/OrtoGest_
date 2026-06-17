@@ -1,6 +1,6 @@
-package it.ortogest.ortogestapp.dao.InMemoryDAO;
+package it.ortogest.ortogestapp.dao.inmemorydao;
 
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IUtenteDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IUtenteDAO;
 import it.ortogest.ortogestapp.model.Utente;
 
 import java.util.ArrayList;

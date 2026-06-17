@@ -8,7 +8,7 @@ public class RigaOrdineBean {
     private String nomeProdotto;
     private String idLotto;
     private double quantita;       // In Kg
-    private double prezzoUnitario; // €/Kg
+    private double prezzoUnitario; // ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬/Kg
 
     public RigaOrdineBean(String nomeProdotto, String idLotto, double quantita, double prezzoUnitario) {
         this.nomeProdotto = nomeProdotto;

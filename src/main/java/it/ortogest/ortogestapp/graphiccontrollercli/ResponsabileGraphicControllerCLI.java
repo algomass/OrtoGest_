@@ -70,7 +70,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
         List<ProdottoBean> catalogo = appController.getTuttiIProdotti();
 
         if (catalogo.isEmpty()) {
-            Printer.print("Il catalogo è vuoto.");
+            Printer.print("Il catalogo ÃƒÆ’Ã‚Â¨ vuoto.");
             return catalogo;
         }
 
@@ -78,7 +78,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
         Printer.print("-----------------------------------------------------------------");
         for (int i = 0; i < catalogo.size(); i++) {
             ProdottoBean p = catalogo.get(i);
-            Printer.printf("%-5d %-15s %-15s %-15.2f %-15.2f â‚¬\n",
+            Printer.printf("%-5d %-15s %-15s %-15.2f %-15.2f ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬\n",
                     (i+1),
                     p.getNome(),
                     p.getCategoria(),
@@ -113,12 +113,12 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("-------------------------------------------------------------------");
             for (int i = 0; i < lotti.size(); i++) {
                 LottoBean l = lotti.get(i);
-                Printer.printf("%-5d %-15s %-15.2f â‚¬ %-15.2f â‚¬ %-15s\n",
+                Printer.printf("%-5d %-15s %-15.2f ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ %-15.2f ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ %-15s\n",
                         (i+1),
                         l.getIdLotto(),
                         l.getCostoAcquisto(),
                         l.getPrezzoVendita(),
-                        l.isScontoScadenzaAttivo() ? "SI (" + l.getPrezzoScontato() + " â‚¬)" : "NO");
+                        l.isScontoScadenzaAttivo() ? "SI (" + l.getPrezzoScontato() + " ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬)" : "NO");
             }
 
             Printer.print("\nInserisci il NUM del lotto da modificare (oppure 0 per annullare): ");
@@ -131,8 +131,8 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
 
             LottoBean lottoScelto = lotti.get(numLotto - 1);
 
-            Printer.print("Attuale costo di acquisto: " + lottoScelto.getCostoAcquisto() + " â‚¬");
-            Printer.print("Nuovo Prezzo di Vendita al pubblico (â‚¬): ");
+            Printer.print("Attuale costo di acquisto: " + lottoScelto.getCostoAcquisto() + " ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬");
+            Printer.print("Nuovo Prezzo di Vendita al pubblico (ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬): ");
             double nuovoPrezzo = Double.parseDouble(scanner.nextLine());
 
             // Il bean viene usato come trasportatore dei dati modificati

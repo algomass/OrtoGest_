@@ -1,7 +1,7 @@
 package it.ortogest.ortogestapp.model;
 
 /**
- * Entità di Dominio: Rappresenta uno specifico carico di merce in entrata.
+ * EntitÃƒÆ’Ã‚Â  di Dominio: Rappresenta uno specifico carico di merce in entrata.
  * Raccoglie i dati fisici di una consegna (lotto) e si associa alla tipologia
  * di Prodotto.
  */

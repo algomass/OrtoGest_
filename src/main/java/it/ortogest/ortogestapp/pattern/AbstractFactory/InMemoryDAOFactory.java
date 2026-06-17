@@ -1,13 +1,13 @@
-package it.ortogest.ortogestapp.pattern.AbstractFactory;
+package it.ortogest.ortogestapp.pattern.abstractfactory;
 
-import it.ortogest.ortogestapp.dao.InMemoryDAO.LottoDAOInMemory;
-import it.ortogest.ortogestapp.dao.InMemoryDAO.OrdineDAOInMemory;
-import it.ortogest.ortogestapp.dao.InMemoryDAO.ProdottoDAOInMemory;
-import it.ortogest.ortogestapp.dao.InMemoryDAO.UtenteDAOInMemory;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.ILottoDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IOrdineDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IProdottoDAO;
-import it.ortogest.ortogestapp.dao.InterfaceDAO.IUtenteDAO;
+import it.ortogest.ortogestapp.dao.inmemorydao.LottoDAOInMemory;
+import it.ortogest.ortogestapp.dao.inmemorydao.OrdineDAOInMemory;
+import it.ortogest.ortogestapp.dao.inmemorydao.ProdottoDAOInMemory;
+import it.ortogest.ortogestapp.dao.inmemorydao.UtenteDAOInMemory;
+import it.ortogest.ortogestapp.dao.interfacedao.ILottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IOrdineDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IProdottoDAO;
+import it.ortogest.ortogestapp.dao.interfacedao.IUtenteDAO;
 
 /**
  * Concrete Factory per la famiglia di oggetti DAO In-Memory (Versione Demo).

@@ -91,7 +91,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
             dettaglioProdottiList.getItems().add(r);
         }
         
-        // Abilita il pulsante solo se l'ordine è "Inviato"
+        // Abilita il pulsante solo se l'ordine ÃƒÆ’Ã‚Â¨ "Inviato"
         btnSegnaPronto.setDisable(!STATO_INVIATO.equals(ordine.getStato()));
         messaggioLabel.setText("");
     }
@@ -113,7 +113,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
         }
         
         if (!STATO_INVIATO.equals(selected.getStato())) {
-            mostraErrore("L'ordine non è nello stato Inviato.");
+            mostraErrore("L'ordine non ÃƒÆ’Ã‚Â¨ nello stato Inviato.");
             return;
         }
 

@@ -135,7 +135,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
         for (RigaOrdineBean r : carrello) {
             totale += r.getSubtotale();
         }
-        recapTotaleLabel.setText(String.format("%.2f €", totale));
+        recapTotaleLabel.setText(String.format("%.2f ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬", totale));
     }
 
     @FXML
@@ -156,7 +156,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
             Printer.printf("Ordine confermato: " + risultato);
             tornaAlCatalogo();
             // N.B. Qui potresti voler mostrare un messaggio di successo, 
-            // ma dato che cambiamo scena, il controller del catalogo dovrà occuparsene.
+            // ma dato che cambiamo scena, il controller del catalogo dovrÃƒÆ’Ã‚Â  occuparsene.
             
         } catch (Exception e) {
             mostraErrore("Errore nell'invio dell'ordine: " + e.getMessage());

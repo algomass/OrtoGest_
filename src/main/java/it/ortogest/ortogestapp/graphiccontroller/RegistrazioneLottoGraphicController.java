@@ -72,7 +72,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
                 throw new GestioneException("Tutti i campi testuali sono obbligatori.");
             }
 
-            double quantita = parseDoubleOrThrow(quantitaStr, "La quantità deve essere un numero valido.");
+            double quantita = parseDoubleOrThrow(quantitaStr, "La quantitÃƒÆ’Ã‚Â  deve essere un numero valido.");
 
             double costoAcquisto = 0.0;
             String costoStr = costoAcquistoField.getText();

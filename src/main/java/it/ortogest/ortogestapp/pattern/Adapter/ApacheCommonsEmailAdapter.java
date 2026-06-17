@@ -1,4 +1,4 @@
-package it.ortogest.ortogestapp.pattern.Adapter;
+package it.ortogest.ortogestapp.pattern.adapter;
 
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
@@ -6,7 +6,7 @@ import org.apache.commons.mail.SimpleEmail;
 
 /**
  * Concrete Adapter per l'invio di Email.
- * Adatta la libreria esterna Apache Commons Email (l'Adaptee è SimpleEmail)
+ * Adatta la libreria esterna Apache Commons Email (l'Adaptee ÃƒÆ’Ã‚Â¨ SimpleEmail)
  * all'interfaccia Target (EmailAdapter) del nostro sistema.
  */
 public class ApacheCommonsEmailAdapter implements EmailTarget {
@@ -14,9 +14,9 @@ public class ApacheCommonsEmailAdapter implements EmailTarget {
     @Override
     public boolean inviaEmail(String destinatario, String oggetto, String corpo) {
         try {
-            // L'Adaptee è l'oggetto SimpleEmail.
+            // L'Adaptee ÃƒÆ’Ã‚Â¨ l'oggetto SimpleEmail.
             // Notare come l'interfaccia dell'Adaptee (setHostName, setSubject, setMsg)
-            // è completamente diversa dal nostro metodo Target "inviaEmail".
+            // ÃƒÆ’Ã‚Â¨ completamente diversa dal nostro metodo Target "inviaEmail".
             // L'Adapter ha proprio il compito di tradurre!
             Email email = new SimpleEmail();
 
@@ -34,7 +34,7 @@ public class ApacheCommonsEmailAdapter implements EmailTarget {
 
             // IMPORTANTE: Per evitare che l'applicazione vada in crash al runtime
             // a causa di credenziali fittizie, commentiamo il vero e proprio invio fisico.
-            // Basterà inserire le credenziali corrette e decommentare la riga sotto per
+            // BasterÃƒÆ’Ã‚Â  inserire le credenziali corrette e decommentare la riga sotto per
             // inviare davvero.
             // email.send();
 
