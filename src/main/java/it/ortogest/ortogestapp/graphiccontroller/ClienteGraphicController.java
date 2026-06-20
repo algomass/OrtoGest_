@@ -115,7 +115,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     public void mostraFruttaAction() {
         if (searchField != null) searchField.clear();
         aggiornaStileSidebar(btnFrutta);
-        titoloSezione.setText("Catalogo Ã¢â‚¬âEUR�? Frutta");
+        titoloSezione.setText("Catalogo - Frutta");
         mostraCatalogo();
         caricaProdottiPerCategoria(CategoriaProdotto.FRUTTA);
     }
@@ -124,7 +124,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     public void mostraVerduraAction() {
         if (searchField != null) searchField.clear();
         aggiornaStileSidebar(btnVerdura);
-        titoloSezione.setText("Catalogo Ã¢â‚¬âEUR�? Verdura");
+        titoloSezione.setText("Catalogo - Verdura");
         mostraCatalogo();
         caricaProdottiPerCategoria(CategoriaProdotto.VERDURA);
     }
@@ -414,7 +414,7 @@ public class ClienteGraphicController extends BaseGraphicController {
                 totale += r.getSubtotale();
                 pezzi++;
             }
-            cartSummaryLabel.setText(String.format("%d prod. Ã¢â‚¬âEUR�? Tot: %.2f EUR", pezzi, totale));
+            cartSummaryLabel.setText(String.format("%d prod. - Tot: %.2f EUR", pezzi, totale));
             btnConfermaOrdine.setVisible(true);
             btnSvuotaCarrello.setVisible(true);
         }
