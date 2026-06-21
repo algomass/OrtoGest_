@@ -37,6 +37,11 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Button>
+                <Button fx:id="btnDaPrezzare" onAction="#vistaDaPrezzareAction" style="-fx-background-color: #9b59b6; -fx-text-fill: white;" text="Prodotti da prezzare">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
                 <Button onAction="#logoutAction" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Esci / Cambia Utente" />
             </children>
             <padding>
@@ -54,11 +59,15 @@
 
                 <VBox fx:id="sezioneSuperiore" spacing="15.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <Label text="Elenco Prodotti a Sistema">
-                            <font>
-                                <Font name="System Bold" size="16.0" />
-                            </font>
-                        </Label>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                            <Label text="Elenco Prodotti a Sistema">
+                                <font>
+                                    <Font name="System Bold" size="16.0" />
+                                </font>
+                            </Label>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <CheckBox fx:id="chkMostraStorico" onAction="#aggiornaTabelleAction" text="Mostra Storico (Inclusi Esauriti/Scaduti)" />
+                        </HBox>
 
                         <!-- Tabella Prodotti -->
                         <TableView fx:id="tabellaProdotti" prefHeight="150.0" VBox.vgrow="ALWAYS">

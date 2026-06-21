@@ -25,20 +25,37 @@ public class GestioneCatalogoAppController {
      * @return Lista di ProdottoBean
      */
     public List<ProdottoBean> getTuttiIProdotti() {
+        return getTuttiIProdotti(false);
+    }
+
+    public List<ProdottoBean> getTuttiIProdotti(boolean includiStorico) {
         IProdottoDAO prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
         ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
         List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
         List<ProdottoBean> beans = new ArrayList<>();
 
         for (Prodotto p : prodotti) {
-            ProdottoBean bean = new ProdottoBean(
-                    p.getNome(),
-                    p.getPrezzoAttuale(),
-                    p.getQuantitaTotaleDisponibile(),
-                    p.getCategoria(),
-                    p.getImmaginePath());
-            bean.setPrezzoAcquistoMedio(lottoDAO.getPrezzoMedioAcquisto(p.getNome()));
-            beans.add(bean);
+            List<Lotto> lotti = lottoDAO.trovaPerProdotto(p.getNome());
+            double validGiacenza = 0.0;
+            boolean hasValidLots = false;
+
+            for (Lotto l : lotti) {
+                if (includiStorico || l.getStato() == it.ortogest.ortogestapp.model.StatoLotto.ATTIVO) {
+                    hasValidLots = true;
+                    validGiacenza += l.getQuantitaKg();
+                }
+            }
+
+            if (includiStorico || (hasValidLots && validGiacenza > 0)) {
+                ProdottoBean bean = new ProdottoBean(
+                        p.getNome(),
+                        p.getPrezzoAttuale(),
+                        validGiacenza,
+                        p.getCategoria(),
+                        p.getImmaginePath());
+                bean.setPrezzoAcquistoMedio(lottoDAO.getPrezzoMedioAcquisto(p.getNome()));
+                beans.add(bean);
+            }
         }
 
         return beans;
@@ -67,23 +84,29 @@ public class GestioneCatalogoAppController {
      * Recupera i lotti associati a un prodotto.
      */
     public List<LottoBean> getLottiPerProdotto(String nomeProdotto) {
+        return getLottiPerProdotto(nomeProdotto, false);
+    }
+
+    public List<LottoBean> getLottiPerProdotto(String nomeProdotto, boolean includiStorico) {
         ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
         List<Lotto> lotti = lottoDAO.trovaPerProdotto(nomeProdotto);
         List<LottoBean> beans = new ArrayList<>();
 
         for (Lotto l : lotti) {
-            beans.add(LottoBean.builder()
-                    .idLotto(l.getIdLotto())
-                    .nomeFornitore(l.getNomeFornitore())
-                    .nomeProdotto(l.getTipologiaProdotto().getNome())
-                    .quantitaKg(l.getQuantitaKg())
-                    .dataArrivo(l.getDataArrivo())
-                    .dataScadenza(l.getDataScadenza())
-                    .costoAcquisto(l.getCostoAcquisto())
-                    .prezzoVendita(l.getPrezzoVendita())
-                    .scontoScadenzaAttivo(l.isScontoScadenzaAttivo())
-                    .prezzoScontato(l.getPrezzoScontato())
-                    .build());
+            if (includiStorico || l.getStato() == it.ortogest.ortogestapp.model.StatoLotto.ATTIVO) {
+                beans.add(LottoBean.builder()
+                        .idLotto(l.getIdLotto())
+                        .nomeFornitore(l.getNomeFornitore())
+                        .nomeProdotto(l.getTipologiaProdotto().getNome())
+                        .quantitaKg(l.getQuantitaKg())
+                        .dataArrivo(l.getDataArrivo())
+                        .dataScadenza(l.getDataScadenza())
+                        .costoAcquisto(l.getCostoAcquisto())
+                        .prezzoVendita(l.getPrezzoVendita())
+                        .scontoScadenzaAttivo(l.isScontoScadenzaAttivo())
+                        .prezzoScontato(l.getPrezzoScontato())
+                        .build());
+            }
         }
         return beans;
     }
@@ -128,8 +151,35 @@ public class GestioneCatalogoAppController {
 
         for (Lotto l : tuttiLotti) {
             // Mostra i lotti se la loro scadenza è <= al limite e non sono già stati messi
-            // in sconto
-            if (!l.isScontoScadenzaAttivo() && !l.getDataScadenza().isAfter(limite)) {
+            // in sconto, e ovviamente solo se sono ATTIVI
+            if (l.getStato() == it.ortogest.ortogestapp.model.StatoLotto.ATTIVO && !l.isScontoScadenzaAttivo() && !l.getDataScadenza().isAfter(limite)) {
+                beans.add(LottoBean.builder()
+                        .idLotto(l.getIdLotto())
+                        .nomeFornitore(l.getNomeFornitore())
+                        .nomeProdotto(l.getTipologiaProdotto().getNome())
+                        .quantitaKg(l.getQuantitaKg())
+                        .dataArrivo(l.getDataArrivo())
+                        .dataScadenza(l.getDataScadenza())
+                        .costoAcquisto(l.getCostoAcquisto())
+                        .prezzoVendita(l.getPrezzoVendita())
+                        .scontoScadenzaAttivo(l.isScontoScadenzaAttivo())
+                        .prezzoScontato(l.getPrezzoScontato())
+                        .build());
+            }
+        }
+        return beans;
+    }
+
+    /**
+     * Recupera i lotti da prezzare (prezzoVendita = 0.0).
+     */
+    public List<LottoBean> getLottiDaPrezzare() {
+        ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
+        List<Lotto> tuttiLotti = lottoDAO.getTuttiILotti();
+        List<LottoBean> beans = new ArrayList<>();
+
+        for (Lotto l : tuttiLotti) {
+            if (l.getStato() == it.ortogest.ortogestapp.model.StatoLotto.ATTIVO && l.getPrezzoVendita() == 0.0) {
                 beans.add(LottoBean.builder()
                         .idLotto(l.getIdLotto())
                         .nomeFornitore(l.getNomeFornitore())

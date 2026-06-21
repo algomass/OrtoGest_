@@ -36,6 +36,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("2. Imposta/Modifica Prezzo di Vendita Lotto");
             Printer.print("3. Monitora Scadenze e Applica Sconti");
             Printer.print("4. Aggiorna Categoria Prodotto");
+            Printer.print("5. Visualizza Lotti da Prezzare");
             Printer.print("0. Logout");
             Printer.print("Scelta: ");
 
@@ -53,6 +54,9 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
                     break;
                 case "4":
                     aggiornaCategoria(scanner);
+                    break;
+                case "5":
+                    visualizzaDaPrezzare(scanner);
                     break;
                 case "0":
                     Printer.print("Logout in corso...");
@@ -238,5 +242,30 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
         } catch (GestioneException e) {
             Printer.perror(MSG_ERRORE + e.getMessage());
         }
+    }
+
+    private void visualizzaDaPrezzare(Scanner scanner) {
+        Printer.print("\n--- Lotti da Prezzare ---");
+        List<LottoBean> lottiDaPrezzare = appController.getLottiDaPrezzare();
+
+        if (lottiDaPrezzare.isEmpty()) {
+            Printer.print("Nessun lotto da prezzare.");
+            return;
+        }
+
+        Printer.printf(ROW_FORMAT, "NUM", "ID LOTTO", "PRODOTTO", "COSTO ACQ.", "PREZZO VENDITA");
+        Printer.print("-------------------------------------------------------------------------");
+        for (int i = 0; i < lottiDaPrezzare.size(); i++) {
+            LottoBean l = lottiDaPrezzare.get(i);
+            Printer.printf("%-5d %-15s %-15s %-15.2f EUR %-15.2f EUR\n",
+                    (i+1),
+                    l.getIdLotto(),
+                    l.getNomeProdotto(),
+                    l.getCostoAcquisto(),
+                    l.getPrezzoVendita());
+        }
+
+        Printer.print("\nPremi INVIO per tornare al menu...");
+        scanner.nextLine();
     }
 }

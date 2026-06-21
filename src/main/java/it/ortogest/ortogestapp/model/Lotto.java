@@ -43,4 +43,23 @@ public class Lotto extends AbstractLotto {
     public void setTipologiaProdotto(Prodotto tipologiaProdotto) {
         this.tipologiaProdotto = tipologiaProdotto;
     }
+
+    public boolean isEsaurito() {
+        return getQuantitaKg() <= 0.0;
+    }
+
+    public boolean isScaduto() {
+        return getDataScadenza() != null && java.time.LocalDate.now().isAfter(getDataScadenza());
+    }
+
+    public StatoLotto getStato() {
+        if (isSmaltito()) {
+            return StatoLotto.SMALTITO;
+        } else if (isEsaurito()) {
+            return StatoLotto.ESAURITO;
+        } else if (isScaduto()) {
+            return StatoLotto.SCADUTO;
+        }
+        return StatoLotto.ATTIVO;
+    }
 }

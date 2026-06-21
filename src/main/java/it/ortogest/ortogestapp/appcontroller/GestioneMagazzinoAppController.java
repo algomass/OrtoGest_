@@ -66,15 +66,17 @@ public class GestioneMagazzinoAppController {
         List<Lotto> lotti = lottoDAO.trovaPerProdotto(nomeProdotto);
         List<LottoBean> beans = new ArrayList<>();
         for (Lotto l : lotti) {
-            beans.add(LottoBean.builder()
-                    .idLotto(l.getIdLotto())
-                    .nomeFornitore(l.getNomeFornitore())
-                    .nomeProdotto(l.getTipologiaProdotto().getNome())
-                    .quantitaKg(l.getQuantitaKg())
-                    .dataArrivo(l.getDataArrivo())
-                    .dataScadenza(l.getDataScadenza())
-                    .costoAcquisto(l.getCostoAcquisto())
-                    .build());
+            if (!l.isSmaltito()) {
+                beans.add(LottoBean.builder()
+                        .idLotto(l.getIdLotto())
+                        .nomeFornitore(l.getNomeFornitore())
+                        .nomeProdotto(l.getTipologiaProdotto().getNome())
+                        .quantitaKg(l.getQuantitaKg())
+                        .dataArrivo(l.getDataArrivo())
+                        .dataScadenza(l.getDataScadenza())
+                        .costoAcquisto(l.getCostoAcquisto())
+                        .build());
+            }
         }
         return beans;
     }
@@ -224,5 +226,55 @@ public class GestioneMagazzinoAppController {
         lottoVecchio.setCostoAcquisto(beanNuovo.getCostoAcquisto());
 
         lottoDAO.salvaLotto(lottoVecchio);
+    }
+
+    /**
+     * Recupera i lotti che sono scaduti e hanno ancora giacenza, quindi
+     * necessitano di smaltimento fisico.
+     */
+    public List<LottoBean> getLottiDaSmaltire() {
+        List<Lotto> tuttiLotti = lottoDAO.getTuttiILotti();
+        List<LottoBean> beans = new ArrayList<>();
+        for (Lotto l : tuttiLotti) {
+            if (l.isScaduto() && !l.isEsaurito() && !l.isSmaltito()) {
+                beans.add(LottoBean.builder()
+                        .idLotto(l.getIdLotto())
+                        .nomeFornitore(l.getNomeFornitore())
+                        .nomeProdotto(l.getTipologiaProdotto().getNome())
+                        .quantitaKg(l.getQuantitaKg())
+                        .dataArrivo(l.getDataArrivo())
+                        .dataScadenza(l.getDataScadenza())
+                        .costoAcquisto(l.getCostoAcquisto())
+                        .build());
+            }
+        }
+        return beans;
+    }
+
+    /**
+     * Effettua lo smaltimento logico di un lotto: sottrae la sua giacenza
+     * rimanente dal totale del prodotto e lo marca come SMALTITO.
+     */
+    public void smaltisciLotto(String idLotto) throws GestioneException {
+        Lotto lotto = lottoDAO.trovaPerId(idLotto);
+        if (lotto == null) {
+            throw new GestioneException("Lotto non trovato.");
+        }
+        if (lotto.isSmaltito()) {
+            throw new GestioneException("Lotto già smaltito.");
+        }
+
+        Prodotto prodotto = lotto.getTipologiaProdotto();
+        
+        // Sottraiamo la giacenza in scadenza dal totale del prodotto
+        prodotto.sottraiGiacenza(lotto.getQuantitaKg());
+        if (prodotto.getQuantitaTotaleDisponibile() < 0) {
+            prodotto.setQuantitaTotaleDisponibile(0);
+        }
+        prodottoDAO.salvaProdotto(prodotto);
+
+        // Marchiamo come smaltito (la giacenza del lotto rimane invariata per storico, ma è smaltito)
+        lotto.setSmaltito(true);
+        lottoDAO.salvaLotto(lotto);
     }
 }

@@ -17,10 +17,19 @@ import java.util.List;
 
 public class ResponsabileGraphicController extends BaseGraphicController {
 
-    private boolean isVistaScontiAttiva = false;
+    private enum StatoVista {
+        CLASSICA, SCONTI, DA_PREZZARE
+    }
+    private StatoVista vistaCorrente = StatoVista.CLASSICA;
 
     @FXML
     private Button btnToggleVista;
+
+    @FXML
+    private Button btnDaPrezzare;
+
+    @FXML
+    private CheckBox chkMostraStorico;
 
     @FXML
     private VBox sezioneSuperiore;
@@ -129,7 +138,8 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     }
 
     private void caricaCatalogo() {
-        List<ProdottoBean> prodotti = appController.getTuttiIProdotti();
+        boolean includiStorico = chkMostraStorico != null && chkMostraStorico.isSelected();
+        List<ProdottoBean> prodotti = appController.getTuttiIProdotti(includiStorico);
         ObservableList<ProdottoBean> observableList = FXCollections.observableArrayList(prodotti);
         tabellaProdotti.setItems(observableList);
 
@@ -144,7 +154,8 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     }
 
     private void caricaLotti(String nomeProdotto) {
-        List<LottoBean> lotti = appController.getLottiPerProdotto(nomeProdotto);
+        boolean includiStorico = chkMostraStorico != null && chkMostraStorico.isSelected();
+        List<LottoBean> lotti = appController.getLottiPerProdotto(nomeProdotto, includiStorico);
         ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lotti);
         tabellaLotti.setItems(observableList);
     }
@@ -154,6 +165,11 @@ public class ResponsabileGraphicController extends BaseGraphicController {
         prezzoVenditaField.clear();
         scontoCheckBox.setSelected(false);
         prezzoScontatoField.clear();
+    }
+
+    @FXML
+    public void aggiornaTabelleAction() {
+        caricaCatalogo();
     }
 
     @FXML
@@ -220,15 +236,18 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             mostraSuccesso("Prezzi del lotto aggiornati correttamente");
 
-            // Ricarichiamo i lotti del prodotto corrente o la lista scadenze
-            if (!isVistaScontiAttiva) {
+            // Ricarichiamo i lotti del prodotto corrente o la lista scadenze/da prezzare
+            if (vistaCorrente == StatoVista.CLASSICA) {
                 String prodSelezionato = prodottoSelezionatoField.getText();
                 if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
                     caricaLotti(prodSelezionato);
                 }
-            } else {
+            } else if (vistaCorrente == StatoVista.SCONTI) {
                 List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2);
                 tabellaLotti.setItems(FXCollections.observableArrayList(lottiInScadenza));
+            } else if (vistaCorrente == StatoVista.DA_PREZZARE) {
+                List<LottoBean> lottiDaPrezzare = appController.getLottiDaPrezzare();
+                tabellaLotti.setItems(FXCollections.observableArrayList(lottiDaPrezzare));
             }
 
         } catch (NumberFormatException _) {
@@ -250,46 +269,91 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     @FXML
     public void toggleVistaAction() {
         messaggioLabel.setVisible(false);
-        
-        if (!isVistaScontiAttiva) {
-            // Passa alla vista "Prodotti da scontare"
-            try {
-                List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2); // 48 ore di preavviso
-                if (lottiInScadenza.isEmpty()) {
-                    mostraSuccesso("Nessun prodotto in scadenza nelle prossime 48 ore.");
-                } else {
-                    mostraSuccesso("Trovati " + lottiInScadenza.size() + " lotti da scontare.");
-                }
-                
-                // Popoliamo la tabella dei lotti
-                ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lottiInScadenza);
-                tabellaLotti.setItems(observableList);
-                
-                sezioneSuperiore.setVisible(false);
-                sezioneSuperiore.setManaged(false);
-                btnToggleVista.setText("Vista classica");
-                
-                // Deselezioniamo il prodotto corrente per indicare che stiamo vedendo una vista globale
-                tabellaProdotti.getSelectionModel().clearSelection();
-                prodottoSelezionatoField.clear();
-                nuovaCategoriaComboBox.setValue(null);
-                
-                pulisciFormLotto();
-                
-                isVistaScontiAttiva = true;
-                
-            } catch (Exception e) {
-                mostraErrore("Errore durante il recupero dei lotti: " + e.getMessage());
-            }
+        if (vistaCorrente == StatoVista.SCONTI) {
+            impostaVistaClassica();
         } else {
-            // Ritorna alla vista classica
-            sezioneSuperiore.setVisible(true);
-            sezioneSuperiore.setManaged(true);
-            btnToggleVista.setText("Prodotti da scontare");
-            isVistaScontiAttiva = false;
-            
+            impostaVistaSconti();
+        }
+    }
+
+    @FXML
+    public void vistaDaPrezzareAction() {
+        messaggioLabel.setVisible(false);
+        if (vistaCorrente == StatoVista.DA_PREZZARE) {
+            impostaVistaClassica();
+        } else {
+            impostaVistaDaPrezzare();
+        }
+    }
+
+    private void impostaVistaClassica() {
+        sezioneSuperiore.setVisible(true);
+        sezioneSuperiore.setManaged(true);
+        btnToggleVista.setText("Prodotti da scontare");
+        if (btnDaPrezzare != null) btnDaPrezzare.setText("Prodotti da prezzare");
+        vistaCorrente = StatoVista.CLASSICA;
+
+        pulisciFormLotto();
+        caricaCatalogo();
+    }
+
+    private void impostaVistaSconti() {
+        try {
+            List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2); // 48 ore di preavviso
+            if (lottiInScadenza.isEmpty()) {
+                mostraSuccesso("Nessun prodotto in scadenza nelle prossime 48 ore.");
+            } else {
+                mostraSuccesso("Trovati " + lottiInScadenza.size() + " lotti da scontare.");
+            }
+
+            // Popoliamo la tabella dei lotti
+            ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lottiInScadenza);
+            tabellaLotti.setItems(observableList);
+
+            sezioneSuperiore.setVisible(false);
+            sezioneSuperiore.setManaged(false);
+            btnToggleVista.setText("Vista classica");
+            if (btnDaPrezzare != null) btnDaPrezzare.setText("Prodotti da prezzare");
+
+            // Deselezioniamo il prodotto corrente per indicare che stiamo vedendo una vista globale
+            tabellaProdotti.getSelectionModel().clearSelection();
+            prodottoSelezionatoField.clear();
+            nuovaCategoriaComboBox.setValue(null);
+
             pulisciFormLotto();
-            caricaCatalogo();
+            vistaCorrente = StatoVista.SCONTI;
+
+        } catch (Exception e) {
+            mostraErrore("Errore durante il recupero dei lotti: " + e.getMessage());
+        }
+    }
+
+    private void impostaVistaDaPrezzare() {
+        try {
+            List<LottoBean> lottiDaPrezzare = appController.getLottiDaPrezzare();
+            if (lottiDaPrezzare.isEmpty()) {
+                mostraSuccesso("Nessun prodotto da prezzare al momento.");
+            } else {
+                mostraSuccesso("Trovati " + lottiDaPrezzare.size() + " lotti da prezzare.");
+            }
+
+            ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lottiDaPrezzare);
+            tabellaLotti.setItems(observableList);
+
+            sezioneSuperiore.setVisible(false);
+            sezioneSuperiore.setManaged(false);
+            if (btnDaPrezzare != null) btnDaPrezzare.setText("Vista classica");
+            btnToggleVista.setText("Prodotti da scontare");
+
+            tabellaProdotti.getSelectionModel().clearSelection();
+            prodottoSelezionatoField.clear();
+            nuovaCategoriaComboBox.setValue(null);
+
+            pulisciFormLotto();
+            vistaCorrente = StatoVista.DA_PREZZARE;
+
+        } catch (Exception e) {
+            mostraErrore("Errore durante il recupero dei lotti da prezzare: " + e.getMessage());
         }
     }
 

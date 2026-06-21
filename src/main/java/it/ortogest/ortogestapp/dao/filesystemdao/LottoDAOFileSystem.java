@@ -53,6 +53,10 @@ public class LottoDAOFileSystem implements ILottoDAO {
                     double prezzoVendita = Double.parseDouble(values[7]);
                     boolean scontoAttivo = Boolean.parseBoolean(values[8]);
                     double prezzoScontato = Double.parseDouble(values[9]);
+                    boolean smaltito = false;
+                    if (values.length >= 11) {
+                        smaltito = Boolean.parseBoolean(values[10]);
+                    }
 
                     Prodotto prodotto = DAOFactory.getInstance().getProdottoDAO().trovaPerNome(nomeProdotto);
 
@@ -67,6 +71,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
                             .prezzoVendita(prezzoVendita)
                             .scontoScadenzaAttivo(scontoAttivo)
                             .prezzoScontato(prezzoScontato)
+                            .smaltito(smaltito)
                             .build();
 
                     lotti.add(lotto);
@@ -81,7 +86,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
     private void scriviTutti(List<Lotto> lotti) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_PATH))) {
             pw.println(
-                    "idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato");
+                    "idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato,smaltito");
             for (Lotto l : lotti) {
                 String pName = l.getTipologiaProdotto() != null ? l.getTipologiaProdotto().getNome() : "";
                 pw.println(l.getIdLotto() + "," +
@@ -93,7 +98,8 @@ public class LottoDAOFileSystem implements ILottoDAO {
                         l.getCostoAcquisto() + "," +
                         l.getPrezzoVendita() + "," +
                         l.isScontoScadenzaAttivo() + "," +
-                        l.getPrezzoScontato());
+                        l.getPrezzoScontato() + "," +
+                        l.isSmaltito());
             }
         } catch (IOException e) {
             it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());

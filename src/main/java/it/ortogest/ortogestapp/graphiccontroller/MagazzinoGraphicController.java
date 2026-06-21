@@ -106,6 +106,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         dialog.setTitle("Gestione Lotti");
         dialog.setHeaderText("Lotti registrati per: " + nomeProdotto);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.getDialogPane().setPrefWidth(600);
 
         TableView<LottoBean> table = new TableView<>();
         ObservableList<LottoBean> data = FXCollections
@@ -114,21 +115,27 @@ public class MagazzinoGraphicController extends BaseGraphicController {
 
         TableColumn<LottoBean, String> colId = new TableColumn<>("ID");
         colId.setCellValueFactory(new PropertyValueFactory<>("idLotto"));
+        colId.setPrefWidth(80);
 
         TableColumn<LottoBean, String> colFornitore = new TableColumn<>("Fornitore");
         colFornitore.setCellValueFactory(new PropertyValueFactory<>("nomeFornitore"));
+        colFornitore.setPrefWidth(120);
 
         TableColumn<LottoBean, Double> colQuantita = new TableColumn<>("Quantità (Kg)");
         colQuantita.setCellValueFactory(new PropertyValueFactory<>("quantitaKg"));
+        colQuantita.setPrefWidth(100);
 
         TableColumn<LottoBean, LocalDate> colArrivo = new TableColumn<>("Arrivo");
         colArrivo.setCellValueFactory(new PropertyValueFactory<>("dataArrivo"));
+        colArrivo.setPrefWidth(100);
 
         TableColumn<LottoBean, LocalDate> colScadenza = new TableColumn<>("Scadenza");
         colScadenza.setCellValueFactory(new PropertyValueFactory<>("dataScadenza"));
+        colScadenza.setPrefWidth(100);
 
         TableColumn<LottoBean, Double> colCosto = new TableColumn<>("Costo Acquisto");
         colCosto.setCellValueFactory(new PropertyValueFactory<>("costoAcquisto"));
+        colCosto.setPrefWidth(100);
 
         table.getColumns().add(colId);
         table.getColumns().add(colFornitore);
@@ -242,5 +249,76 @@ public class MagazzinoGraphicController extends BaseGraphicController {
     public void registraLottoAction() {
         cambiaScenaSicuro(CostantiGUI.VIEW_REGISTRAZIONE_LOTTO,
                 "Errore nell'apertura della schermata di registrazione lotto:");
+    }
+
+    @FXML
+    public void apriDaSmaltireAction() {
+        GestioneMagazzinoAppController controller = new GestioneMagazzinoAppController();
+        List<LottoBean> lottiDaSmaltire = controller.getLottiDaSmaltire();
+
+        if (lottiDaSmaltire.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "Non ci sono lotti da smaltire al momento.").showAndWait();
+            return;
+        }
+
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Lotti da Smaltire");
+        dialog.setHeaderText("Questi lotti sono scaduti e vanno smaltiti fisicamente.");
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.getDialogPane().setPrefWidth(600);
+
+        TableView<LottoBean> table = new TableView<>();
+        ObservableList<LottoBean> data = FXCollections.observableArrayList(lottiDaSmaltire);
+        table.setItems(data);
+
+        TableColumn<LottoBean, String> colId = new TableColumn<>("ID");
+        colId.setCellValueFactory(new PropertyValueFactory<>("idLotto"));
+        colId.setPrefWidth(80);
+
+        TableColumn<LottoBean, String> colProdotto = new TableColumn<>("Prodotto");
+        colProdotto.setCellValueFactory(new PropertyValueFactory<>("nomeProdotto"));
+        colProdotto.setPrefWidth(200);
+
+        TableColumn<LottoBean, Double> colQuantita = new TableColumn<>("Quantità (Kg)");
+        colQuantita.setCellValueFactory(new PropertyValueFactory<>("quantitaKg"));
+        colQuantita.setPrefWidth(120);
+
+        TableColumn<LottoBean, LocalDate> colScadenza = new TableColumn<>("Scadenza");
+        colScadenza.setCellValueFactory(new PropertyValueFactory<>("dataScadenza"));
+        colScadenza.setPrefWidth(130);
+
+        table.getColumns().add(colId);
+        table.getColumns().add(colProdotto);
+        table.getColumns().add(colQuantita);
+        table.getColumns().add(colScadenza);
+
+        Button btnSmaltisci = new Button("Smaltisci Selezionato");
+        btnSmaltisci.setStyle("-fx-background-color: #8e44ad; -fx-text-fill: white;");
+        btnSmaltisci.setOnAction(e -> {
+            LottoBean selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                try {
+                    controller.smaltisciLotto(selected.getIdLotto());
+                    data.remove(selected);
+                    table.refresh();
+                    caricaInventario(); // Aggiorna la vista dietro
+                    Printer.printf("Lotto smaltito con successo.");
+
+                    if (data.isEmpty()) {
+                        dialog.setResult(null);
+                        dialog.close();
+                    }
+                } catch (GestioneException ex) {
+                    new Alert(Alert.AlertType.ERROR, "Errore durante lo smaltimento: " + ex.getMessage()).showAndWait();
+                }
+            } else {
+                new Alert(Alert.AlertType.WARNING, "Seleziona prima un lotto dalla tabella.").showAndWait();
+            }
+        });
+
+        VBox vbox = new VBox(10, table, btnSmaltisci);
+        vbox.setPadding(new Insets(10));
+        dialog.getDialogPane().setContent(vbox);
+        dialog.showAndWait();
     }
 }

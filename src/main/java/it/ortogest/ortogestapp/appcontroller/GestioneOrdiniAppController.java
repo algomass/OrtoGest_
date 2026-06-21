@@ -58,9 +58,6 @@ public class GestioneOrdiniAppController {
     }
 
     private ProdottoBean elaboraProdottoRiepilogo(Prodotto p) {
-        if (p.getQuantitaTotaleDisponibile() <= 0)
-            return null;
-
         List<Lotto> lotti = lottoDAO.trovaPerProdotto(p.getNome());
 
         double minPrice = Double.MAX_VALUE;
@@ -80,7 +77,7 @@ public class GestioneOrdiniAppController {
             }
         }
 
-        if (!hasValidLots)
+        if (!hasValidLots || validGiacenza <= 0)
             return null;
 
         ProdottoBean bean = new ProdottoBean(
@@ -96,7 +93,7 @@ public class GestioneOrdiniAppController {
     }
 
     private boolean isLottoValido(Lotto l) {
-        return l.getQuantitaKg() > 0 && l.getPrezzoVendita() > 0;
+        return l.getStato() == it.ortogest.ortogestapp.model.StatoLotto.ATTIVO && l.getPrezzoVendita() > 0;
     }
 
     private double getPrezzoEffettivo(Lotto l) {
