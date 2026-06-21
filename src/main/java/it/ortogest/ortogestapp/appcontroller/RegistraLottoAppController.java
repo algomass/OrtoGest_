@@ -17,21 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Application Controller per la gestione delle operazioni di Magazzino.
- * Coordinerà l'inserimento dei lotti e le segnalazioni di anomalie.
+ * Use Case Controller per la registrazione e gestione dei lotti nel Magazzino.
+ * Assorbe anche il caso d'uso secondario di "Notifica merce anomala".
  */
-public class GestioneMagazzinoAppController {
+public class RegistraLottoAppController {
 
-    // Utilizziamo l'interfaccia Adapter per l'invio delle email
     private EmailTarget emailAdapter;
     private ILottoDAO lottoDAO;
     private IProdottoDAO prodottoDAO;
 
     private static final String EMAIL_FORNITORE_DEFAULT = "assistenza@fornitore-ortofrutta.it";
 
-    public GestioneMagazzinoAppController() {
-        // In futuro potremmo usare la Dependency Injection (es. tramite un Factory)
-        // per instanziare il servizio reale. Per ora usiamo l'Adapter reale.
+    public RegistraLottoAppController() {
         this.emailAdapter = new ApacheCommonsEmailAdapter();
         this.lottoDAO = DAOFactory.getInstance().getLottoDAO();
         this.prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
@@ -41,7 +38,6 @@ public class GestioneMagazzinoAppController {
         List<Prodotto> prodotti = prodottoDAO.getTuttiIProdotti();
         List<ProdottoBean> beans = new ArrayList<>();
         for (Prodotto p : prodotti) {
-            // Mostra solo i prodotti che hanno almeno un lotto registrato
             List<Lotto> lotti = lottoDAO.trovaPerProdotto(p.getNome());
             if (!lotti.isEmpty()) {
                 ProdottoBean bean = new ProdottoBean(p.getNome(), p.getPrezzoAttuale(),
@@ -81,19 +77,7 @@ public class GestioneMagazzinoAppController {
         return beans;
     }
 
-    /**
-     * Segnala un'anomalia di fornitura (merce mancante o danneggiata) e invia una
-     * mail al fornitore.
-     * 
-     * @param anomaliaBean I dati inseriti dalla vista.
-     * @return Messaggio di conferma o errore.
-     */
     public String inoltraSegnalazione(AnomaliaBean anomaliaBean) {
-
-        // Costruire il messaggio dell'email
-        // Nella realtà, l'email del fornitore verrebbe recuperata dal DB tramite il
-        // FornitoreDAO
-        // associato a quel lotto/prodotto. Per ora simuliamo.
         String emailFornitore = EMAIL_FORNITORE_DEFAULT;
         String oggetto = "Segnalazione Anomalia: Merce " + anomaliaBean.getTipoAnomalia();
 
@@ -112,7 +96,6 @@ public class GestioneMagazzinoAppController {
                 anomaliaBean.getQuantita(),
                 anomaliaBean.getNote());
 
-        // 3. Inviare l'email tramite l'Adapter
         boolean successo = emailAdapter.inviaEmail(emailFornitore, oggetto, corpo);
 
         if (successo) {
@@ -123,7 +106,6 @@ public class GestioneMagazzinoAppController {
     }
 
     public LottoBean registraLotto(LottoBean bean) throws GestioneException {
-        // 1. Validazione base
         if (bean.getIdLotto() == null || bean.getIdLotto().trim().isEmpty()) {
             throw new GestioneException("L'ID del Lotto non può essere vuoto.");
         }
@@ -137,23 +119,18 @@ public class GestioneMagazzinoAppController {
             throw new GestioneException("La data di scadenza non può essere precedente alla data di arrivo.");
         }
 
-        // 2. Controllo duplicato del lotto
         if (lottoDAO.trovaPerId(bean.getIdLotto()) != null) {
             throw new GestioneException("Esiste già un lotto registrato con ID: " + bean.getIdLotto());
         }
 
-        // 3. Ricerca del prodotto
         Prodotto prodotto = prodottoDAO.trovaPerNome(bean.getNomeProdotto());
 
         if (prodotto == null) {
-            // Creiamo un nuovo prodotto dinamicamente se non esiste
-            // Categoria di default FRUTTA - il responsabile potrà modificarla in seguito
             prodotto = new Prodotto(bean.getNomeProdotto(), 0.0, 0.0, CategoriaProdotto.FRUTTA,
                     "/images/placeholder.png");
             prodottoDAO.salvaProdotto(prodotto);
         }
 
-        // 4. Creazione dell'Entità Lotto
         Lotto lotto = Lotto.builder()
                 .idLotto(bean.getIdLotto())
                 .nomeFornitore(bean.getNomeFornitore())
@@ -164,14 +141,10 @@ public class GestioneMagazzinoAppController {
                 .costoAcquisto(bean.getCostoAcquisto())
                 .build();
 
-        // 5. Aggiornamento Giacenza Prodotto
         prodotto.aggiungiGiacenza(lotto.getQuantitaKg());
-        prodottoDAO.salvaProdotto(prodotto); // Salvataggio aggiornamento prodotto
-
-        // 6. Salvataggio Lotto
+        prodottoDAO.salvaProdotto(prodotto);
         lottoDAO.salvaLotto(lotto);
 
-        // 7. Ritorno Bean per conferma
         return bean;
     }
 
@@ -182,14 +155,11 @@ public class GestioneMagazzinoAppController {
         }
 
         Prodotto prodotto = lotto.getTipologiaProdotto();
-
-        // Verifica se è l'ultimo lotto per questo prodotto
         List<Lotto> lottiEsistenti = lottoDAO.trovaPerProdotto(prodotto.getNome());
         boolean isUltimoLotto = (lottiEsistenti.size() == 1 && lottiEsistenti.get(0).getIdLotto().equals(idLotto));
 
         lottoDAO.eliminaLotto(idLotto);
 
-        // Sottrai sempre la quantità, assicurandoti che non diventi negativa
         prodotto.sottraiGiacenza(lotto.getQuantitaKg());
         if (prodotto.getQuantitaTotaleDisponibile() < 0) {
             prodotto.setQuantitaTotaleDisponibile(0);
@@ -197,7 +167,6 @@ public class GestioneMagazzinoAppController {
         prodottoDAO.salvaProdotto(prodotto);
 
         if (isUltimoLotto) {
-            // Elimina il prodotto dalla tabella principale se era l'ultimo lotto
             prodottoDAO.eliminaProdotto(prodotto.getNome());
         }
     }
@@ -209,11 +178,9 @@ public class GestioneMagazzinoAppController {
         }
 
         double diff = beanNuovo.getQuantitaKg() - lottoVecchio.getQuantitaKg();
-
         Prodotto prodotto = lottoVecchio.getTipologiaProdotto();
         prodotto.aggiungiGiacenza(diff);
 
-        // Evita che la giacenza diventi negativa
         if (prodotto.getQuantitaTotaleDisponibile() < 0) {
             prodotto.setQuantitaTotaleDisponibile(0);
         }
@@ -228,10 +195,6 @@ public class GestioneMagazzinoAppController {
         lottoDAO.salvaLotto(lottoVecchio);
     }
 
-    /**
-     * Recupera i lotti che sono scaduti e hanno ancora giacenza, quindi
-     * necessitano di smaltimento fisico.
-     */
     public List<LottoBean> getLottiDaSmaltire() {
         List<Lotto> tuttiLotti = lottoDAO.getTuttiILotti();
         List<LottoBean> beans = new ArrayList<>();
@@ -251,10 +214,6 @@ public class GestioneMagazzinoAppController {
         return beans;
     }
 
-    /**
-     * Effettua lo smaltimento logico di un lotto: sottrae la sua giacenza
-     * rimanente dal totale del prodotto e lo marca come SMALTITO.
-     */
     public void smaltisciLotto(String idLotto) throws GestioneException {
         Lotto lotto = lottoDAO.trovaPerId(idLotto);
         if (lotto == null) {
@@ -266,14 +225,12 @@ public class GestioneMagazzinoAppController {
 
         Prodotto prodotto = lotto.getTipologiaProdotto();
         
-        // Sottraiamo la giacenza in scadenza dal totale del prodotto
         prodotto.sottraiGiacenza(lotto.getQuantitaKg());
         if (prodotto.getQuantitaTotaleDisponibile() < 0) {
             prodotto.setQuantitaTotaleDisponibile(0);
         }
         prodottoDAO.salvaProdotto(prodotto);
 
-        // Marchiamo come smaltito (la giacenza del lotto rimane invariata per storico, ma è smaltito)
         lotto.setSmaltito(true);
         lottoDAO.salvaLotto(lotto);
     }

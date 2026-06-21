@@ -3,17 +3,17 @@ package it.ortogest.ortogestapp.graphiccontrollercli;
 import java.util.List;
 import java.util.Scanner;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneOrdiniAppController;
+import it.ortogest.ortogestapp.appcontroller.RegistraVenditaAppController;
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SessionManager;
 
 public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
 
-    private final GestioneOrdiniAppController appController;
+    private final RegistraVenditaAppController appController;
 
     public OperatoreGraphicControllerCLI() {
-        this.appController = new GestioneOrdiniAppController();
+        this.appController = new RegistraVenditaAppController();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
 
     private void confermaEmettiScontrino(OrdineBean ordineDaEvadere) {
         try {
-            appController.aggiornaStatoOrdine(ordineDaEvadere.getIdOrdine(), "Ritirato");
+            appController.registraVendita(ordineDaEvadere.getIdOrdine());
             Printer.print("\n**************************************");
             Printer.print("         SCONTRINO EMESSO             ");
             Printer.print(" Ordine: " + ordineDaEvadere.getIdOrdine());
@@ -121,9 +121,6 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
     }
 
     private List<OrdineBean> getOrdiniPronti() {
-        List<OrdineBean> tuttiOrdini = appController.getTuttiOrdini();
-        return tuttiOrdini.stream()
-                .filter(o -> "Pronto per il Ritiro".equals(o.getStato()))
-                .toList();
+        return appController.getOrdiniProntiPerRitiro();
     }
 }

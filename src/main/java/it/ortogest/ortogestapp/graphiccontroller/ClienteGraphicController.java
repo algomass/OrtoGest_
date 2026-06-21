@@ -1,6 +1,6 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneOrdiniAppController;
+import it.ortogest.ortogestapp.appcontroller.CreaOrdineAppController;
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.beans.RigaOrdineBean;
@@ -85,7 +85,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     @FXML
     private Button btnSvuotaCarrello;
 
-    private GestioneOrdiniAppController appController;
+    private CreaOrdineAppController appController;
 
     // Lista locale per gestire il carrello prima dell'invio finale
     private List<RigaOrdineBean> carrello = new ArrayList<>();
@@ -96,7 +96,7 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void initialize() {
-        appController = new GestioneOrdiniAppController();
+        appController = new CreaOrdineAppController();
 
         // Recupera il carrello dalla sessione se presente (es. ritorno da riepilogo)
         List<RigaOrdineBean> cartInSession = SessionManager.getInstance().getCarrelloCorrente();

@@ -3,7 +3,8 @@ package it.ortogest.ortogestapp.graphiccontrollercli;
 import java.util.List;
 import java.util.Scanner;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneCatalogoAppController;
+import it.ortogest.ortogestapp.appcontroller.AggiungiLottoAppController;
+import it.ortogest.ortogestapp.appcontroller.ModificaPrezzoLottoAppController;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.exception.GestioneException;
@@ -16,10 +17,12 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
     private static final String MSG_NUM_NON_VALIDO = "Numero non valido.";
     private static final String MSG_ERRORE = "[ERRORE] ";
 
-    private final GestioneCatalogoAppController appController;
+    private final AggiungiLottoAppController aggiungiLottoController;
+    private final ModificaPrezzoLottoAppController modificaPrezzoController;
 
     public ResponsabileGraphicControllerCLI() {
-        this.appController = new GestioneCatalogoAppController();
+        this.aggiungiLottoController = new AggiungiLottoAppController();
+        this.modificaPrezzoController = new ModificaPrezzoLottoAppController();
     }
 
     @Override
@@ -71,7 +74,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
 
     private List<ProdottoBean> visualizzaCatalogo() {
         Printer.print("\n--- Catalogo Completo ---");
-        List<ProdottoBean> catalogo = appController.getTuttiIProdotti();
+        List<ProdottoBean> catalogo = aggiungiLottoController.getTuttiIProdotti();
 
         if (catalogo.isEmpty()) {
             Printer.print("Il catalogo è vuoto.");
@@ -106,7 +109,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             }
             String nomeProdotto = catalogo.get(numProd - 1).getNome();
 
-            List<LottoBean> lotti = appController.getLottiPerProdotto(nomeProdotto);
+            List<LottoBean> lotti = modificaPrezzoController.getLottiPerProdotto(nomeProdotto);
 
             if (lotti.isEmpty()) {
                 Printer.perror("Nessun lotto trovato per questo prodotto.");
@@ -142,7 +145,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             // Il bean viene usato come trasportatore dei dati modificati
             lottoScelto.setPrezzoVendita(nuovoPrezzo);
 
-            appController.aggiornaPrezzoLotto(lottoScelto);
+            modificaPrezzoController.aggiornaPrezzoLotto(lottoScelto);
             Printer.print("[SUCCESS] Prezzo aggiornato correttamente.");
 
         } catch (NumberFormatException _) {
@@ -155,7 +158,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
     private void applicaScontiScadenza(Scanner scanner) {
         Printer.print("\n--- Analisi Lotti in Scadenza (entro 48h) ---");
         // Passiamo 2 giorni (48 ore) come da requisiti (FR-5)
-        List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2);
+        List<LottoBean> lottiInScadenza = modificaPrezzoController.getLottiInScadenza(2);
 
         if (lottiInScadenza.isEmpty()) {
             Printer.print("Nessun lotto in scadenza sprovvisto di sconto.");
@@ -190,7 +193,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             l.setScontoScadenzaAttivo(true);
             l.setPrezzoScontato(prezzoScontato);
 
-            appController.aggiornaPrezzoLotto(l);
+            modificaPrezzoController.aggiornaPrezzoLotto(l);
             Printer.print("[SUCCESS] Sconto applicato per il lotto " + l.getIdLotto());
 
         } catch (NumberFormatException _) {
@@ -235,7 +238,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             ProdottoBean bean = new ProdottoBean(nomeProdotto, 0, 0, null, null);
             bean.setCategoria(nuovaCategoria);
 
-            appController.aggiornaCategoriaProdotto(bean);
+            aggiungiLottoController.aggiornaCategoriaProdotto(bean);
             Printer.print("[SUCCESS] Categoria aggiornata per " + nomeProdotto);
         } catch (NumberFormatException _) {
             Printer.perror("Formato numerico non valido.");
@@ -246,7 +249,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
 
     private void visualizzaDaPrezzare(Scanner scanner) {
         Printer.print("\n--- Lotti da Prezzare ---");
-        List<LottoBean> lottiDaPrezzare = appController.getLottiDaPrezzare();
+        List<LottoBean> lottiDaPrezzare = aggiungiLottoController.getLottiDaPrezzare();
 
         if (lottiDaPrezzare.isEmpty()) {
             Printer.print("Nessun lotto da prezzare.");

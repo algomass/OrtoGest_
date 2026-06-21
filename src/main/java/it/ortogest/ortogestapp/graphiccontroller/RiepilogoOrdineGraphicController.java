@@ -1,6 +1,6 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneOrdiniAppController;
+import it.ortogest.ortogestapp.appcontroller.CreaOrdineAppController;
 import it.ortogest.ortogestapp.beans.RigaOrdineBean;
 import it.ortogest.ortogestapp.beans.UtenteBean;
 import it.ortogest.ortogestapp.utils.Printer;
@@ -40,11 +40,11 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
     private Label statusLabel;
 
     private List<RigaOrdineBean> carrello;
-    private GestioneOrdiniAppController appController;
+    private CreaOrdineAppController appController;
 
     @FXML
     public void initialize() {
-        appController = new GestioneOrdiniAppController();
+        appController = new CreaOrdineAppController();
         carrello = SessionManager.getInstance().getCarrelloCorrente();
 
         if (carrello == null || carrello.isEmpty()) {

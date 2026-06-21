@@ -1,6 +1,6 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneOrdiniAppController;
+import it.ortogest.ortogestapp.appcontroller.RegistraVenditaAppController;
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -23,14 +23,14 @@ public class CassaGraphicController extends BaseGraphicController {
     @FXML private Label totaleLabel;
     @FXML private Button btnEmettiScontrino;
 
-    private GestioneOrdiniAppController appController;
+    private RegistraVenditaAppController appController;
     
     // Memorizza l'ordine online correntemente in fase di pagamento
     private OrdineBean ordineInPagamento = null;
 
     @FXML
     public void initialize() {
-        appController = new GestioneOrdiniAppController();
+        appController = new RegistraVenditaAppController();
 
         if (colIdOrdine != null) {
             colIdOrdine.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrdine()));
@@ -42,11 +42,7 @@ public class CassaGraphicController extends BaseGraphicController {
     }
 
     private void caricaOrdiniPronti() {
-        List<OrdineBean> tuttiOrdini = appController.getTuttiOrdini();
-        // Filtra solo quelli pronti per il ritiro
-        List<OrdineBean> pronti = tuttiOrdini.stream()
-                .filter(o -> "Pronto per il Ritiro".equals(o.getStato()))
-                .toList();
+        List<OrdineBean> pronti = appController.getOrdiniProntiPerRitiro();
                 
         ObservableList<OrdineBean> data = FXCollections.observableArrayList(pronti);
         ordiniTable.setItems(data);
@@ -73,7 +69,7 @@ public class CassaGraphicController extends BaseGraphicController {
         if (ordineInPagamento != null) {
             try {
                 // L'operatore fa pagare il cliente e l'ordine passa a "Ritirato"
-                appController.aggiornaStatoOrdine(ordineInPagamento.getIdOrdine(), "Ritirato");
+                appController.registraVendita(ordineInPagamento.getIdOrdine());
                 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Pagamento completato. L'ordine #" + ordineInPagamento.getIdOrdine() + " è ora Ritirato.", ButtonType.OK);
                 alert.setHeaderText("Transazione Eseguita");

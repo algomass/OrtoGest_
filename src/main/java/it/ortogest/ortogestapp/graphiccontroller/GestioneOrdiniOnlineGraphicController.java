@@ -1,6 +1,6 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneOrdiniAppController;
+import it.ortogest.ortogestapp.appcontroller.CreaOrdineAppController;
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -32,11 +32,11 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
     @FXML private Label messaggioLabel;
     @FXML private Button btnSegnaPronto;
 
-    private GestioneOrdiniAppController appController;
+    private CreaOrdineAppController appController;
 
     @FXML
     public void initialize() {
-        appController = new GestioneOrdiniAppController();
+        appController = new CreaOrdineAppController();
 
         colIdOrdine.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrdine()));
         colCliente.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmailCliente()));

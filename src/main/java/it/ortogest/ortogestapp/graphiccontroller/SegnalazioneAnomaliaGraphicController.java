@@ -1,6 +1,6 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
+import it.ortogest.ortogestapp.appcontroller.RegistraLottoAppController;
 import it.ortogest.ortogestapp.beans.AnomaliaBean;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.CostantiGUI;
@@ -65,7 +65,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
 
         // 2. Creazione Bean e comunicazione con l'Application Controller
         AnomaliaBean anomaliaBean = new AnomaliaBean(tipo, prodotto, quantita, note);
-        GestioneMagazzinoAppController appController = new GestioneMagazzinoAppController();
+        RegistraLottoAppController appController = new RegistraLottoAppController();
 
         String messaggioRisultato = appController.inoltraSegnalazione(anomaliaBean);
 

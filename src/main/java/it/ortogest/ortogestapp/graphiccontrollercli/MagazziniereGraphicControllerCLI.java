@@ -6,7 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
+import it.ortogest.ortogestapp.appcontroller.RegistraLottoAppController;
 import it.ortogest.ortogestapp.beans.AnomaliaBean;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
@@ -18,11 +18,11 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
 
     private static final String MSG_INVIO_MANTENERE = ") [Invio per mantenere]: ";
 
-    private final GestioneMagazzinoAppController appController;
+    private final RegistraLottoAppController appController;
     private final DateTimeFormatter dateFormatter;
 
     public MagazziniereGraphicControllerCLI() {
-        this.appController = new GestioneMagazzinoAppController();
+        this.appController = new RegistraLottoAppController();
         this.dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     }
 

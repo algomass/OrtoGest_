@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Application Controller per la gestione degli Ordini (lato Cliente).
+ * Use Case Controller per la creazione e gestione degli ordini (Cliente e Responsabile).
  */
-public class GestioneOrdiniAppController {
+public class CreaOrdineAppController {
 
     private IProdottoDAO prodottoDAO;
     private IOrdineDAO ordineDAO;
     private ILottoDAO lottoDAO;
 
-    public GestioneOrdiniAppController() {
+    public CreaOrdineAppController() {
         this.prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
         this.ordineDAO = DAOFactory.getInstance().getOrdineDAO();
         this.lottoDAO = DAOFactory.getInstance().getLottoDAO();
@@ -112,15 +112,6 @@ public class GestioneOrdiniAppController {
         return lottiValidi;
     }
 
-    /**
-     * Crea un nuovo ordine a partire da una lista di prodotti nel carrello.
-     * 
-     * @param emailCliente L'email del cliente che effettua l'ordine.
-     * @param carrello     La lista di prodotti e quantità selezionate.
-     * @return Messaggio di conferma con l'ID dell'ordine.
-     * @throws GestioneException Se un prodotto non è trovato o la giacenza è
-     *                           insufficiente.
-     */
     public String creaOrdine(String emailCliente, List<it.ortogest.ortogestapp.beans.RigaOrdineBean> carrello)
             throws GestioneException {
         if (carrello == null || carrello.isEmpty()) {
@@ -129,7 +120,6 @@ public class GestioneOrdiniAppController {
 
         List<it.ortogest.ortogestapp.model.RigaOrdine> righeModello = new ArrayList<>();
 
-        // Validazione preliminare di tutti i prodotti e giacenze
         for (it.ortogest.ortogestapp.beans.RigaOrdineBean rigaBean : carrello) {
             Prodotto p = prodottoDAO.trovaPerNome(rigaBean.getNomeProdotto());
             if (p == null) {
@@ -138,7 +128,6 @@ public class GestioneOrdiniAppController {
             if (p.getQuantitaTotaleDisponibile() < rigaBean.getQuantita()) {
                 throw new GestioneException("Giacenza insufficiente per: " + rigaBean.getNomeProdotto());
             }
-            // Creiamo la riga per il modello di dominio, passando anche idLotto
             righeModello.add(new it.ortogest.ortogestapp.model.RigaOrdine(
                     p.getNome(),
                     rigaBean.getIdLotto(),
@@ -146,29 +135,22 @@ public class GestioneOrdiniAppController {
                     rigaBean.getPrezzoUnitario()));
         }
 
-        // Simula la creazione dell'ID univoco
         String idOrdine = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
 
-        // Creazione ordine
         Ordine nuovoOrdine = new Ordine(idOrdine, emailCliente, righeModello, "Inviato");
 
-        // Salviamo nel DB
         ordineDAO.salvaOrdine(nuovoOrdine);
 
-        // Scaliamo le giacenze per ogni prodotto nell'ordine applicando il FEFO sui
-        // lotti
         for (it.ortogest.ortogestapp.model.RigaOrdine riga : righeModello) {
             Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
             p.sottraiGiacenza(riga.getQuantita());
             prodottoDAO.salvaProdotto(p);
 
-            // Scaliamo dal lotto esatto
             Lotto l = lottoDAO.trovaPerId(riga.getIdLotto());
             if (l != null && l.getQuantitaKg() >= riga.getQuantita()) {
                 l.setQuantitaKg(l.getQuantitaKg() - riga.getQuantita());
                 lottoDAO.salvaLotto(l);
             } else {
-                // Se non c'è abbastanza quantità o non esiste, è un problema di concorrenza
                 throw new GestioneException(
                         "Quantità non disponibile nel lotto selezionato per: " + riga.getNomeProdotto());
             }
@@ -201,18 +183,13 @@ public class GestioneOrdiniAppController {
             throw new GestioneException("l'ordine è in attesa di ritiro dunque non può essere annullato");
         }
 
-        // Se l'ordine è "Ritirato", lo eliminiamo (dallo storico del cliente) ma NON
-        // ripristiniamo le giacenze.
         if (!"Ritirato".equals(ordine.getStato())) {
-            // Ripristina le giacenze dei prodotti e dei lotti solo se non è ancora stato
-            // ritirato
             for (it.ortogest.ortogestapp.model.RigaOrdine riga : ordine.getRighe()) {
                 Prodotto p = prodottoDAO.trovaPerNome(riga.getNomeProdotto());
                 if (p != null) {
                     p.aggiungiGiacenza(riga.getQuantita());
                     prodottoDAO.salvaProdotto(p);
 
-                    // Ripristiniamo la giacenza nel lotto d'origine
                     Lotto l = lottoDAO.trovaPerId(riga.getIdLotto());
                     if (l != null) {
                         l.setQuantitaKg(l.getQuantitaKg() + riga.getQuantita());
@@ -222,7 +199,6 @@ public class GestioneOrdiniAppController {
             }
         }
 
-        // Elimina l'ordine (e le righe associate) dal database
         ordineDAO.eliminaOrdine(idOrdine);
     }
 

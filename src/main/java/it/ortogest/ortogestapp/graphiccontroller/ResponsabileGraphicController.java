@@ -1,6 +1,7 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneCatalogoAppController;
+import it.ortogest.ortogestapp.appcontroller.AggiungiLottoAppController;
+import it.ortogest.ortogestapp.appcontroller.ModificaPrezzoLottoAppController;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.model.CategoriaProdotto;
@@ -79,11 +80,13 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     @FXML
     private Label messaggioLabel;
 
-    private GestioneCatalogoAppController appController;
+    private AggiungiLottoAppController aggiungiLottoController;
+    private ModificaPrezzoLottoAppController modificaPrezzoController;
 
     @FXML
     public void initialize() {
-        appController = new GestioneCatalogoAppController();
+        aggiungiLottoController = new AggiungiLottoAppController();
+        modificaPrezzoController = new ModificaPrezzoLottoAppController();
 
         // Coloriamo di rosso i lotti "Da prezzare" (prezzo vendita 0.0)
         colPrezzoVendita.setCellFactory(column -> new TableCell<LottoBean, Double>() {
@@ -139,7 +142,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
     private void caricaCatalogo() {
         boolean includiStorico = chkMostraStorico != null && chkMostraStorico.isSelected();
-        List<ProdottoBean> prodotti = appController.getTuttiIProdotti(includiStorico);
+        List<ProdottoBean> prodotti = aggiungiLottoController.getTuttiIProdotti(includiStorico);
         ObservableList<ProdottoBean> observableList = FXCollections.observableArrayList(prodotti);
         tabellaProdotti.setItems(observableList);
 
@@ -155,7 +158,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
     private void caricaLotti(String nomeProdotto) {
         boolean includiStorico = chkMostraStorico != null && chkMostraStorico.isSelected();
-        List<LottoBean> lotti = appController.getLottiPerProdotto(nomeProdotto, includiStorico);
+        List<LottoBean> lotti = modificaPrezzoController.getLottiPerProdotto(nomeProdotto, includiStorico);
         ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lotti);
         tabellaLotti.setItems(observableList);
     }
@@ -193,7 +196,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             bean.setNome(nomeProdotto);
             bean.setCategoria(categoriaSelezionata);
 
-            appController.aggiornaCategoriaProdotto(bean);
+            aggiungiLottoController.aggiornaCategoriaProdotto(bean);
 
             mostraSuccesso("Categoria aggiornata correttamente");
             caricaCatalogo();
@@ -232,7 +235,11 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             bean.setScontoScadenzaAttivo(scontoAttivo);
             bean.setPrezzoScontato(prezzoScontato);
 
-            appController.aggiornaPrezzoLotto(bean);
+            if (vistaCorrente == StatoVista.DA_PREZZARE) {
+                aggiungiLottoController.impostaPrezzoLotto(bean);
+            } else {
+                modificaPrezzoController.aggiornaPrezzoLotto(bean);
+            }
 
             mostraSuccesso("Prezzi del lotto aggiornati correttamente");
 
@@ -243,10 +250,10 @@ public class ResponsabileGraphicController extends BaseGraphicController {
                     caricaLotti(prodSelezionato);
                 }
             } else if (vistaCorrente == StatoVista.SCONTI) {
-                List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2);
+                List<LottoBean> lottiInScadenza = modificaPrezzoController.getLottiInScadenza(2);
                 tabellaLotti.setItems(FXCollections.observableArrayList(lottiInScadenza));
             } else if (vistaCorrente == StatoVista.DA_PREZZARE) {
-                List<LottoBean> lottiDaPrezzare = appController.getLottiDaPrezzare();
+                List<LottoBean> lottiDaPrezzare = aggiungiLottoController.getLottiDaPrezzare();
                 tabellaLotti.setItems(FXCollections.observableArrayList(lottiDaPrezzare));
             }
 
@@ -299,7 +306,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
     private void impostaVistaSconti() {
         try {
-            List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2); // 48 ore di preavviso
+            List<LottoBean> lottiInScadenza = modificaPrezzoController.getLottiInScadenza(2); // 48 ore di preavviso
             if (lottiInScadenza.isEmpty()) {
                 mostraSuccesso("Nessun prodotto in scadenza nelle prossime 48 ore.");
             } else {
@@ -330,7 +337,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
     private void impostaVistaDaPrezzare() {
         try {
-            List<LottoBean> lottiDaPrezzare = appController.getLottiDaPrezzare();
+            List<LottoBean> lottiDaPrezzare = aggiungiLottoController.getLottiDaPrezzare();
             if (lottiDaPrezzare.isEmpty()) {
                 mostraSuccesso("Nessun prodotto da prezzare al momento.");
             } else {

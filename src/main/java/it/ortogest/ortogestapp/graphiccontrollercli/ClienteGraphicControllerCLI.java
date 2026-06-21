@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneOrdiniAppController;
+import it.ortogest.ortogestapp.appcontroller.CreaOrdineAppController;
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.beans.RigaOrdineBean;
@@ -15,10 +15,10 @@ import it.ortogest.ortogestapp.utils.SessionManager;
 
 public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
 
-    private final GestioneOrdiniAppController appController;
+    private final CreaOrdineAppController appController;
 
     public ClienteGraphicControllerCLI() {
-        this.appController = new GestioneOrdiniAppController();
+        this.appController = new CreaOrdineAppController();
         // Inizializza il carrello in sessione se non esiste
         if (SessionManager.getInstance().getCarrelloCorrente() == null) {
             SessionManager.getInstance().setCarrelloCorrente(new ArrayList<>());
@@ -92,17 +92,18 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         Printer.print("---------------------------------------------------------");
         for (int i = 0; i < catalogo.size(); i++) {
             ProdottoBean p = catalogo.get(i);
-            Printer.printf("%-5d %-15s %-15.2f %-15.2f\n", 
-                (i + 1), 
-                p.getNome(), 
-                p.getPrezzoMin(), 
-                p.getPrezzoMax());
+            Printer.printf("%-5d %-15s %-15.2f %-15.2f\n",
+                    (i + 1),
+                    p.getNome(),
+                    p.getPrezzoMin(),
+                    p.getPrezzoMax());
         }
 
         Printer.print("\nInserisci il NUM del prodotto che vuoi acquistare (oppure 0 per annullare): ");
         try {
             int sceltaProd = Integer.parseInt(scanner.nextLine());
-            if (sceltaProd == 0) return;
+            if (sceltaProd == 0)
+                return;
             if (sceltaProd < 1 || sceltaProd > catalogo.size()) {
                 Printer.perror("Scelta non valida.");
                 return;
@@ -129,28 +130,32 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         Printer.print("-------------------------------------------------------------------------");
         for (int i = 0; i < lotti.size(); i++) {
             Lotto l = lotti.get(i);
-            double prezzoEffettivo = l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0 ? l.getPrezzoScontato() : l.getPrezzoVendita();
+            double prezzoEffettivo = l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0 ? l.getPrezzoScontato()
+                    : l.getPrezzoVendita();
             String infoSconto = l.isScontoScadenzaAttivo() ? " [SCONTATO]" : "";
-            Printer.printf("%-5d %-15s %-15s %-15.2f %-15.2f %s\n", 
-                (i + 1), 
-                l.getIdLotto(), 
-                l.getDataScadenza().toString(), 
-                l.getQuantitaKg(), 
-                prezzoEffettivo,
-                infoSconto);
+            Printer.printf("%-5d %-15s %-15s %-15.2f %-15.2f %s\n",
+                    (i + 1),
+                    l.getIdLotto(),
+                    l.getDataScadenza().toString(),
+                    l.getQuantitaKg(),
+                    prezzoEffettivo,
+                    infoSconto);
         }
 
         Printer.print("\nInserisci il NUM del lotto dal quale prelevare (oppure 0 per annullare): ");
         try {
             int sceltaLotto = Integer.parseInt(scanner.nextLine());
-            if (sceltaLotto == 0) return;
+            if (sceltaLotto == 0)
+                return;
             if (sceltaLotto < 1 || sceltaLotto > lotti.size()) {
                 Printer.perror("Scelta non valida.");
                 return;
             }
 
             Lotto lottoScelto = lotti.get(sceltaLotto - 1);
-            double prezzoScelto = lottoScelto.isScontoScadenzaAttivo() && lottoScelto.getPrezzoScontato() > 0 ? lottoScelto.getPrezzoScontato() : lottoScelto.getPrezzoVendita();
+            double prezzoScelto = lottoScelto.isScontoScadenzaAttivo() && lottoScelto.getPrezzoScontato() > 0
+                    ? lottoScelto.getPrezzoScontato()
+                    : lottoScelto.getPrezzoVendita();
 
             Printer.print("Quantità da acquistare (Kg) (Max " + lottoScelto.getQuantitaKg() + "): ");
             double quantita = Double.parseDouble(scanner.nextLine());
@@ -161,7 +166,8 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
             }
 
             // Creiamo la riga d'ordine e l'aggiungiamo al carrello
-            RigaOrdineBean riga = new RigaOrdineBean(prodotto.getNome(), lottoScelto.getIdLotto(), quantita, prezzoScelto);
+            RigaOrdineBean riga = new RigaOrdineBean(prodotto.getNome(), lottoScelto.getIdLotto(), quantita,
+                    prezzoScelto);
             SessionManager.getInstance().getCarrelloCorrente().add(riga);
             Printer.print("[SUCCESS] Prodotto aggiunto al carrello!");
 
@@ -183,11 +189,11 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         Printer.printf("%-15s %-15s %-15s %-15s\n", "PRODOTTO", "QUANTITA (Kg)", "PREZZO/Kg", "SUBTOTALE");
         Printer.print("-----------------------------------------------------------------");
         for (RigaOrdineBean riga : carrello) {
-            Printer.printf("%-15s %-15.2f %-15.2f %-15.2f\n", 
-                riga.getNomeProdotto(), 
-                riga.getQuantita(), 
-                riga.getPrezzoUnitario(), 
-                riga.getSubtotale());
+            Printer.printf("%-15s %-15.2f %-15.2f %-15.2f\n",
+                    riga.getNomeProdotto(),
+                    riga.getQuantita(),
+                    riga.getPrezzoUnitario(),
+                    riga.getSubtotale());
             totale += riga.getSubtotale();
         }
         Printer.print("-----------------------------------------------------------------");
@@ -226,7 +232,8 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         }
 
         for (OrdineBean o : ordini) {
-            Printer.print("\nID Ordine: " + o.getIdOrdine() + " | Stato: " + o.getStato() + " | Totale: " + o.getTotale() + " EUR");
+            Printer.print("\nID Ordine: " + o.getIdOrdine() + " | Stato: " + o.getStato() + " | Totale: "
+                    + o.getTotale() + " EUR");
             Printer.print("Contenuto: " + o.getRiepilogoProdotti());
         }
     }
@@ -236,7 +243,8 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         Printer.print("\nInserisci l'ID dell'ordine da annullare (oppure INVIO vuoto per uscire): ");
         String idOrdine = scanner.nextLine().trim();
 
-        if (idOrdine.isEmpty()) return;
+        if (idOrdine.isEmpty())
+            return;
 
         try {
             appController.eliminaOrdine(idOrdine);

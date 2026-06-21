@@ -1,6 +1,6 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
+import it.ortogest.ortogestapp.appcontroller.RegistraLottoAppController;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.utils.Printer;
@@ -37,7 +37,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
     @FXML
     public void initialize() {
         // Popolamento della ComboBox con i prodotti esistenti
-        GestioneMagazzinoAppController appController = new GestioneMagazzinoAppController();
+        RegistraLottoAppController appController = new RegistraLottoAppController();
         List<String> nomi = appController.getNomiProdotti();
         ObservableList<String> nomiProdotti = FXCollections.observableArrayList(nomi);
         prodottoComboBox.setItems(nomiProdotti);
@@ -92,7 +92,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
                     .build();
 
             // 3. Invio all'App Controller
-            GestioneMagazzinoAppController appController = new GestioneMagazzinoAppController();
+            RegistraLottoAppController appController = new RegistraLottoAppController();
             LottoBean risultato = appController.registraLotto(lottoBean);
 
             // 4. Successo

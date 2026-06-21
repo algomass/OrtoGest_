@@ -1,6 +1,6 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import it.ortogest.ortogestapp.appcontroller.GestioneMagazzinoAppController;
+import it.ortogest.ortogestapp.appcontroller.RegistraLottoAppController;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.CostantiGUI;
@@ -100,7 +100,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
     }
 
     private void mostraLottiProdotto(String nomeProdotto) {
-        GestioneMagazzinoAppController controller = new GestioneMagazzinoAppController();
+        RegistraLottoAppController controller = new RegistraLottoAppController();
 
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Gestione Lotti");
@@ -188,7 +188,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
     }
 
     private void apriModificaLottoDialog(LottoBean lotto, String nomeProdotto,
-            GestioneMagazzinoAppController controller) {
+            RegistraLottoAppController controller) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Modifica Lotto");
         dialog.setHeaderText("Modifica lotto ID: " + lotto.getIdLotto());
@@ -233,7 +233,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
     }
 
     private void caricaInventario() {
-        GestioneMagazzinoAppController appController = new GestioneMagazzinoAppController();
+        RegistraLottoAppController appController = new RegistraLottoAppController();
         List<ProdottoBean> beans = appController.getInventario();
         ObservableList<ProdottoBean> data = FXCollections.observableArrayList(beans);
         inventarioTable.setItems(data);
@@ -253,7 +253,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
 
     @FXML
     public void apriDaSmaltireAction() {
-        GestioneMagazzinoAppController controller = new GestioneMagazzinoAppController();
+        RegistraLottoAppController controller = new RegistraLottoAppController();
         List<LottoBean> lottiDaSmaltire = controller.getLottiDaSmaltire();
 
         if (lottiDaSmaltire.isEmpty()) {
