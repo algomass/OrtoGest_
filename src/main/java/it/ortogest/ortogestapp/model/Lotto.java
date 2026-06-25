@@ -49,7 +49,7 @@ public class Lotto extends AbstractLotto {
     }
 
     public boolean isScaduto() {
-        return getDataScadenza() != null && java.time.LocalDate.now().isAfter(getDataScadenza());
+        return getDataScadenza() != null && java.time.LocalDate.now(java.time.ZoneId.systemDefault()).isAfter(getDataScadenza());
     }
 
     public StatoLotto getStato() {

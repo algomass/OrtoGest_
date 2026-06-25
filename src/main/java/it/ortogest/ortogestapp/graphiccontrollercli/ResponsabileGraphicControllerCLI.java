@@ -16,6 +16,8 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
     private static final String ROW_FORMAT = "%-5s %-15s %-15s %-15s %-15s\n";
     private static final String MSG_NUM_NON_VALIDO = "Numero non valido.";
     private static final String MSG_ERRORE = "[ERRORE] ";
+    private static final String HEADER_ID_LOTTO = "ID LOTTO";
+    private static final String HEADER_PRODOTTO = "PRODOTTO";
 
     private final AggiungiLottoAppController aggiungiLottoController;
     private final ModificaPrezzoLottoAppController modificaPrezzoController;
@@ -81,7 +83,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             return catalogo;
         }
 
-        Printer.printf(ROW_FORMAT, "NUM", "PRODOTTO", "CATEGORIA", "GIACENZA TOT", "COSTO MEDIO");
+        Printer.printf(ROW_FORMAT, "NUM", HEADER_PRODOTTO, "CATEGORIA", "GIACENZA TOT", "COSTO MEDIO");
         Printer.print("-----------------------------------------------------------------");
         for (int i = 0; i < catalogo.size(); i++) {
             ProdottoBean p = catalogo.get(i);
@@ -116,7 +118,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
                 return;
             }
 
-            Printer.printf(ROW_FORMAT, "NUM", "ID LOTTO", "COSTO ACQ.", "PREZZO VENDITA", "SCONTO ATTIVO");
+            Printer.printf(ROW_FORMAT, "NUM", HEADER_ID_LOTTO, "COSTO ACQ.", "PREZZO VENDITA", "SCONTO ATTIVO");
             Printer.print("-------------------------------------------------------------------");
             for (int i = 0; i < lotti.size(); i++) {
                 LottoBean l = lotti.get(i);
@@ -165,7 +167,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             return;
         }
 
-        Printer.printf(ROW_FORMAT, "NUM", "ID LOTTO", "PRODOTTO", "SCADENZA", "PREZZO ATTUALE");
+        Printer.printf(ROW_FORMAT, "NUM", HEADER_ID_LOTTO, HEADER_PRODOTTO, "SCADENZA", "PREZZO ATTUALE");
         Printer.print("-------------------------------------------------------------------------");
         for (int i = 0; i < lottiInScadenza.size(); i++) {
             LottoBean l = lottiInScadenza.get(i);
@@ -256,7 +258,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             return;
         }
 
-        Printer.printf(ROW_FORMAT, "NUM", "ID LOTTO", "PRODOTTO", "COSTO ACQ.", "PREZZO VENDITA");
+        Printer.printf(ROW_FORMAT, "NUM", HEADER_ID_LOTTO, HEADER_PRODOTTO, "COSTO ACQ.", "PREZZO VENDITA");
         Printer.print("-------------------------------------------------------------------------");
         for (int i = 0; i < lottiDaPrezzare.size(); i++) {
             LottoBean l = lottiDaPrezzare.get(i);

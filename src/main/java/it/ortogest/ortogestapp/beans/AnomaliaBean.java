@@ -9,12 +9,14 @@ public class AnomaliaBean {
     private String nomeProdotto;
     private double quantita;
     private String note;
+    private String emailFornitore;
 
-    public AnomaliaBean(String tipoAnomalia, String nomeProdotto, double quantita, String note) {
+    public AnomaliaBean(String tipoAnomalia, String nomeProdotto, double quantita, String note, String emailFornitore) {
         this.tipoAnomalia = tipoAnomalia;
         this.nomeProdotto = nomeProdotto;
         this.quantita = quantita;
         this.note = note;
+        this.emailFornitore = emailFornitore;
     }
 
     public String getTipoAnomalia() { return tipoAnomalia; }
@@ -28,4 +30,7 @@ public class AnomaliaBean {
 
     public String getNote() { return note; }
     public void setNote(String note) { this.note = note; }
+
+    public String getEmailFornitore() { return emailFornitore; }
+    public void setEmailFornitore(String emailFornitore) { this.emailFornitore = emailFornitore; }
 }

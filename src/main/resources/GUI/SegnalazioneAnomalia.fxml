@@ -35,6 +35,9 @@
                 <Label text="Tipo Anomalia:" textFill="#7f8c8d" />
                 <ComboBox fx:id="tipoAnomaliaComboBox" prefHeight="40.0" prefWidth="440.0" promptText="Seleziona tipo di anomalia..." />
 
+                <Label text="Email Fornitore:" textFill="#7f8c8d" />
+                <TextField fx:id="emailFornitoreField" prefHeight="40.0" promptText="es. fornitore@esempio.com" />
+
                 <Label text="Nome Prodotto:" textFill="#7f8c8d" />
                 <TextField fx:id="prodottoField" prefHeight="40.0" promptText="es. Mele Golden" />
 

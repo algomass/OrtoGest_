@@ -215,6 +215,9 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("Tipo di Anomalia (Mancante / Danneggiata): ");
             String tipo = scanner.nextLine();
 
+            Printer.print("Email Fornitore: ");
+            String email = scanner.nextLine();
+
             Printer.print("Nome del Prodotto interessato: ");
             String prodotto = scanner.nextLine();
 
@@ -224,7 +227,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("Note aggiuntive: ");
             String note = scanner.nextLine();
 
-            AnomaliaBean anomalia = new AnomaliaBean(tipo, prodotto, quantita, note);
+            AnomaliaBean anomalia = new AnomaliaBean(tipo, prodotto, quantita, note, email);
             
             String risultato = appController.inoltraSegnalazione(anomalia);
             Printer.print("[ESITO] " + risultato);

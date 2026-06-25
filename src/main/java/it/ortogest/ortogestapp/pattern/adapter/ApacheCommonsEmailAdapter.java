@@ -26,7 +26,7 @@ public class ApacheCommonsEmailAdapter implements EmailTarget {
             // Configurazione Server SMTP
             email.setHostName("smtp.googlemail.com");
             email.setSmtpPort(465);
-            email.setAuthentication("email@gmail.com", "password");
+            email.setAuthentication("algozzinomatteo@gmail.com", "hgmt hctv pycy vfrr");
             email.setSSLOnConnect(true);
 
             // Mappatura dei parametri del nostro Target sull'Adaptee
@@ -42,7 +42,7 @@ public class ApacheCommonsEmailAdapter implements EmailTarget {
             // Basterà inserire le credenziali corrette e decommentare la riga sotto per
             //
             // inviare davvero.
-            // email.send();
+            email.send();
 
             System.out.println(
                     "[Adapter] L'Adapter ha configurato e instradato con successo la richiesta verso la libreria Apache Commons (Adaptee).");
