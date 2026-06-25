@@ -79,6 +79,9 @@ public class RegistraLottoAppController {
 
     public String inoltraSegnalazione(AnomaliaBean anomaliaBean) {
         String emailFornitore = anomaliaBean.getEmailFornitore();
+        if (emailFornitore == null || emailFornitore.trim().isEmpty()) {
+            emailFornitore = EMAIL_FORNITORE_DEFAULT;
+        }
         String oggetto = "Segnalazione Anomalia: Merce " + anomaliaBean.getTipoAnomalia();
 
         String corpo = String.format("""
