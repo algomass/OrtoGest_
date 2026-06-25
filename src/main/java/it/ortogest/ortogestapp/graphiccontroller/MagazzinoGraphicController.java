@@ -226,8 +226,8 @@ public class MagazzinoGraphicController extends BaseGraphicController {
                 Printer.printf("Lotto modificato con successo.");
             } catch (NumberFormatException _) {
                 new Alert(Alert.AlertType.ERROR, "Valori numerici non validi.").showAndWait();
-            } catch (GestioneException ex) {
-                new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
+            } catch (GestioneException _) {
+                new Alert(Alert.AlertType.ERROR, "Errore durante la modifica del lotto.").showAndWait();
             }
         }
     }
@@ -308,8 +308,8 @@ public class MagazzinoGraphicController extends BaseGraphicController {
                         dialog.setResult(null);
                         dialog.close();
                     }
-                } catch (GestioneException ex) {
-                    new Alert(Alert.AlertType.ERROR, "Errore durante lo smaltimento: " + ex.getMessage()).showAndWait();
+                } catch (GestioneException _) {
+                    new Alert(Alert.AlertType.ERROR, "Errore durante lo smaltimento del lotto.").showAndWait();
                 }
             } else {
                 new Alert(Alert.AlertType.WARNING, "Seleziona prima un lotto dalla tabella.").showAndWait();
