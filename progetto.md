@@ -80,19 +80,29 @@ Le funzionalità principali del sistema si articolano nei seguenti moduli:
 ### 5.4 INTERNAL STEPS
 
 **Nome: Crea ordine.**
-1. Il cliente seleziona i prodotti dal catalogo online e inserisce le quantità desiderate.
-2. Il sistema verifica la disponibilità delle giacenze in tempo reale.
-3. Il cliente conferma l'ordine e specifica l'orario previsto per il ritiro.
-4. Il sistema salva l'ordine con stato "Inviato" e genera un ID univoco.
-5. Il sistema invia una notifica all'operatore aggiornando la sua lista "Ordini da preparare".
-6. L'operatore prende in carico l'ordine, preleva i prodotti fisici e conferma il completamento a sistema.
-7. Il sistema aggiorna lo stato dell'ordine in "Pronto per il Ritiro".
-8. Il cliente si presenta in cassa e comunica l'ID ordine.
-9. L'operatore procede alla registrazione del pagamento. 
-10. Il sistema imposta l'ordine come "Ritirato" e scala definitivamente le quantità dal magazzino.
-*Estensioni/Eccezioni:*
-*   2a. Prodotto non disponibile: il sistema non permette l'inserimento nel carrello.
-*   9a. Il cliente modifica l'ordine al momento del ritiro: Il sistema ricalcola il totale da pagare, e ripristina (o scala) le giacenze corrispondenti.
+1. Il cliente seleziona e aggiunge i prodotti desiderati al carrello virtuale.
+2. L'utente clicca sul bottone per confermare l'ordine, inviando al sistema la lista dei prodotti presenti nel carrello e la propria email.
+3. Il sistema verifica che il carrello in ingresso non sia nullo o vuoto.
+4. Il sistema itera su ciascun prodotto presente nel carrello per una validazione preliminare sulle giacenze:
+   4.1 Cerca il prodotto nel database tramite il nome.
+   4.2 Verifica che la quantità totale disponibile del prodotto in magazzino sia sufficiente per coprire la richiesta.
+   4.3 Crea le rispettive righe dell'ordine associandole agli identificativi dei lotti scelti.
+5. Il sistema genera un codice identificativo (ID Ordine) univoco.
+6. Il sistema crea l'oggetto Ordine assegnandogli l'ID generato, l'email del cliente, le righe validate e lo imposta allo stato iniziale "Inviato".
+7. Il sistema salva il nuovo ordine nel database.
+8. Il sistema procede ad aggiornare l'inventario per ogni riga dell'ordine appena salvato:
+   8.1 Recupera i dati aggiornati del prodotto dal database.
+   8.2 Sottrae la quantità venduta dalla giacenza totale del prodotto e salva la modifica.
+   8.3 Recupera lo specifico lotto (tramite ID) da cui è stata assegnata la merce.
+   8.4 Verifica che la quantità disponibile nel lotto sia ancora sufficiente (controllo di concorrenza/disponibilità finale).
+   8.5 Scala la quantità venduta dal lotto e salva l'aggiornamento del lotto nel database.
+9. Il sistema completa l'operazione restituendo un messaggio di successo contenente l'ID dell'ordine ("Ordine completato con ID: ...").
+
+*Eccezioni e Validazioni:*
+*   **Carrello vuoto (Step 3):** Se il sistema rileva un carrello vuoto, lancia un'eccezione e mostra l'errore: "Il carrello è vuoto."
+*   **Prodotto inesistente (Step 4.1):** Se un prodotto non viene trovato nel database, il sistema lancia un'eccezione mostrando: "Prodotto '[NomeProdotto]' non trovato." e blocca il salvataggio.
+*   **Giacenza insufficiente in fase di validazione (Step 4.2):** Se la giacenza totale del prodotto è inferiore alla quantità richiesta, il sistema mostra l'errore: "Giacenza insufficiente per: [NomeProdotto]" e blocca il salvataggio.
+*   **Quantità lotto non disponibile in fase di aggiornamento (Step 8.4):** Se al momento dello scarico il lotto non esiste o non ha quantità sufficiente (es. venduto in concomitanza ad un altro utente), il sistema lancia un'eccezione annullando l'operazione: "Quantità non disponibile nel lotto selezionato per: [NomeProdotto]".
 
 **Nome: Registra lotto**
 1. Il magazziniere seleziona l'opzione “registra nuovo lotto” dalla schermata principale
