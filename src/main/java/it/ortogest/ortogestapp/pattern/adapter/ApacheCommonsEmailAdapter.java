@@ -3,6 +3,8 @@ package it.ortogest.ortogestapp.pattern.adapter;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Concrete Adapter per l'invio di Email.
@@ -13,6 +15,8 @@ import org.apache.commons.mail.SimpleEmail;
  * all'interfaccia Target (EmailAdapter) del nostro sistema.
  */
 public class ApacheCommonsEmailAdapter implements EmailTarget {
+
+    private static final Logger LOGGER = Logger.getLogger(ApacheCommonsEmailAdapter.class.getName());
 
     @Override
     public boolean inviaEmail(String destinatario, String oggetto, String corpo) {
@@ -44,11 +48,10 @@ public class ApacheCommonsEmailAdapter implements EmailTarget {
             // inviare davvero.
             email.send();
 
-            System.out.println(
-                    "[Adapter] L'Adapter ha configurato e instradato con successo la richiesta verso la libreria Apache Commons (Adaptee).");
+            LOGGER.info("[Adapter] L'Adapter ha configurato e instradato con successo la richiesta verso la libreria Apache Commons (Adaptee).");
             return true;
         } catch (EmailException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Errore durante l'invio dell'email", e);
             return false;
         }
     }
