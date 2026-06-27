@@ -64,6 +64,8 @@ public class DatabaseHelper {
                 "prezzo_vendita DOUBLE DEFAULT 0.0, " +
                 "sconto_attivo BOOLEAN DEFAULT FALSE, " +
                 "prezzo_scontato DOUBLE DEFAULT 0.0, " +
+                "smaltito BOOLEAN DEFAULT FALSE, " +
+                "ritirato BOOLEAN DEFAULT FALSE, " +
                 "FOREIGN KEY(nome_prodotto) REFERENCES prodotto(nome)" +
                 ");";
 
@@ -103,6 +105,8 @@ public class DatabaseHelper {
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN prezzo_vendita DOUBLE DEFAULT 0.0");
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN sconto_attivo BOOLEAN DEFAULT FALSE");
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN prezzo_scontato DOUBLE DEFAULT 0.0");
+            eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN smaltito BOOLEAN DEFAULT FALSE");
+            eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN ritirato BOOLEAN DEFAULT FALSE");
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE riga_ordine ADD COLUMN id_lotto VARCHAR(100)");
 
             Printer.printf("Database MySQL inizializzato con successo.");

@@ -220,4 +220,39 @@ public class CreaOrdineAppController {
     public void aggiornaStatoOrdine(String idOrdine, String nuovoStato) {
         ordineDAO.aggiornaStatoOrdine(idOrdine, nuovoStato);
     }
+
+    /**
+     * Recupera la lista degli ordini che sono stati preparati e attendono solo il pagamento in cassa.
+     */
+    public List<OrdineBean> getOrdiniProntiPerRitiro() {
+        List<Ordine> tuttiOrdini = ordineDAO.trovaTuttiOrdini();
+        List<OrdineBean> pronti = new ArrayList<>();
+
+        for (Ordine o : tuttiOrdini) {
+            if ("Pronto per il Ritiro".equals(o.getStato())) {
+                pronti.add(new OrdineBean(
+                        o.getIdOrdine(),
+                        o.getRiepilogoProdotti(),
+                        o.getTotale(),
+                        o.getStato(),
+                        o.getEmailCliente()));
+            }
+        }
+        return pronti;
+    }
+
+    /**
+     * Finalizza la vendita dell'ordine, registrando il pagamento e l'uscita fisica della merce.
+     */
+    public void registraVendita(String idOrdine) throws GestioneException {
+        Ordine ordine = ordineDAO.trovaOrdinePerId(idOrdine);
+        if (ordine == null) {
+            throw new GestioneException("Ordine non trovato.");
+        }
+        if (!"Pronto per il Ritiro".equals(ordine.getStato())) {
+            throw new GestioneException("L'ordine non è pronto per il ritiro.");
+        }
+
+        ordineDAO.aggiornaStatoOrdine(idOrdine, "Ritirato");
+    }
 }

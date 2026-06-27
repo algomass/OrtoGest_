@@ -55,6 +55,8 @@ public class Lotto extends AbstractLotto {
     public StatoLotto getStato() {
         if (isSmaltito()) {
             return StatoLotto.SMALTITO;
+        } else if (isRitirato()) {
+            return StatoLotto.RITIRATO;
         } else if (isEsaurito()) {
             return StatoLotto.ESAURITO;
         } else if (isScaduto()) {

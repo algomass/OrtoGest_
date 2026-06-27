@@ -7,5 +7,6 @@ public enum StatoLotto {
     ATTIVO,
     ESAURITO,
     SCADUTO,
-    SMALTITO
+    SMALTITO,
+    RITIRATO
 }

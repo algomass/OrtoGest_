@@ -42,6 +42,11 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Button>
+                <Button fx:id="btnRitirati" onAction="#vistaRitiratiAction" style="-fx-background-color: #7f8c8d; -fx-text-fill: white;" text="Lotti Ritirati">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
                 <Button onAction="#logoutAction" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Esci / Cambia Utente" />
             </children>
             <padding>
@@ -175,6 +180,17 @@
                         <TextField fx:id="prezzoScontatoField" prefWidth="70.0" promptText="Es. 1.50" />
                         
                         <Button onAction="#aggiornaPrezzoLottoAction" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Salva Prezzi">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Button>
+                        
+                        <Button fx:id="btnRimuoviLotto" onAction="#rimuoviLottoAction" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Rimuovi">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="btnRimettiInCommercio" onAction="#rimettiInCommercioAction" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Rimetti in commercio" visible="false" managed="false">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>

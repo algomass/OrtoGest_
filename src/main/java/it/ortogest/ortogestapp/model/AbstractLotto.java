@@ -13,6 +13,7 @@ public abstract class AbstractLotto {
     private boolean scontoScadenzaAttivo;
     private double prezzoScontato;
     private boolean smaltito;
+    private boolean ritirato;
 
     protected AbstractLotto() {}
 
@@ -27,6 +28,7 @@ public abstract class AbstractLotto {
         this.scontoScadenzaAttivo = builder.scontoScadenzaAttivo;
         this.prezzoScontato = builder.prezzoScontato;
         this.smaltito = builder.smaltito;
+        this.ritirato = builder.ritirato;
     }
 
     public abstract static class AbstractBuilder<T extends AbstractLotto, B extends AbstractBuilder<T, B>> {
@@ -40,6 +42,7 @@ public abstract class AbstractLotto {
         protected boolean scontoScadenzaAttivo;
         protected double prezzoScontato;
         protected boolean smaltito;
+        protected boolean ritirato;
 
         protected abstract B self();
 
@@ -55,6 +58,7 @@ public abstract class AbstractLotto {
         public B scontoScadenzaAttivo(boolean scontoScadenzaAttivo) { this.scontoScadenzaAttivo = scontoScadenzaAttivo; return self(); }
         public B prezzoScontato(double prezzoScontato) { this.prezzoScontato = prezzoScontato; return self(); }
         public B smaltito(boolean smaltito) { this.smaltito = smaltito; return self(); }
+        public B ritirato(boolean ritirato) { this.ritirato = ritirato; return self(); }
     }
 
     public String getIdLotto() {
@@ -135,5 +139,13 @@ public abstract class AbstractLotto {
 
     public void setSmaltito(boolean smaltito) {
         this.smaltito = smaltito;
+    }
+
+    public boolean isRitirato() {
+        return ritirato;
+    }
+
+    public void setRitirato(boolean ritirato) {
+        this.ritirato = ritirato;
     }
 }

@@ -14,9 +14,9 @@ public class LottoDAOJdbc implements ILottoDAO {
 
     @Override
     public void salvaLotto(Lotto lotto) {
-        String sql = "INSERT INTO lotto (id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato) "
+        String sql = "INSERT INTO lotto (id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato, smaltito, ritirato) "
                 +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "nome_fornitore = VALUES(nome_fornitore), " +
                 "nome_prodotto = VALUES(nome_prodotto), " +
@@ -26,30 +26,32 @@ public class LottoDAOJdbc implements ILottoDAO {
                 "costo_acquisto = VALUES(costo_acquisto), " +
                 "prezzo_vendita = VALUES(prezzo_vendita), " +
                 "sconto_attivo = VALUES(sconto_attivo), " +
-                "prezzo_scontato = VALUES(prezzo_scontato)";
+                "prezzo_scontato = VALUES(prezzo_scontato), " +
+                "smaltito = VALUES(smaltito), " +
+                "ritirato = VALUES(ritirato)";
 
         DatabaseHelper.getInstance().executeUpdate(sql, "Errore in salvaLotto",
                 lotto.getIdLotto(), lotto.getNomeFornitore(), lotto.getTipologiaProdotto().getNome(),
                 lotto.getQuantitaKg(), lotto.getDataArrivo().toString(), lotto.getDataScadenza().toString(),
                 lotto.getCostoAcquisto(), lotto.getPrezzoVendita(), lotto.isScontoScadenzaAttivo(),
-                lotto.getPrezzoScontato());
+                lotto.getPrezzoScontato(), lotto.isSmaltito(), lotto.isRitirato());
     }
 
     @Override
     public List<Lotto> getTuttiILotti() {
-        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato FROM lotto";
+        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato, smaltito, ritirato FROM lotto";
         return DatabaseHelper.getInstance().queryForList(sql, this::estraiLotto, "Errore in getTuttiILotti");
     }
 
     @Override
     public Lotto trovaPerId(String idLotto) {
-        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato FROM lotto WHERE id_lotto = ?";
+        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato, smaltito, ritirato FROM lotto WHERE id_lotto = ?";
         return DatabaseHelper.getInstance().queryForObject(sql, this::estraiLotto, "Errore in trovaPerId", idLotto);
     }
 
     @Override
     public List<Lotto> trovaPerProdotto(String nomeProdotto) {
-        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato FROM lotto WHERE nome_prodotto = ?";
+        String sql = "SELECT id_lotto, nome_fornitore, nome_prodotto, quantita_kg, data_arrivo, data_scadenza, costo_acquisto, prezzo_vendita, sconto_attivo, prezzo_scontato, smaltito, ritirato FROM lotto WHERE nome_prodotto = ?";
         return DatabaseHelper.getInstance().queryForList(sql, this::estraiLotto, "Errore in trovaPerProdotto",
                 nomeProdotto);
     }
@@ -69,6 +71,8 @@ public class LottoDAOJdbc implements ILottoDAO {
                 .prezzoVendita(rs.getDouble("prezzo_vendita"))
                 .scontoScadenzaAttivo(rs.getBoolean("sconto_attivo"))
                 .prezzoScontato(rs.getDouble("prezzo_scontato"))
+                .smaltito(rs.getBoolean("smaltito"))
+                .ritirato(rs.getBoolean("ritirato"))
                 .build();
     }
 

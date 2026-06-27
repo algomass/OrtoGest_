@@ -24,7 +24,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
         if (!f.exists()) {
             try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
                 pw.println(
-                        "idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato");
+                        "idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato,smaltito,ritirato");
             } catch (IOException e) {
                 it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
             }
@@ -54,8 +54,12 @@ public class LottoDAOFileSystem implements ILottoDAO {
                     boolean scontoAttivo = Boolean.parseBoolean(values[8]);
                     double prezzoScontato = Double.parseDouble(values[9]);
                     boolean smaltito = false;
+                    boolean ritirato = false;
                     if (values.length >= 11) {
                         smaltito = Boolean.parseBoolean(values[10]);
+                    }
+                    if (values.length >= 12) {
+                        ritirato = Boolean.parseBoolean(values[11]);
                     }
 
                     Prodotto prodotto = DAOFactory.getInstance().getProdottoDAO().trovaPerNome(nomeProdotto);
@@ -72,6 +76,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
                             .scontoScadenzaAttivo(scontoAttivo)
                             .prezzoScontato(prezzoScontato)
                             .smaltito(smaltito)
+                            .ritirato(ritirato)
                             .build();
 
                     lotti.add(lotto);
@@ -86,7 +91,7 @@ public class LottoDAOFileSystem implements ILottoDAO {
     private void scriviTutti(List<Lotto> lotti) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_PATH))) {
             pw.println(
-                    "idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato,smaltito");
+                    "idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato,smaltito,ritirato");
             for (Lotto l : lotti) {
                 String pName = l.getTipologiaProdotto() != null ? l.getTipologiaProdotto().getNome() : "";
                 pw.println(l.getIdLotto() + "," +
@@ -99,7 +104,8 @@ public class LottoDAOFileSystem implements ILottoDAO {
                         l.getPrezzoVendita() + "," +
                         l.isScontoScadenzaAttivo() + "," +
                         l.getPrezzoScontato() + "," +
-                        l.isSmaltito());
+                        l.isSmaltito() + "," +
+                        l.isRitirato());
             }
         } catch (IOException e) {
             it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());

@@ -1,6 +1,6 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import it.ortogest.ortogestapp.appcontroller.RegistraVenditaAppController;
+import it.ortogest.ortogestapp.appcontroller.CreaOrdineAppController;
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -23,14 +23,14 @@ public class CassaGraphicController extends BaseGraphicController {
     @FXML private Label totaleLabel;
     @FXML private Button btnEmettiScontrino;
 
-    private RegistraVenditaAppController appController;
+    private CreaOrdineAppController appController;
     
     // Memorizza l'ordine online correntemente in fase di pagamento
     private OrdineBean ordineInPagamento = null;
 
     @FXML
     public void initialize() {
-        appController = new RegistraVenditaAppController();
+        appController = new CreaOrdineAppController();
 
         if (colIdOrdine != null) {
             colIdOrdine.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrdine()));

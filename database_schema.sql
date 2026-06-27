@@ -20,6 +20,11 @@ CREATE TABLE IF NOT EXISTS lotto (
     data_arrivo VARCHAR(50) NOT NULL,
     data_scadenza VARCHAR(50) NOT NULL,
     costo_acquisto DOUBLE NOT NULL,
+    prezzo_vendita DOUBLE DEFAULT 0.0,
+    sconto_attivo BOOLEAN DEFAULT FALSE,
+    prezzo_scontato DOUBLE DEFAULT 0.0,
+    smaltito BOOLEAN DEFAULT FALSE,
+    ritirato BOOLEAN DEFAULT FALSE,
     FOREIGN KEY(nome_prodotto) REFERENCES prodotto(nome)
 );
 

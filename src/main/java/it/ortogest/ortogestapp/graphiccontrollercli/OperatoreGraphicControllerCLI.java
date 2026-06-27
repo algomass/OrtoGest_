@@ -3,17 +3,17 @@ package it.ortogest.ortogestapp.graphiccontrollercli;
 import java.util.List;
 import java.util.Scanner;
 
-import it.ortogest.ortogestapp.appcontroller.RegistraVenditaAppController;
+import it.ortogest.ortogestapp.appcontroller.CreaOrdineAppController;
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SessionManager;
 
 public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
 
-    private final RegistraVenditaAppController appController;
+    private final CreaOrdineAppController appController;
 
     public OperatoreGraphicControllerCLI() {
-        this.appController = new RegistraVenditaAppController();
+        this.appController = new CreaOrdineAppController();
     }
 
     @Override
