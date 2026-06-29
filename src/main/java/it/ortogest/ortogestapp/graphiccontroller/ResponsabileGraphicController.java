@@ -94,6 +94,11 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     public void initialize() {
         appController = new GestisciCatalogoAppController();
 
+        formatDoubleColumn(colGiacenza);
+        formatDoubleColumn(colQuantitaLotto);
+        formatDoubleColumn(colCostoAcquisto);
+        formatDoubleColumn(colPrezzoScontato);
+
         // Coloriamo di rosso i lotti "Da prezzare" (prezzo vendita 0.0)
         colPrezzoVendita.setCellFactory(column -> new TableCell<LottoBean, Double>() {
             @Override

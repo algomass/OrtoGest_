@@ -49,4 +49,23 @@ public abstract class BaseGraphicController {
             label.setVisible(true);
         }
     }
+
+    /**
+     * Formats a table column containing numbers to display with exactly two decimal places.
+     */
+    protected <T, N extends Number> void formatDoubleColumn(javafx.scene.control.TableColumn<T, N> column) {
+        if (column != null) {
+            column.setCellFactory(tc -> new javafx.scene.control.TableCell<T, N>() {
+                @Override
+                protected void updateItem(N item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(String.format(java.util.Locale.US, "%.2f", item.doubleValue()));
+                    }
+                }
+            });
+        }
+    }
 }

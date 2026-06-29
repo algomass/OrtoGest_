@@ -36,6 +36,7 @@ public class CassaGraphicController extends BaseGraphicController {
             colIdOrdine.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrdine()));
             colCliente.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmailCliente()));
             colTotale.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("totale"));
+            formatDoubleColumn(colTotale);
             
             caricaOrdiniPronti();
         }

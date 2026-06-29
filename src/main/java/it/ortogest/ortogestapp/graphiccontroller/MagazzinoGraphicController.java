@@ -54,6 +54,9 @@ public class MagazzinoGraphicController extends BaseGraphicController {
                 cellData -> new SimpleDoubleProperty(cellData.getValue().getPrezzoAcquistoMedio()));
         colGiacenza.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getGiacenza()));
 
+        formatDoubleColumn(colPrezzo);
+        formatDoubleColumn(colGiacenza);
+
         setupRowFactory();
         caricaInventario();
     }
@@ -136,6 +139,9 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         TableColumn<LottoBean, Double> colCosto = new TableColumn<>("Costo Acquisto");
         colCosto.setCellValueFactory(new PropertyValueFactory<>("costoAcquisto"));
         colCosto.setPrefWidth(100);
+
+        formatDoubleColumn(colQuantita);
+        formatDoubleColumn(colCosto);
 
         table.getColumns().add(colId);
         table.getColumns().add(colFornitore);
@@ -282,6 +288,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         TableColumn<LottoBean, Double> colQuantita = new TableColumn<>("Quantità (Kg)");
         colQuantita.setCellValueFactory(new PropertyValueFactory<>("quantitaKg"));
         colQuantita.setPrefWidth(120);
+        formatDoubleColumn(colQuantita);
 
         TableColumn<LottoBean, LocalDate> colScadenza = new TableColumn<>("Scadenza");
         colScadenza.setCellValueFactory(new PropertyValueFactory<>("dataScadenza"));

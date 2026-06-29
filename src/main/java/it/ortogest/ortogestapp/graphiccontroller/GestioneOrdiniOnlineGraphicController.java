@@ -44,6 +44,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
         
         // Formattazione per la colonna totale
         colTotale.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("totale"));
+        formatDoubleColumn(colTotale);
         colStato.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("stato"));
         
         filtroStatoComboBox.getItems().addAll(FILTRO_TUTTI, STATO_INVIATO, "Pronto per il Ritiro", "Ritirato");
