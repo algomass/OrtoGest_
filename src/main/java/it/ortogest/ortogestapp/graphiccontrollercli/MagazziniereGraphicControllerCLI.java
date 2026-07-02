@@ -127,7 +127,8 @@ public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
         try {
             eseguiAzioneSuLotto(scanner, lottoDaModificare, azione);
         } catch (NumberFormatException e) {
-            Printer.perror("[ERRORE] Hai inserito un formato numerico non valido durante la modifica.");
+            it.ortogest.ortogestapp.exception.ValidationException ve = new it.ortogest.ortogestapp.exception.ValidationException("Hai inserito un formato numerico non valido durante la modifica.", e);
+            Printer.perror("[ERRORE] " + ve.getMessage());
         }
     }
 

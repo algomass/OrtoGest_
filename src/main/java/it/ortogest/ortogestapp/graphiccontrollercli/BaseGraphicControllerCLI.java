@@ -25,7 +25,8 @@ public abstract class BaseGraphicControllerCLI implements GraphicControllerCLI {
                     Printer.perror("Errore: la scelta deve essere compresa tra " + min + " e " + max + ".");
                 }
             } catch (NumberFormatException e) {
-                Printer.perror("Errore: inserire un numero intero valido.");
+                it.ortogest.ortogestapp.exception.ValidationException ve = new it.ortogest.ortogestapp.exception.ValidationException("inserire un numero intero valido.", e);
+                Printer.perror("Errore: " + ve.getMessage());
             }
         }
     }
@@ -45,7 +46,8 @@ public abstract class BaseGraphicControllerCLI implements GraphicControllerCLI {
                     Printer.perror("Errore: il valore deve essere maggiore o uguale a " + min + ".");
                 }
             } catch (NumberFormatException e) {
-                Printer.perror("Errore: inserire un numero decimale valido (es. 2.50).");
+                it.ortogest.ortogestapp.exception.ValidationException ve = new it.ortogest.ortogestapp.exception.ValidationException("inserire un numero decimale valido (es. 2.50).", e);
+                Printer.perror("Errore: " + ve.getMessage());
             }
         }
     }
