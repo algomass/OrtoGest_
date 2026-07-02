@@ -20,7 +20,7 @@ public class UtenteDAOJdbc implements IUtenteDAO {
     private String getNomeOrDefault(ResultSet rs, String fallback) {
         try {
             return rs.getString("nome");
-        } catch (SQLException _) {
+        } catch (SQLException ignored) {
             return fallback;
         }
     }

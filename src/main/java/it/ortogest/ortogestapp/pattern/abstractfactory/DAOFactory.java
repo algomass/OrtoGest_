@@ -62,7 +62,7 @@ public abstract class DAOFactory {
                         type = props.getProperty("persistence", JDBC).trim().toLowerCase();
                     }
                 }
-            } catch (Exception _) {
+            } catch (Exception e) {
                 // Passo 6: Fallback sicuro. Se il file è corrotto, avviso e proseguo con il
                 // database di default
                 it.ortogest.ortogestapp.utils.Printer
