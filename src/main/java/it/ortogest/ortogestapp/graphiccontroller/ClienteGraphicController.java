@@ -354,7 +354,7 @@ public class ClienteGraphicController extends BaseGraphicController {
             if (qta <= 0)
                 throw new it.ortogest.ortogestapp.exception.ValidationException(
                         "La quantità deve essere maggiore di zero.");
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             mostraMessaggio("Quantità non valida (deve essere un numero).", false);
             return;
         } catch (it.ortogest.ortogestapp.exception.ValidationException e) {

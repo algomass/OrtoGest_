@@ -104,7 +104,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
         } catch (GestioneException e) {
             errorLabel.setText(e.getMessage());
             errorLabel.setVisible(true);
-        } catch (Exception e) {
+        } catch (Exception _) {
             errorLabel.setText("Errore imprevisto.");
             errorLabel.setVisible(true);
         }
@@ -113,7 +113,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
     private double parseDoubleOrThrow(String value, String errorMessage) throws it.ortogest.ortogestapp.exception.ValidationException {
         try {
             return Double.parseDouble(value);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             throw new it.ortogest.ortogestapp.exception.ValidationException(errorMessage);
         }
     }

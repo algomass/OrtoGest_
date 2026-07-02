@@ -119,7 +119,7 @@ public class DatabaseHelper {
     private void eseguiAlterTableSilenzioso(Statement stmt, String sql) {
         try {
             stmt.execute(sql);
-        } catch (SQLException ignored) {
+        } catch (SQLException _) {
             // Ignora se la colonna esiste già
         }
     }

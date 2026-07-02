@@ -263,7 +263,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             // Ricarichiamo i lotti del prodotto corrente o la lista scadenze/da prezzare
             ricaricaVistaCorrente();
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             mostraErrore("Inserisci un valore numerico valido per il prezzo (es. 2.50).");
         } catch (Exception e) {
             mostraErrore(e.getMessage());
@@ -365,7 +365,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             }
             pulisciFormLotto();
 
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             mostraErrore("Inserisci un valore numerico valido per i prezzi prima di rimettere in commercio.");
         } catch (Exception e) {
             mostraErrore("Errore durante il ripristino: " + e.getMessage());
