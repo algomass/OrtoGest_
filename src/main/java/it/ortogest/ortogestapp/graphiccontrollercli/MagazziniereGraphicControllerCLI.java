@@ -189,23 +189,16 @@ public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private void segnalaAnomalia(Scanner scanner) {
         Printer.print("\n--- Segnalazione Anomalia di Fornitura ---");
-        try {
-            String tipo = leggiStringaNonVuota(scanner, "Tipo di Anomalia (Mancante / Danneggiata): ");
-            String email = leggiStringaNonVuota(scanner, "Email Fornitore: ");
-            String prodotto = leggiStringaNonVuota(scanner, "Nome del Prodotto interessato: ");
-            double quantita = leggiDoubleValido(scanner, "Quantità interessata (Kg): ", 0.01);
-            String note = leggiStringaOpzionale(scanner, "Note aggiuntive: ");
+        String tipo = leggiStringaNonVuota(scanner, "Tipo di Anomalia (Mancante / Danneggiata): ");
+        String email = leggiStringaNonVuota(scanner, "Email Fornitore: ");
+        String prodotto = leggiStringaNonVuota(scanner, "Nome del Prodotto interessato: ");
+        double quantita = leggiDoubleValido(scanner, "Quantità interessata (Kg): ", 0.01);
+        String note = leggiStringaOpzionale(scanner, "Note aggiuntive: ");
 
-            AnomaliaBean anomalia = new AnomaliaBean(tipo, prodotto, quantita, note, email);
-            
-            String risultato = appController.inoltraSegnalazione(anomalia);
-            Printer.print("[ESITO] " + risultato);
-
-        } catch (it.ortogest.ortogestapp.exception.ValidationException | it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
-            Printer.perror("[ERRORE] " + e.getMessage());
-        } catch (GestioneException e) {
-            Printer.perror("[ERRORE SISTEMA] " + e.getMessage());
-        }
+        AnomaliaBean anomalia = new AnomaliaBean(tipo, prodotto, quantita, note, email);
+        
+        String risultato = appController.inoltraSegnalazione(anomalia);
+        Printer.print("[ESITO] " + risultato);
     }
 
     private LocalDate leggiData(Scanner scanner, String messaggio) {

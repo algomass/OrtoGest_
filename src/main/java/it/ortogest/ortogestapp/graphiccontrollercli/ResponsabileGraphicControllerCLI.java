@@ -13,7 +13,6 @@ import it.ortogest.ortogestapp.utils.SessionManager;
 public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private static final String ROW_FORMAT = "%-5s %-15s %-15s %-15s %-15s\n";
-    private static final String MSG_NUM_NON_VALIDO = "Numero non valido.";
     private static final String MSG_ERRORE = "[ERRORE] ";
     private static final String HEADER_ID_LOTTO = "ID LOTTO";
     private static final String HEADER_PRODOTTO = "PRODOTTO";
@@ -80,7 +79,7 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
         for (int i = 0; i < catalogo.size(); i++) {
             ProdottoBean p = catalogo.get(i);
             Printer.printf("%-5d %-15s %-15s %-15.2f %-15.2f EUR\n",
-                    (i+1),
+                    (i + 1),
                     p.getNome(),
                     p.getCategoria(),
                     p.getGiacenza(),
@@ -91,10 +90,14 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private void modificaPrezzoLotto(Scanner scanner) {
         List<ProdottoBean> catalogo = visualizzaCatalogo();
-        if (catalogo.isEmpty()) return;
+        if (catalogo.isEmpty())
+            return;
 
-        int numProd = leggiInteroValido(scanner, "\nInserisci il NUM del Prodotto per visualizzarne i lotti (oppure 0 per annullare): ", 0, catalogo.size());
-        if (numProd == 0) return;
+        int numProd = leggiInteroValido(scanner,
+                "\nInserisci il NUM del Prodotto per visualizzarne i lotti (oppure 0 per annullare): ", 0,
+                catalogo.size());
+        if (numProd == 0)
+            return;
         String nomeProdotto = catalogo.get(numProd - 1).getNome();
 
         try {
@@ -111,15 +114,17 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
             for (int i = 0; i < lotti.size(); i++) {
                 LottoBean l = lotti.get(i);
                 Printer.printf("%-5d %-15s %-15.2f EUR %-15.2f EUR %-15s\n",
-                        (i+1),
+                        (i + 1),
                         l.getIdLotto(),
                         l.getCostoAcquisto(),
                         l.getPrezzoVendita(),
                         l.isScontoScadenzaAttivo() ? "SI (" + l.getPrezzoScontato() + " EUR)" : "NO");
             }
 
-            int numLotto = leggiInteroValido(scanner, "\nInserisci il NUM del lotto da modificare (oppure 0 per annullare): ", 0, lotti.size());
-            if (numLotto == 0) return;
+            int numLotto = leggiInteroValido(scanner,
+                    "\nInserisci il NUM del lotto da modificare (oppure 0 per annullare): ", 0, lotti.size());
+            if (numLotto == 0)
+                return;
 
             LottoBean lottoScelto = lotti.get(numLotto - 1);
 
@@ -154,16 +159,19 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
         for (int i = 0; i < lottiInScadenza.size(); i++) {
             LottoBean l = lottiInScadenza.get(i);
             Printer.printf("%-5d %-15s %-15s %-15s %-15.2f EUR\n",
-                    (i+1),
+                    (i + 1),
                     l.getIdLotto(),
                     l.getNomeProdotto(),
                     l.getDataScadenza().toString(),
                     l.getPrezzoVendita());
         }
 
-        int num = leggiInteroValido(scanner, "\nInserisci il NUM del lotto a cui applicare lo sconto (oppure 0 per annullare): ", 0, lottiInScadenza.size());
-        if (num == 0) return;
-        
+        int num = leggiInteroValido(scanner,
+                "\nInserisci il NUM del lotto a cui applicare lo sconto (oppure 0 per annullare): ", 0,
+                lottiInScadenza.size());
+        if (num == 0)
+            return;
+
         LottoBean l = lottiInScadenza.get(num - 1);
         double prezzoScontato = leggiDoubleValido(scanner, "Inserisci il nuovo prezzo SCONTATO (EUR): ", 0.0);
 
@@ -184,40 +192,44 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private void aggiornaCategoria(Scanner scanner) {
         List<ProdottoBean> catalogo = visualizzaCatalogo();
-        if (catalogo.isEmpty()) return;
+        if (catalogo.isEmpty())
+            return;
 
-        int numProd = leggiInteroValido(scanner, "\nInserisci il NUM del Prodotto da modificare (oppure 0 per annullare): ", 0, catalogo.size());
-        if (numProd == 0) return;
+        int numProd = leggiInteroValido(scanner,
+                "\nInserisci il NUM del Prodotto da modificare (oppure 0 per annullare): ", 0, catalogo.size());
+        if (numProd == 0)
+            return;
         String nomeProdotto = catalogo.get(numProd - 1).getNome();
 
         Printer.print("\nSeleziona la nuova categoria:");
         Printer.print("1. FRUTTA");
         Printer.print("2. VERDURA");
-        
+
         int sceltaCat = leggiInteroValido(scanner, "Scelta (1-2, oppure 0 per annullare): ", 0, 2);
-        if (sceltaCat == 0) return;
-            
-            String nuovaCategoria = switch (sceltaCat) {
-                case 1 -> "FRUTTA";
-                case 2 -> "VERDURA";
-                default -> null;
-            };
-            if (nuovaCategoria == null) {
-                Printer.perror("Scelta non valida.");
-                return;
-            }
+        if (sceltaCat == 0)
+            return;
 
-            ProdottoBean bean = new ProdottoBean(nomeProdotto, 0, 0, null, null);
-            bean.setCategoria(nuovaCategoria);
+        String nuovaCategoria = switch (sceltaCat) {
+            case 1 -> "FRUTTA";
+            case 2 -> "VERDURA";
+            default -> null;
+        };
+        if (nuovaCategoria == null) {
+            Printer.perror("Scelta non valida.");
+            return;
+        }
 
-            try {
-                appController.aggiornaCategoriaProdotto(bean);
-                Printer.print("[SUCCESS] Categoria aggiornata per " + nomeProdotto);
-            } catch (it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
-                Printer.perror(MSG_ERRORE + e.getMessage());
-            } catch (GestioneException e) {
-                Printer.perror(MSG_ERRORE + e.getMessage());
-            }
+        ProdottoBean bean = new ProdottoBean(nomeProdotto, 0, 0, null, null);
+        bean.setCategoria(nuovaCategoria);
+
+        try {
+            appController.aggiornaCategoriaProdotto(bean);
+            Printer.print("[SUCCESS] Categoria aggiornata per " + nomeProdotto);
+        } catch (it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
+            Printer.perror(MSG_ERRORE + e.getMessage());
+        } catch (GestioneException e) {
+            Printer.perror(MSG_ERRORE + e.getMessage());
+        }
     }
 
     private void visualizzaDaPrezzare(Scanner scanner) {
@@ -234,7 +246,7 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
         for (int i = 0; i < lottiDaPrezzare.size(); i++) {
             LottoBean l = lottiDaPrezzare.get(i);
             Printer.printf("%-5d %-15s %-15s %-15.2f EUR %-15.2f EUR\n",
-                    (i+1),
+                    (i + 1),
                     l.getIdLotto(),
                     l.getNomeProdotto(),
                     l.getCostoAcquisto(),
