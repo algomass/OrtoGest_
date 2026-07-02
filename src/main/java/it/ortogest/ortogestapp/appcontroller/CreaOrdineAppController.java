@@ -25,6 +25,8 @@ import java.util.UUID;
  */
 public class CreaOrdineAppController {
 
+    private static final String STATO_PRONTO_RITIRO = "Pronto per il Ritiro";
+
     private IProdottoDAO prodottoDAO;
     private IOrdineDAO ordineDAO;
     private ILottoDAO lottoDAO;
@@ -183,7 +185,7 @@ public class CreaOrdineAppController {
             throw new ItemNotFoundException("Ordine non trovato.");
         }
 
-        if ("Pronto per il Ritiro".equals(ordine.getStato())) {
+        if (STATO_PRONTO_RITIRO.equals(ordine.getStato())) {
             throw new InvalidStateException("l'ordine è in attesa di ritiro dunque non può essere annullato");
         }
 
@@ -233,7 +235,7 @@ public class CreaOrdineAppController {
         List<OrdineBean> pronti = new ArrayList<>();
 
         for (Ordine o : tuttiOrdini) {
-            if ("Pronto per il Ritiro".equals(o.getStato())) {
+            if (STATO_PRONTO_RITIRO.equals(o.getStato())) {
                 pronti.add(new OrdineBean(
                         o.getIdOrdine(),
                         o.getRiepilogoProdotti(),
@@ -253,7 +255,7 @@ public class CreaOrdineAppController {
         if (ordine == null) {
             throw new ItemNotFoundException("Ordine non trovato.");
         }
-        if (!"Pronto per il Ritiro".equals(ordine.getStato())) {
+        if (!STATO_PRONTO_RITIRO.equals(ordine.getStato())) {
             throw new InvalidStateException("L'ordine non è pronto per il ritiro.");
         }
 

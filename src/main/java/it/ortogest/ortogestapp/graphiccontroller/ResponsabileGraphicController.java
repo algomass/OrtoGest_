@@ -17,6 +17,12 @@ import java.util.List;
 
 public class ResponsabileGraphicController extends BaseGraphicController {
 
+    private static final String MSG_VISTA_CLASSICA = "Vista classica";
+    private static final String MSG_PRODOTTI_DA_SCONTARE = "Prodotti da scontare";
+    private static final String MSG_PRODOTTI_DA_PREZZARE = "Prodotti da prezzare";
+    private static final String MSG_LOTTI_RITIRATI = "Lotti Ritirati";
+    private static final String MSG_TROVATI = "Trovati ";
+
     private enum StatoVista {
         CLASSICA, SCONTI, DA_PREZZARE, RITIRATI
     }
@@ -255,26 +261,30 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             mostraSuccesso("Prezzi del lotto aggiornati correttamente");
 
             // Ricarichiamo i lotti del prodotto corrente o la lista scadenze/da prezzare
-            if (vistaCorrente == StatoVista.CLASSICA) {
-                String prodSelezionato = prodottoSelezionatoField.getText();
-                if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
-                    caricaLotti(prodSelezionato);
-                }
-            } else if (vistaCorrente == StatoVista.SCONTI) {
-                List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2);
-                tabellaLotti.setItems(FXCollections.observableArrayList(lottiInScadenza));
-            } else if (vistaCorrente == StatoVista.DA_PREZZARE) {
-                List<LottoBean> lottiDaPrezzare = appController.getLottiDaPrezzare();
-                tabellaLotti.setItems(FXCollections.observableArrayList(lottiDaPrezzare));
-            } else if (vistaCorrente == StatoVista.RITIRATI) {
-                List<LottoBean> lottiRitirati = appController.getLottiRitirati();
-                tabellaLotti.setItems(FXCollections.observableArrayList(lottiRitirati));
-            }
+            ricaricaVistaCorrente();
 
         } catch (NumberFormatException _) {
             mostraErrore("Inserisci un valore numerico valido per il prezzo (es. 2.50).");
         } catch (Exception e) {
             mostraErrore(e.getMessage());
+        }
+    }
+
+    private void ricaricaVistaCorrente() {
+        if (vistaCorrente == StatoVista.CLASSICA) {
+            String prodSelezionato = prodottoSelezionatoField.getText();
+            if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
+                caricaLotti(prodSelezionato);
+            }
+        } else if (vistaCorrente == StatoVista.SCONTI) {
+            List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2);
+            tabellaLotti.setItems(FXCollections.observableArrayList(lottiInScadenza));
+        } else if (vistaCorrente == StatoVista.DA_PREZZARE) {
+            List<LottoBean> lottiDaPrezzare = appController.getLottiDaPrezzare();
+            tabellaLotti.setItems(FXCollections.observableArrayList(lottiDaPrezzare));
+        } else if (vistaCorrente == StatoVista.RITIRATI) {
+            List<LottoBean> lottiRitirati = appController.getLottiRitirati();
+            tabellaLotti.setItems(FXCollections.observableArrayList(lottiRitirati));
         }
     }
 
@@ -404,9 +414,9 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     private void impostaVistaClassica() {
         sezioneSuperiore.setVisible(true);
         sezioneSuperiore.setManaged(true);
-        btnToggleVista.setText("Prodotti da scontare");
-        if (btnDaPrezzare != null) btnDaPrezzare.setText("Prodotti da prezzare");
-        if (btnRitirati != null) btnRitirati.setText("Lotti Ritirati");
+        btnToggleVista.setText(MSG_PRODOTTI_DA_SCONTARE);
+        if (btnDaPrezzare != null) btnDaPrezzare.setText(MSG_PRODOTTI_DA_PREZZARE);
+        if (btnRitirati != null) btnRitirati.setText(MSG_LOTTI_RITIRATI);
         vistaCorrente = StatoVista.CLASSICA;
 
         if (btnRimettiInCommercio != null) { btnRimettiInCommercio.setVisible(false); btnRimettiInCommercio.setManaged(false); }
@@ -422,7 +432,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             if (lottiInScadenza.isEmpty()) {
                 mostraSuccesso("Nessun prodotto in scadenza nelle prossime 48 ore.");
             } else {
-                mostraSuccesso("Trovati " + lottiInScadenza.size() + " lotti da scontare.");
+                mostraSuccesso(MSG_TROVATI + lottiInScadenza.size() + " lotti da scontare.");
             }
 
             // Popoliamo la tabella dei lotti
@@ -431,9 +441,9 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             sezioneSuperiore.setVisible(false);
             sezioneSuperiore.setManaged(false);
-            btnToggleVista.setText("Vista classica");
-            if (btnDaPrezzare != null) btnDaPrezzare.setText("Prodotti da prezzare");
-            if (btnRitirati != null) btnRitirati.setText("Lotti Ritirati");
+            btnToggleVista.setText(MSG_VISTA_CLASSICA);
+            if (btnDaPrezzare != null) btnDaPrezzare.setText(MSG_PRODOTTI_DA_PREZZARE);
+            if (btnRitirati != null) btnRitirati.setText(MSG_LOTTI_RITIRATI);
 
             if (btnRimettiInCommercio != null) { btnRimettiInCommercio.setVisible(false); btnRimettiInCommercio.setManaged(false); }
             if (btnRimuoviLotto != null) { btnRimuoviLotto.setVisible(true); btnRimuoviLotto.setManaged(true); }
@@ -457,7 +467,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             if (lottiDaPrezzare.isEmpty()) {
                 mostraSuccesso("Nessun prodotto da prezzare al momento.");
             } else {
-                mostraSuccesso("Trovati " + lottiDaPrezzare.size() + " lotti da prezzare.");
+                mostraSuccesso(MSG_TROVATI + lottiDaPrezzare.size() + " lotti da prezzare.");
             }
 
             ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lottiDaPrezzare);
@@ -465,9 +475,9 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             sezioneSuperiore.setVisible(false);
             sezioneSuperiore.setManaged(false);
-            if (btnDaPrezzare != null) btnDaPrezzare.setText("Vista classica");
-            btnToggleVista.setText("Prodotti da scontare");
-            if (btnRitirati != null) btnRitirati.setText("Lotti Ritirati");
+            if (btnDaPrezzare != null) btnDaPrezzare.setText(MSG_VISTA_CLASSICA);
+            btnToggleVista.setText(MSG_PRODOTTI_DA_SCONTARE);
+            if (btnRitirati != null) btnRitirati.setText(MSG_LOTTI_RITIRATI);
 
             if (btnRimettiInCommercio != null) { btnRimettiInCommercio.setVisible(false); btnRimettiInCommercio.setManaged(false); }
             if (btnRimuoviLotto != null) { btnRimuoviLotto.setVisible(true); btnRimuoviLotto.setManaged(true); }
@@ -490,7 +500,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             if (lottiRitirati.isEmpty()) {
                 mostraSuccesso("Nessun lotto ritirato presente.");
             } else {
-                mostraSuccesso("Trovati " + lottiRitirati.size() + " lotti ritirati.");
+                mostraSuccesso(MSG_TROVATI + lottiRitirati.size() + " lotti ritirati.");
             }
 
             ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lottiRitirati);
@@ -498,9 +508,9 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             sezioneSuperiore.setVisible(false);
             sezioneSuperiore.setManaged(false);
-            if (btnRitirati != null) btnRitirati.setText("Vista classica");
-            btnToggleVista.setText("Prodotti da scontare");
-            if (btnDaPrezzare != null) btnDaPrezzare.setText("Prodotti da prezzare");
+            if (btnRitirati != null) btnRitirati.setText(MSG_VISTA_CLASSICA);
+            btnToggleVista.setText(MSG_PRODOTTI_DA_SCONTARE);
+            if (btnDaPrezzare != null) btnDaPrezzare.setText(MSG_PRODOTTI_DA_PREZZARE);
 
             if (btnRimettiInCommercio != null) { btnRimettiInCommercio.setVisible(true); btnRimettiInCommercio.setManaged(true); }
             if (btnRimuoviLotto != null) { btnRimuoviLotto.setVisible(false); btnRimuoviLotto.setManaged(false); }
