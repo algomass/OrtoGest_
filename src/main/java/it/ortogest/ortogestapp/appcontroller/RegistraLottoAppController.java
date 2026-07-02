@@ -6,6 +6,10 @@ import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.dao.interfacedao.ILottoDAO;
 import it.ortogest.ortogestapp.dao.interfacedao.IProdottoDAO;
 import it.ortogest.ortogestapp.exception.GestioneException;
+import it.ortogest.ortogestapp.exception.ValidationException;
+import it.ortogest.ortogestapp.exception.DuplicateItemException;
+import it.ortogest.ortogestapp.exception.ItemNotFoundException;
+import it.ortogest.ortogestapp.exception.InvalidStateException;
 import it.ortogest.ortogestapp.model.CategoriaProdotto;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Prodotto;
@@ -110,20 +114,20 @@ public class RegistraLottoAppController {
 
     public LottoBean registraLotto(LottoBean bean) throws GestioneException {
         if (bean.getIdLotto() == null || bean.getIdLotto().trim().isEmpty()) {
-            throw new GestioneException("L'ID del Lotto non può essere vuoto.");
+            throw new ValidationException("L'ID del Lotto non può essere vuoto.");
         }
         if (bean.getQuantitaKg() <= 0) {
-            throw new GestioneException("La quantità deve essere maggiore di zero.");
+            throw new ValidationException("La quantità deve essere maggiore di zero.");
         }
         if (bean.getDataArrivo() == null || bean.getDataScadenza() == null) {
-            throw new GestioneException("Le date di arrivo e scadenza sono obbligatorie.");
+            throw new ValidationException("Le date di arrivo e scadenza sono obbligatorie.");
         }
         if (bean.getDataScadenza().isBefore(bean.getDataArrivo())) {
-            throw new GestioneException("La data di scadenza non può essere precedente alla data di arrivo.");
+            throw new ValidationException("La data di scadenza non può essere precedente alla data di arrivo.");
         }
 
         if (lottoDAO.trovaPerId(bean.getIdLotto()) != null) {
-            throw new GestioneException("Esiste già un lotto registrato con ID: " + bean.getIdLotto());
+            throw new DuplicateItemException("Esiste già un lotto registrato con ID: " + bean.getIdLotto());
         }
 
         Prodotto prodotto = prodottoDAO.trovaPerNome(bean.getNomeProdotto());
@@ -154,7 +158,7 @@ public class RegistraLottoAppController {
     public void eliminaLotto(String idLotto) throws GestioneException {
         Lotto lotto = lottoDAO.trovaPerId(idLotto);
         if (lotto == null) {
-            throw new GestioneException("Lotto non trovato.");
+            throw new ItemNotFoundException("Lotto non trovato.");
         }
 
         Prodotto prodotto = lotto.getTipologiaProdotto();
@@ -177,7 +181,7 @@ public class RegistraLottoAppController {
     public void modificaLotto(LottoBean beanNuovo) throws GestioneException {
         Lotto lottoVecchio = lottoDAO.trovaPerId(beanNuovo.getIdLotto());
         if (lottoVecchio == null) {
-            throw new GestioneException("Lotto non trovato.");
+            throw new ItemNotFoundException("Lotto non trovato.");
         }
 
         double diff = beanNuovo.getQuantitaKg() - lottoVecchio.getQuantitaKg();
@@ -220,10 +224,10 @@ public class RegistraLottoAppController {
     public void smaltisciLotto(String idLotto) throws GestioneException {
         Lotto lotto = lottoDAO.trovaPerId(idLotto);
         if (lotto == null) {
-            throw new GestioneException("Lotto non trovato.");
+            throw new ItemNotFoundException("Lotto non trovato.");
         }
         if (lotto.isSmaltito()) {
-            throw new GestioneException("Lotto già smaltito.");
+            throw new InvalidStateException("Lotto già smaltito.");
         }
 
         Prodotto prodotto = lotto.getTipologiaProdotto();

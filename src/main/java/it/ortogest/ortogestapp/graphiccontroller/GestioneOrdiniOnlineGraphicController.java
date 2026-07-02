@@ -139,7 +139,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
     public void tornaIndietroAction() {
         try {
             it.ortogest.ortogestapp.utils.SceneManager.getInstance().cambiaScena(it.ortogest.ortogestapp.utils.CostantiGUI.VIEW_RESPONSABILE);
-        } catch (java.io.IOException e) {
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             mostraErrore("Errore nel ritorno alla schermata Responsabile: " + e.getMessage());
         }
     }

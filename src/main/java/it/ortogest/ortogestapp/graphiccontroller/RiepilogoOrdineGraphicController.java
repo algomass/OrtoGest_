@@ -13,11 +13,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
- * Controller Grafico dedicato esclusivamente alla fase di conferma finale dell'ordine.
+ * Controller Grafico dedicato esclusivamente alla fase di conferma finale
+ * dell'ordine.
  */
 public class RiepilogoOrdineGraphicController extends BaseGraphicController {
 
@@ -121,7 +121,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
     private void rimuoviDalCarrello(RigaOrdineBean riga) {
         carrello.remove(riga);
         rinfrescaTabella();
-        
+
         if (carrello.isEmpty()) {
             tornaAlCatalogo();
         }
@@ -130,7 +130,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
     private void rinfrescaTabella() {
         ObservableList<RigaOrdineBean> data = FXCollections.observableArrayList(carrello);
         recapTable.setItems(data);
-        
+
         double totale = 0;
         for (RigaOrdineBean r : carrello) {
             totale += r.getSubtotale();
@@ -148,16 +148,16 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
         UtenteBean currentUser = SessionManager.getInstance().getCurrentUser();
         try {
             String risultato = appController.creaOrdine(currentUser.getEmail(), carrello);
-            
+
             // Successo: svuota carrello e torna indietro con feedback
             carrello.clear();
             SessionManager.getInstance().setCarrelloCorrente(null);
-            
+
             Printer.printf("Ordine confermato: " + risultato);
             tornaAlCatalogo();
-            // N.B. Qui potresti voler mostrare un messaggio di successo, 
+            // N.B. Qui potresti voler mostrare un messaggio di successo,
             // ma dato che cambiamo scena, il controller del catalogo dovrà occuparsene.
-            
+
         } catch (Exception e) {
             mostraErrore("Errore nell'invio dell'ordine: " + e.getMessage());
             Printer.perror("Errore conferma ordine: " + e.getMessage());
@@ -167,7 +167,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
     private void tornaAlCatalogo() {
         try {
             SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_CLIENTE);
-        } catch (IOException e) {
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             Printer.perror("Errore critico nel ritorno al catalogo: " + e.getMessage());
         }
     }

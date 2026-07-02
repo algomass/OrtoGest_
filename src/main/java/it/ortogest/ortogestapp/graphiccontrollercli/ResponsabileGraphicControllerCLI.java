@@ -10,7 +10,7 @@ import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SessionManager;
 
-public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
+public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private static final String ROW_FORMAT = "%-5s %-15s %-15s %-15s %-15s\n";
     private static final String MSG_NUM_NON_VALIDO = "Numero non valido.";
@@ -30,19 +30,15 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
         String userName = SessionManager.getInstance().getCurrentUser().getNome();
 
         while (!exit) {
-            Printer.print("\n=================================");
-            Printer.print("     DASHBOARD RESPONSABILE      ");
-            Printer.print("     Bentornato, " + userName);
-            Printer.print("=================================");
-            Printer.print("1. Visualizza Catalogo Completo");
-            Printer.print("2. Imposta/Modifica Prezzo di Vendita Lotto");
-            Printer.print("3. Monitora Scadenze e Applica Sconti");
-            Printer.print("4. Aggiorna Categoria Prodotto");
-            Printer.print("5. Visualizza Lotti da Prezzare");
-            Printer.print("0. Logout");
-            Printer.print("Scelta: ");
-
-            String scelta = scanner.nextLine();
+            stampaMenu("DASHBOARD RESPONSABILE",
+                    "Bentornato, " + userName,
+                    "1. Visualizza Catalogo Completo",
+                    "2. Imposta/Modifica Prezzo di Vendita Lotto",
+                    "3. Monitora Scadenze e Applica Sconti",
+                    "4. Aggiorna Categoria Prodotto",
+                    "5. Visualizza Lotti da Prezzare",
+                    "0. Logout");
+            String scelta = leggiStringaNonVuota(scanner, "Scelta: ");
 
             switch (scelta) {
                 case "1":
@@ -61,8 +57,7 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
                     visualizzaDaPrezzare(scanner);
                     break;
                 case "0":
-                    Printer.print("Logout in corso...");
-                    SessionManager.getInstance().logout();
+                    eseguiLogout();
                     exit = true;
                     break;
                 default:
@@ -98,15 +93,11 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
         List<ProdottoBean> catalogo = visualizzaCatalogo();
         if (catalogo.isEmpty()) return;
 
-        Printer.print("\nInserisci il NUM del Prodotto per visualizzarne i lotti (oppure 0 per annullare): ");
+        int numProd = leggiInteroValido(scanner, "\nInserisci il NUM del Prodotto per visualizzarne i lotti (oppure 0 per annullare): ", 0, catalogo.size());
+        if (numProd == 0) return;
+        String nomeProdotto = catalogo.get(numProd - 1).getNome();
+
         try {
-            int numProd = Integer.parseInt(scanner.nextLine().trim());
-            if (numProd == 0) return;
-            if (numProd < 1 || numProd > catalogo.size()) {
-                Printer.perror(MSG_NUM_NON_VALIDO);
-                return;
-            }
-            String nomeProdotto = catalogo.get(numProd - 1).getNome();
 
             List<LottoBean> lotti = appController.getLottiPerProdotto(nomeProdotto);
 
@@ -127,19 +118,13 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
                         l.isScontoScadenzaAttivo() ? "SI (" + l.getPrezzoScontato() + " EUR)" : "NO");
             }
 
-            Printer.print("\nInserisci il NUM del lotto da modificare (oppure 0 per annullare): ");
-            int numLotto = Integer.parseInt(scanner.nextLine().trim());
+            int numLotto = leggiInteroValido(scanner, "\nInserisci il NUM del lotto da modificare (oppure 0 per annullare): ", 0, lotti.size());
             if (numLotto == 0) return;
-            if (numLotto < 1 || numLotto > lotti.size()) {
-                Printer.perror(MSG_NUM_NON_VALIDO);
-                return;
-            }
 
             LottoBean lottoScelto = lotti.get(numLotto - 1);
 
             Printer.print("Attuale costo di acquisto: " + lottoScelto.getCostoAcquisto() + " EUR");
-            Printer.print("Nuovo Prezzo di Vendita al pubblico (EUR): ");
-            double nuovoPrezzo = Double.parseDouble(scanner.nextLine());
+            double nuovoPrezzo = leggiDoubleValido(scanner, "Nuovo Prezzo di Vendita al pubblico (EUR): ", 0.0);
 
             // Il bean viene usato come trasportatore dei dati modificati
             lottoScelto.setPrezzoVendita(nuovoPrezzo);
@@ -147,8 +132,8 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             appController.aggiornaPrezzoLotto(lottoScelto);
             Printer.print("[SUCCESS] Prezzo aggiornato correttamente.");
 
-        } catch (NumberFormatException _) {
-            Printer.perror("Formato numerico non valido.");
+        } catch (it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
+            Printer.perror(MSG_ERRORE + e.getMessage());
         } catch (GestioneException e) {
             Printer.perror(MSG_ERRORE + e.getMessage());
         }
@@ -176,18 +161,13 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
                     l.getPrezzoVendita());
         }
 
-        Printer.print("\nInserisci il NUM del lotto a cui applicare lo sconto (oppure 0 per annullare): ");
+        int num = leggiInteroValido(scanner, "\nInserisci il NUM del lotto a cui applicare lo sconto (oppure 0 per annullare): ", 0, lottiInScadenza.size());
+        if (num == 0) return;
+        
+        LottoBean l = lottiInScadenza.get(num - 1);
+        double prezzoScontato = leggiDoubleValido(scanner, "Inserisci il nuovo prezzo SCONTATO (EUR): ", 0.0);
+
         try {
-            int num = Integer.parseInt(scanner.nextLine().trim());
-            if (num == 0) return;
-            if (num < 1 || num > lottiInScadenza.size()) {
-                Printer.perror(MSG_NUM_NON_VALIDO);
-                return;
-            }
-            
-            LottoBean l = lottiInScadenza.get(num - 1);
-            Printer.print("Inserisci il nuovo prezzo SCONTATO (EUR): ");
-            double prezzoScontato = Double.parseDouble(scanner.nextLine());
 
             l.setScontoScadenzaAttivo(true);
             l.setPrezzoScontato(prezzoScontato);
@@ -195,8 +175,8 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             appController.aggiornaPrezzoLotto(l);
             Printer.print("[SUCCESS] Sconto applicato per il lotto " + l.getIdLotto());
 
-        } catch (NumberFormatException _) {
-            Printer.perror("Valore non numerico, sconto annullato.");
+        } catch (it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
+            Printer.perror(MSG_ERRORE + e.getMessage());
         } catch (GestioneException e) {
             Printer.perror(MSG_ERRORE + e.getMessage());
         }
@@ -206,23 +186,16 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
         List<ProdottoBean> catalogo = visualizzaCatalogo();
         if (catalogo.isEmpty()) return;
 
-        Printer.print("\nInserisci il NUM del Prodotto da modificare (oppure 0 per annullare): ");
-        try {
-            int numProd = Integer.parseInt(scanner.nextLine().trim());
-            if (numProd == 0) return;
-            if (numProd < 1 || numProd > catalogo.size()) {
-                Printer.perror(MSG_NUM_NON_VALIDO);
-                return;
-            }
-            String nomeProdotto = catalogo.get(numProd - 1).getNome();
+        int numProd = leggiInteroValido(scanner, "\nInserisci il NUM del Prodotto da modificare (oppure 0 per annullare): ", 0, catalogo.size());
+        if (numProd == 0) return;
+        String nomeProdotto = catalogo.get(numProd - 1).getNome();
 
-            Printer.print("\nSeleziona la nuova categoria:");
-            Printer.print("1. FRUTTA");
-            Printer.print("2. VERDURA");
-            Printer.print("Scelta (1-2, oppure 0 per annullare): ");
-            
-            int sceltaCat = Integer.parseInt(scanner.nextLine().trim());
-            if (sceltaCat == 0) return;
+        Printer.print("\nSeleziona la nuova categoria:");
+        Printer.print("1. FRUTTA");
+        Printer.print("2. VERDURA");
+        
+        int sceltaCat = leggiInteroValido(scanner, "Scelta (1-2, oppure 0 per annullare): ", 0, 2);
+        if (sceltaCat == 0) return;
             
             String nuovaCategoria = switch (sceltaCat) {
                 case 1 -> "FRUTTA";
@@ -237,13 +210,14 @@ public class ResponsabileGraphicControllerCLI implements GraphicControllerCLI {
             ProdottoBean bean = new ProdottoBean(nomeProdotto, 0, 0, null, null);
             bean.setCategoria(nuovaCategoria);
 
-            appController.aggiornaCategoriaProdotto(bean);
-            Printer.print("[SUCCESS] Categoria aggiornata per " + nomeProdotto);
-        } catch (NumberFormatException _) {
-            Printer.perror("Formato numerico non valido.");
-        } catch (GestioneException e) {
-            Printer.perror(MSG_ERRORE + e.getMessage());
-        }
+            try {
+                appController.aggiornaCategoriaProdotto(bean);
+                Printer.print("[SUCCESS] Categoria aggiornata per " + nomeProdotto);
+            } catch (it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
+                Printer.perror(MSG_ERRORE + e.getMessage());
+            } catch (GestioneException e) {
+                Printer.perror(MSG_ERRORE + e.getMessage());
+            }
     }
 
     private void visualizzaDaPrezzare(Scanner scanner) {

@@ -110,11 +110,11 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
         }
     }
 
-    private double parseDoubleOrThrow(String value, String errorMessage) throws GestioneException {
+    private double parseDoubleOrThrow(String value, String errorMessage) throws it.ortogest.ortogestapp.exception.ValidationException {
         try {
             return Double.parseDouble(value);
         } catch (NumberFormatException _) {
-            throw new GestioneException(errorMessage);
+            throw new it.ortogest.ortogestapp.exception.ValidationException(errorMessage);
         }
     }
 }

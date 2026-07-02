@@ -32,7 +32,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,8 @@ public class ClienteGraphicController extends BaseGraphicController {
     @FXML
     private ScrollPane scrollPaneCatalogo;
 
-    @FXML private TableView<ProdottoBean> catalogoTable;
+    @FXML
+    private TableView<ProdottoBean> catalogoTable;
 
     @FXML
     private VBox ordiniContainer;
@@ -113,7 +113,8 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void mostraFruttaAction() {
-        if (searchField != null) searchField.clear();
+        if (searchField != null)
+            searchField.clear();
         aggiornaStileSidebar(btnFrutta);
         titoloSezione.setText("Catalogo - Frutta");
         mostraCatalogo();
@@ -122,7 +123,8 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void mostraVerduraAction() {
-        if (searchField != null) searchField.clear();
+        if (searchField != null)
+            searchField.clear();
         aggiornaStileSidebar(btnVerdura);
         titoloSezione.setText("Catalogo - Verdura");
         mostraCatalogo();
@@ -131,7 +133,8 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void mostraOrdiniAction() {
-        if (searchField != null) searchField.clear();
+        if (searchField != null)
+            searchField.clear();
         aggiornaStileSidebar(btnOrdini);
         titoloSezione.setText("I Miei Ordini");
         mostraOrdini();
@@ -142,7 +145,8 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void cercaProdottoAction() {
-        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA : CategoriaProdotto.FRUTTA;
+        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA
+                : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
 
@@ -150,7 +154,8 @@ public class ClienteGraphicController extends BaseGraphicController {
         scrollPaneCatalogo.setVisible(true);
         ordiniContainer.setVisible(false);
         errorLabel.setVisible(false);
-        if (searchField != null) searchField.setVisible(true);
+        if (searchField != null)
+            searchField.setVisible(true);
         aggiornaUIHeaderCarrello();
     }
 
@@ -158,7 +163,8 @@ public class ClienteGraphicController extends BaseGraphicController {
         scrollPaneCatalogo.setVisible(false);
         ordiniContainer.setVisible(true);
         errorLabel.setVisible(false);
-        if (searchField != null) searchField.setVisible(false);
+        if (searchField != null)
+            searchField.setVisible(false);
         aggiornaUIHeaderCarrello();
     }
 
@@ -166,7 +172,9 @@ public class ClienteGraphicController extends BaseGraphicController {
         List<ProdottoBean> prodotti = appController.getCatalogoPerCategoria(categoria);
         flowPaneProdotti.getChildren().clear();
 
-        String filter = (searchField != null && searchField.getText() != null) ? searchField.getText().trim().toLowerCase() : "";
+        String filter = (searchField != null && searchField.getText() != null)
+                ? searchField.getText().trim().toLowerCase()
+                : "";
 
         boolean trovati = false;
         for (ProdottoBean prodotto : prodotti) {
@@ -188,7 +196,8 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
 
         if (!trovati) {
-            Label vuoto = new Label(filter.isEmpty() ? "Nessun prodotto disponibile in questa categoria." : "Nessun prodotto corrisponde alla ricerca.");
+            Label vuoto = new Label(filter.isEmpty() ? "Nessun prodotto disponibile in questa categoria."
+                    : "Nessun prodotto corrisponde alla ricerca.");
             vuoto.setTextFill(Color.web("#7f8c8d"));
             vuoto.setStyle("-fx-font-size: 14;");
             flowPaneProdotti.getChildren().add(vuoto);
@@ -213,7 +222,8 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
 
         if ("Pronto per il Ritiro".equals(selected.getStato())) {
-            Alert errAlert = new Alert(Alert.AlertType.ERROR, "L'ordine è in attesa di ritiro dunque non può essere annullato.", ButtonType.OK);
+            Alert errAlert = new Alert(Alert.AlertType.ERROR,
+                    "L'ordine è in attesa di ritiro dunque non può essere annullato.", ButtonType.OK);
             errAlert.setHeaderText("Impossibile annullare l'ordine");
             errAlert.showAndWait();
             return;
@@ -223,7 +233,8 @@ public class ClienteGraphicController extends BaseGraphicController {
         if ("Ritirato".equals(selected.getStato())) {
             messaggioConferma = "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine() + " dallo storico?";
         } else {
-            messaggioConferma = "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine() + "?\nLe quantità verranno ripristinate in magazzino.";
+            messaggioConferma = "Sei sicuro di voler rimuovere l'ordine " + selected.getIdOrdine()
+                    + "?\nLe quantità verranno ripristinate in magazzino.";
         }
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, messaggioConferma, ButtonType.YES, ButtonType.NO);
@@ -249,7 +260,7 @@ public class ClienteGraphicController extends BaseGraphicController {
      */
     private void mostraPopupSelezioneLotto(ProdottoBean prodotto) {
         errorLabel.setVisible(false);
-        
+
         List<it.ortogest.ortogestapp.model.Lotto> lotti = appController.getLottiDisponibili(prodotto.getNome());
         if (lotti == null || lotti.isEmpty()) {
             mostraMessaggio("Nessun lotto disponibile per questo prodotto.", false);
@@ -259,59 +270,62 @@ public class ClienteGraphicController extends BaseGraphicController {
         Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.setTitle("Scegli un lotto per " + prodotto.getNome());
-        
+
         VBox root = new VBox(15);
         root.setPadding(new Insets(20));
         root.setAlignment(Pos.TOP_CENTER);
-        
+
         Label title = new Label("Lotti disponibili per " + prodotto.getNome());
         title.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
         root.getChildren().add(title);
-        
+
         for (it.ortogest.ortogestapp.model.Lotto l : lotti) {
             // Calcola disponibilità residua del lotto rispetto al carrello
             double giacenzaResidua = calcolaGiacenzaResidua(l);
-            
-            if (giacenzaResidua <= 0) continue;
-            
+
+            if (giacenzaResidua <= 0)
+                continue;
+
             HBox lottoBox = new HBox(15);
             lottoBox.setAlignment(Pos.CENTER_LEFT);
             lottoBox.setStyle("-fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-padding: 10;");
-            
+
             VBox infoBox = new VBox(5);
             Label scadeLabel = new Label("Scadenza: " + l.getDataScadenza());
             scadeLabel.setStyle("-fx-font-weight: bold;");
-            
-            double prezzoReale = (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato() : l.getPrezzoVendita();
+
+            double prezzoReale = (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato()
+                    : l.getPrezzoVendita();
             Label prezzoLabel = new Label(String.format("Prezzo: %.2f EUR/Kg", prezzoReale));
             if (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) {
                 prezzoLabel.setTextFill(Color.web("#e74c3c"));
             }
-            
+
             Label qtaLabel = new Label(String.format("Disp: %.1f Kg", giacenzaResidua));
             infoBox.getChildren().addAll(scadeLabel, prezzoLabel, qtaLabel);
-            
+
             TextField quantitaField = new TextField();
             quantitaField.setPromptText("Kg");
             quantitaField.setPrefWidth(60);
-            
+
             Button aggiungiBtn = new Button("Aggiungi");
             aggiungiBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
-            
+
             double finalGiacenzaResidua = giacenzaResidua;
             aggiungiBtn.setOnAction(e -> {
-                aggiungiLottoAlCarrello(l.getIdLotto(), prodotto.getNome(), quantitaField.getText(), prezzoReale, finalGiacenzaResidua, popupStage);
+                aggiungiLottoAlCarrello(l.getIdLotto(), prodotto.getNome(), quantitaField.getText(), prezzoReale,
+                        finalGiacenzaResidua, popupStage);
             });
-            
+
             lottoBox.getChildren().addAll(infoBox, quantitaField, aggiungiBtn);
             root.getChildren().add(lottoBox);
         }
-        
+
         if (root.getChildren().size() == 1) {
             Label noLotti = new Label("Nessun lotto disponibile o quantità già nel carrello.");
             root.getChildren().add(noLotti);
         }
-        
+
         Scene scene = new Scene(root, 400, 400);
         popupStage.setScene(scene);
         popupStage.show();
@@ -327,7 +341,8 @@ public class ClienteGraphicController extends BaseGraphicController {
         return giacenzaResidua;
     }
 
-    private void aggiungiLottoAlCarrello(String idLotto, String nomeProdotto, String qtaStr, double prezzoUnitario, double maxAcquistabile, Stage popupStage) {
+    private void aggiungiLottoAlCarrello(String idLotto, String nomeProdotto, String qtaStr, double prezzoUnitario,
+            double maxAcquistabile, Stage popupStage) {
         if (qtaStr == null || qtaStr.trim().isEmpty()) {
             mostraMessaggio("Inserisci la quantità.", false);
             return;
@@ -336,9 +351,14 @@ public class ClienteGraphicController extends BaseGraphicController {
         double qta;
         try {
             qta = Double.parseDouble(qtaStr);
-            if (qta <= 0) throw new NumberFormatException();
+            if (qta <= 0)
+                throw new it.ortogest.ortogestapp.exception.ValidationException(
+                        "La quantità deve essere maggiore di zero.");
         } catch (NumberFormatException _) {
-            mostraMessaggio("Quantità non valida (deve essere > 0).", false);
+            mostraMessaggio("Quantità non valida (deve essere un numero).", false);
+            return;
+        } catch (it.ortogest.ortogestapp.exception.ValidationException e) {
+            mostraMessaggio(e.getMessage(), false);
             return;
         }
 
@@ -366,7 +386,8 @@ public class ClienteGraphicController extends BaseGraphicController {
         aggiornaUIHeaderCarrello();
 
         // Ricarica la categoria per aggiornare le giacenze sulle card
-        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA : CategoriaProdotto.FRUTTA;
+        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA
+                : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
 
@@ -385,7 +406,7 @@ public class ClienteGraphicController extends BaseGraphicController {
             // Cambia scena verso il file FXML dedicato
             SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_RIEPILOGO_ORDINE);
 
-        } catch (IOException e) {
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             mostraMessaggio("Errore nel caricamento del riepilogo: " + e.getMessage(), false);
             Printer.perror("Errore cambio scena riepilogo: " + e.getMessage());
         }
@@ -398,7 +419,8 @@ public class ClienteGraphicController extends BaseGraphicController {
         mostraMessaggio("Carrello svuotato.", true);
 
         // Ricarica la categoria per ripristinare le giacenze originali sulle card
-        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA : CategoriaProdotto.FRUTTA;
+        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA
+                : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
 
@@ -448,16 +470,18 @@ public class ClienteGraphicController extends BaseGraphicController {
 
         VBox prezziBox = new VBox(2);
         prezziBox.setAlignment(Pos.CENTER);
-        
+
         if (prodotto.getPrezzoMin() == prodotto.getPrezzoMax()) {
             Label prezzoLabel = new Label(String.format("%.2f EUR/Kg", prodotto.getPrezzoMin()));
             prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 14;");
             prezziBox.getChildren().add(prezzoLabel);
         } else {
             Label badgeVari = new Label("Lotti Multipli");
-            badgeVari.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 3 6; -fx-background-radius: 4; -fx-font-size: 10; -fx-font-weight: bold;");
-            
-            Label prezzoLabel = new Label(String.format("Da %.2f EUR a %.2f EUR", prodotto.getPrezzoMin(), prodotto.getPrezzoMax()));
+            badgeVari.setStyle(
+                    "-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 3 6; -fx-background-radius: 4; -fx-font-size: 10; -fx-font-weight: bold;");
+
+            Label prezzoLabel = new Label(
+                    String.format("Da %.2f EUR a %.2f EUR", prodotto.getPrezzoMin(), prodotto.getPrezzoMax()));
             prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 13;");
             prezziBox.getChildren().addAll(badgeVari, prezzoLabel);
         }

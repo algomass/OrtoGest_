@@ -366,7 +366,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     public void apriGestioneOrdiniAction() {
         try {
             it.ortogest.ortogestapp.utils.SceneManager.getInstance().cambiaScena(it.ortogest.ortogestapp.utils.CostantiGUI.VIEW_GESTIONE_ORDINI_ONLINE);
-        } catch (java.io.IOException e) {
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             mostraErrore("Errore nell'apertura della gestione ordini: " + e.getMessage());
         }
     }

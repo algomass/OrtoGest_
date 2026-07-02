@@ -39,17 +39,21 @@ public class SceneManager {
     }
 
     // Unico metodo astratto e generico per il cambio schermata
-    public void cambiaScena(String fxmlPath) throws IOException {
+    public void cambiaScena(String fxmlPath) throws it.ortogest.ortogestapp.exception.ViewException {
         URL resource = getClass().getResource(fxmlPath);
         if (resource == null) {
-            throw new IOException("Impossibile trovare il file FXML: " + fxmlPath);
+            throw new it.ortogest.ortogestapp.exception.ViewException("Impossibile trovare il file FXML: " + fxmlPath);
         }
-        Parent root = FXMLLoader.load(resource);
-        if (primaryWindow.getScene() == null) {
-            primaryWindow.setScene(new Scene(root));
-        } else {
-            primaryWindow.getScene().setRoot(root);
+        try {
+            Parent root = FXMLLoader.load(resource);
+            if (primaryWindow.getScene() == null) {
+                primaryWindow.setScene(new Scene(root));
+            } else {
+                primaryWindow.getScene().setRoot(root);
+            }
+            primaryWindow.show();
+        } catch(IOException e) {
+            throw new it.ortogest.ortogestapp.exception.ViewException("Errore nel caricamento del file FXML: " + fxmlPath, e);
         }
-        primaryWindow.show();
     }
 }

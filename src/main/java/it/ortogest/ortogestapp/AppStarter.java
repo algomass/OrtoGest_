@@ -3,8 +3,6 @@ package it.ortogest.ortogestapp;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 import it.ortogest.ortogestapp.utils.CostantiGUI;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SceneManager;
@@ -30,7 +28,7 @@ public class AppStarter extends Application {
             // direttamente nella root "target/classes/GUI" durante la compilazione.
             sceneManager.cambiaScena(CostantiGUI.VIEW_LOGIN);
 
-        } catch (IOException e) {
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             // Gestione basilare degli errori di caricamento
             Printer.perror("Errore durante l'avvio dell'applicazione: " + e.getMessage());
         }

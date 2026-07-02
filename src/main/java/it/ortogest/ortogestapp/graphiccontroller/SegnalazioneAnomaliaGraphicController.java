@@ -10,7 +10,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import java.io.IOException;
 
 /**
  * Controller Grafico per la schermata di Segnalazione Anomalia.
@@ -51,7 +50,8 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
         String quantitaStr = quantitaField.getText();
         String note = noteArea.getText();
 
-        if (tipo == null || email == null || email.trim().isEmpty() || prodotto == null || prodotto.trim().isEmpty() || quantitaStr == null
+        if (tipo == null || email == null || email.trim().isEmpty() || prodotto == null || prodotto.trim().isEmpty()
+                || quantitaStr == null
                 || quantitaStr.trim().isEmpty()) {
             mostraStatus("Tutti i campi obbligatori devono essere compilati.", false);
             return;
@@ -79,7 +79,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
 
         try {
             SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_MAGAZZINO);
-        } catch (IOException e) {
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             Printer.perror("Errore tornando al Magazzino: " + e.getMessage());
         }
     }
@@ -88,7 +88,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
     public void annullaAction() {
         try {
             SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_MAGAZZINO);
-        } catch (IOException e) {
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             Printer.perror("Errore tornando al Magazzino: " + e.getMessage());
         }
     }

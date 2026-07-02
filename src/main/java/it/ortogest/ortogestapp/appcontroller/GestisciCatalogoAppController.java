@@ -5,6 +5,8 @@ import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.dao.interfacedao.ILottoDAO;
 import it.ortogest.ortogestapp.dao.interfacedao.IProdottoDAO;
 import it.ortogest.ortogestapp.exception.GestioneException;
+import it.ortogest.ortogestapp.exception.ValidationException;
+import it.ortogest.ortogestapp.exception.ItemNotFoundException;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Prodotto;
 import it.ortogest.ortogestapp.pattern.abstractfactory.DAOFactory;
@@ -60,7 +62,7 @@ public class GestisciCatalogoAppController {
         Prodotto p = prodottoDAO.trovaPerNome(bean.getNome());
 
         if (p == null) {
-            throw new GestioneException("Prodotto non trovato nel catalogo.");
+            throw new ItemNotFoundException("Prodotto non trovato nel catalogo.");
         }
 
         if (bean.getCategoria() != null && !bean.getCategoria().isEmpty()) {
@@ -97,14 +99,14 @@ public class GestisciCatalogoAppController {
 
     public LottoBean impostaPrezzoLotto(LottoBean bean) throws GestioneException {
         if (bean.getPrezzoVendita() < 0) {
-            throw new GestioneException("Il prezzo di vendita non può essere negativo.");
+            throw new ValidationException("Il prezzo di vendita non può essere negativo.");
         }
 
         ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
         Lotto lotto = lottoDAO.trovaPerId(bean.getIdLotto());
 
         if (lotto == null) {
-            throw new GestioneException("Lotto non trovato.");
+            throw new ItemNotFoundException("Lotto non trovato.");
         }
 
         lotto.setPrezzoVendita(bean.getPrezzoVendita());
@@ -169,17 +171,17 @@ public class GestisciCatalogoAppController {
 
     public LottoBean aggiornaPrezzoLotto(LottoBean bean) throws GestioneException {
         if (bean.getPrezzoVendita() < 0) {
-            throw new GestioneException("Il prezzo di vendita non può essere negativo.");
+            throw new ValidationException("Il prezzo di vendita non può essere negativo.");
         }
         if (bean.isScontoScadenzaAttivo() && bean.getPrezzoScontato() < 0) {
-            throw new GestioneException("Il prezzo scontato non può essere negativo.");
+            throw new ValidationException("Il prezzo scontato non può essere negativo.");
         }
 
         ILottoDAO lottoDAO = DAOFactory.getInstance().getLottoDAO();
         Lotto lotto = lottoDAO.trovaPerId(bean.getIdLotto());
 
         if (lotto == null) {
-            throw new GestioneException("Lotto non trovato.");
+            throw new ItemNotFoundException("Lotto non trovato.");
         }
 
         lotto.setPrezzoVendita(bean.getPrezzoVendita());
@@ -196,7 +198,7 @@ public class GestisciCatalogoAppController {
         Lotto lotto = lottoDAO.trovaPerId(idLotto);
 
         if (lotto == null) {
-            throw new GestioneException("Lotto non trovato.");
+            throw new ItemNotFoundException("Lotto non trovato.");
         }
 
         lotto.setRitirato(true);
@@ -231,7 +233,7 @@ public class GestisciCatalogoAppController {
         Lotto lotto = lottoDAO.trovaPerId(idLotto);
 
         if (lotto == null) {
-            throw new GestioneException("Lotto non trovato.");
+            throw new ItemNotFoundException("Lotto non trovato.");
         }
 
         lotto.setRitirato(false);

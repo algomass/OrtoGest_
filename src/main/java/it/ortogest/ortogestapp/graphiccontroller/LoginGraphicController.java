@@ -1,7 +1,5 @@
 package it.ortogest.ortogestapp.graphiccontroller;
 
-import java.io.IOException;
-
 import it.ortogest.ortogestapp.beans.CredenzialiBean;
 import it.ortogest.ortogestapp.beans.UtenteBean;
 import it.ortogest.ortogestapp.appcontroller.LoginAppController;
@@ -108,7 +106,7 @@ public class LoginGraphicController {
             // Printer
             Printer.perror("Errore di accesso: " + e.getMessage());
             mostraErrore(e.getMessage());
-        } catch (IOException e) {
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             Printer.perror("Errore di caricamento: Impossibile trovare la schermata successiva. " + e.getMessage());
             mostraErrore("Errore di sistema. Contatta l'assistenza.");
         }

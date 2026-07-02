@@ -8,11 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
-import java.io.IOException;
-
 /**
  * Controller Grafico Base (Boundary).
- * Contiene i metodi e i comportamenti comuni a tutte le schermate, 
+ * Contiene i metodi e i comportamenti comuni a tutte le schermate,
  * come ad esempio l'azione di logout (Esci).
  */
 public abstract class BaseGraphicController {
@@ -23,24 +21,27 @@ public abstract class BaseGraphicController {
         SessionManager.getInstance().logout();
         Printer.printf("Logout effettuato con successo. Ritorno alla schermata iniziale.");
 
-        cambiaScenaSicuro(CostantiGUI.VIEW_LOGIN, "Errore critico durante il logout: impossibile ricaricare Login.fxml.");
+        cambiaScenaSicuro(CostantiGUI.VIEW_LOGIN,
+                "Errore critico durante il logout: impossibile ricaricare Login.fxml.");
     }
 
     /**
      * Esegue il cambio di scena gestendo l'eccezione in modo sicuro.
-     * @param viewName Nome della vista da caricare.
+     * 
+     * @param viewName     Nome della vista da caricare.
      * @param errorMessage Messaggio di errore se fallisce.
      */
     protected void cambiaScenaSicuro(String viewName, String errorMessage) {
         try {
             SceneManager.getInstance().cambiaScena(viewName);
-        } catch (IOException e) {
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             Printer.perror(errorMessage + " " + e.getMessage());
         }
     }
 
     /**
-     * Centralizza la logica di colorazione delle label di stato (verde se successo, rosso se errore).
+     * Centralizza la logica di colorazione delle label di stato (verde se successo,
+     * rosso se errore).
      */
     protected void mostraStatusLabel(Label label, String messaggio, boolean successo) {
         if (label != null) {
@@ -51,7 +52,8 @@ public abstract class BaseGraphicController {
     }
 
     /**
-     * Formats a table column containing numbers to display with exactly two decimal places.
+     * Formats a table column containing numbers to display with exactly two decimal
+     * places.
      */
     protected <T, N extends Number> void formatDoubleColumn(javafx.scene.control.TableColumn<T, N> column) {
         if (column != null) {

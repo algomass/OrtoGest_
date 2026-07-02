@@ -13,7 +13,7 @@ import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SessionManager;
 
-public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
+public class ClienteGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private final CreaOrdineAppController appController;
 
@@ -31,19 +31,15 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         String userName = SessionManager.getInstance().getCurrentUser().getNome();
 
         while (!exit) {
-            Printer.print("\n=================================");
-            Printer.print("       AREA CLIENTI ORTOGEST     ");
-            Printer.print("       Benvenuto, " + userName);
-            Printer.print("=================================");
-            Printer.print("1. Sfoglia Catalogo e Acquista");
-            Printer.print("2. Visualizza Carrello (" + getNumeroElementiCarrello() + " elementi)");
-            Printer.print("3. Invia Ordine (Clicca & Ritira)");
-            Printer.print("4. I Miei Ordini");
-            Printer.print("5. Annulla un Ordine");
-            Printer.print("0. Logout");
-            Printer.print("Scelta: ");
-
-            String scelta = scanner.nextLine();
+            stampaMenu("AREA CLIENTI ORTOGEST",
+                    "Benvenuto, " + userName,
+                    "1. Sfoglia Catalogo e Acquista",
+                    "2. Visualizza Carrello (" + getNumeroElementiCarrello() + " elementi)",
+                    "3. Invia Ordine (Clicca & Ritira)",
+                    "4. I Miei Ordini",
+                    "5. Annulla un Ordine",
+                    "0. Logout");
+            String scelta = leggiStringaNonVuota(scanner, "Scelta: ");
 
             switch (scelta) {
                 case "1":
@@ -62,10 +58,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
                     annullaOrdine(scanner);
                     break;
                 case "0":
-                    Printer.print("Logout in corso...");
-                    // Rimuoviamo il carrello alla disconnessione
-                    SessionManager.getInstance().setCarrelloCorrente(null);
-                    SessionManager.getInstance().logout();
+                    eseguiLogout();
                     exit = true;
                     break;
                 default:
@@ -99,22 +92,11 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
                     p.getPrezzoMax());
         }
 
-        Printer.print("\nInserisci il NUM del prodotto che vuoi acquistare (oppure 0 per annullare): ");
-        try {
-            int sceltaProd = Integer.parseInt(scanner.nextLine());
-            if (sceltaProd == 0)
-                return;
-            if (sceltaProd < 1 || sceltaProd > catalogo.size()) {
-                Printer.perror("Scelta non valida.");
-                return;
-            }
+        int sceltaProd = leggiInteroValido(scanner, "\nInserisci il NUM del prodotto che vuoi acquistare (oppure 0 per annullare): ", 0, catalogo.size());
+        if (sceltaProd == 0) return;
 
-            ProdottoBean scelto = catalogo.get(sceltaProd - 1);
-            scegliLottoEQuantita(scelto, scanner);
-
-        } catch (NumberFormatException _) {
-            Printer.perror("Inserire un numero valido.");
-        }
+        ProdottoBean scelto = catalogo.get(sceltaProd - 1);
+        scegliLottoEQuantita(scelto, scanner);
     }
 
     private void scegliLottoEQuantita(ProdottoBean prodotto, Scanner scanner) {
@@ -142,38 +124,25 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
                     infoSconto);
         }
 
-        Printer.print("\nInserisci il NUM del lotto dal quale prelevare (oppure 0 per annullare): ");
-        try {
-            int sceltaLotto = Integer.parseInt(scanner.nextLine());
-            if (sceltaLotto == 0)
-                return;
-            if (sceltaLotto < 1 || sceltaLotto > lotti.size()) {
-                Printer.perror("Scelta non valida.");
-                return;
-            }
+        int sceltaLotto = leggiInteroValido(scanner, "\nInserisci il NUM del lotto dal quale prelevare (oppure 0 per annullare): ", 0, lotti.size());
+        if (sceltaLotto == 0) return;
 
-            Lotto lottoScelto = lotti.get(sceltaLotto - 1);
-            double prezzoScelto = lottoScelto.isScontoScadenzaAttivo() && lottoScelto.getPrezzoScontato() > 0
-                    ? lottoScelto.getPrezzoScontato()
-                    : lottoScelto.getPrezzoVendita();
+        Lotto lottoScelto = lotti.get(sceltaLotto - 1);
+        double prezzoScelto = lottoScelto.isScontoScadenzaAttivo() && lottoScelto.getPrezzoScontato() > 0
+                ? lottoScelto.getPrezzoScontato()
+                : lottoScelto.getPrezzoVendita();
 
-            Printer.print("Quantità da acquistare (Kg) (Max " + lottoScelto.getQuantitaKg() + "): ");
-            double quantita = Double.parseDouble(scanner.nextLine());
+        double quantita = leggiDoubleValido(scanner, "Quantità da acquistare (Kg) (Max " + lottoScelto.getQuantitaKg() + "): ", 0.01);
 
-            if (quantita <= 0 || quantita > lottoScelto.getQuantitaKg()) {
-                Printer.perror("Quantità non valida o superiore alla giacenza.");
-                return;
-            }
-
-            // Creiamo la riga d'ordine e l'aggiungiamo al carrello
-            RigaOrdineBean riga = new RigaOrdineBean(prodotto.getNome(), lottoScelto.getIdLotto(), quantita,
-                    prezzoScelto);
-            SessionManager.getInstance().getCarrelloCorrente().add(riga);
-            Printer.print("[SUCCESS] Prodotto aggiunto al carrello!");
-
-        } catch (NumberFormatException _) {
-            Printer.perror("Inserire un valore numerico valido.");
+        if (quantita > lottoScelto.getQuantitaKg()) {
+            Printer.perror("Quantità superiore alla giacenza.");
+            return;
         }
+
+        // Creiamo la riga d'ordine e l'aggiungiamo al carrello
+        RigaOrdineBean riga = new RigaOrdineBean(prodotto.getNome(), lottoScelto.getIdLotto(), quantita, prezzoScelto);
+        SessionManager.getInstance().getCarrelloCorrente().add(riga);
+        Printer.print("[SUCCESS] Prodotto aggiunto al carrello!");
     }
 
     private void visualizzaCarrello() {
@@ -216,8 +185,10 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
             Printer.print("[SUCCESS] " + risultato);
             // Svuota carrello dopo il completamento
             carrello.clear();
-        } catch (GestioneException e) {
+        } catch (it.ortogest.ortogestapp.exception.ValidationException | it.ortogest.ortogestapp.exception.InsufficientStockException | it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
             Printer.perror("[ERRORE] Impossibile creare l'ordine: " + e.getMessage());
+        } catch (GestioneException e) {
+            Printer.perror("[ERRORE SISTEMA] " + e.getMessage());
         }
     }
 
@@ -240,8 +211,7 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
 
     private void annullaOrdine(Scanner scanner) {
         visualizzaStoricoOrdini();
-        Printer.print("\nInserisci l'ID dell'ordine da annullare (oppure INVIO vuoto per uscire): ");
-        String idOrdine = scanner.nextLine().trim();
+        String idOrdine = leggiStringaOpzionale(scanner, "\nInserisci l'ID dell'ordine da annullare (oppure INVIO vuoto per uscire): ");
 
         if (idOrdine.isEmpty())
             return;
@@ -249,8 +219,10 @@ public class ClienteGraphicControllerCLI implements GraphicControllerCLI {
         try {
             appController.eliminaOrdine(idOrdine);
             Printer.print("[SUCCESS] Ordine " + idOrdine + " annullato correttamente.");
-        } catch (GestioneException e) {
+        } catch (it.ortogest.ortogestapp.exception.InvalidStateException | it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
             Printer.perror("[ERRORE] " + e.getMessage());
+        } catch (GestioneException e) {
+            Printer.perror("[ERRORE DI SISTEMA] " + e.getMessage());
         }
     }
 }

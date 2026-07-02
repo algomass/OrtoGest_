@@ -16,7 +16,7 @@ import it.ortogest.ortogestapp.utils.SessionManager;
  * 2. Leggere i dati di input
  * 3. Chiamare l'AppController corrispondente
  */
-public class LoginGraphicControllerCLI implements GraphicControllerCLI {
+public class LoginGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private final LoginAppController loginAppController;
 
@@ -29,14 +29,10 @@ public class LoginGraphicControllerCLI implements GraphicControllerCLI {
         boolean exit = false;
 
         while (!exit) {
-            Printer.print("=================================");
-            Printer.print("     BENVENUTO IN ORTOGEST (CLI) ");
-            Printer.print("=================================");
-            Printer.print("1. Effettua il Login");
-            Printer.print("0. Esci dall'applicazione");
-            Printer.print("Scelta: ");
-            
-            String scelta = scanner.nextLine();
+            stampaMenu("BENVENUTO IN ORTOGEST (CLI)",
+                    "1. Effettua il Login",
+                    "0. Esci dall'applicazione");
+            String scelta = leggiStringaNonVuota(scanner, "Scelta: ");
 
             switch (scelta) {
                 case "1":
@@ -61,11 +57,8 @@ public class LoginGraphicControllerCLI implements GraphicControllerCLI {
 
     private void eseguiLogin(Scanner scanner) {
         Printer.print("--- Inserimento Credenziali ---");
-        Printer.print("Email: ");
-        String email = scanner.nextLine();
-
-        Printer.print("Password: ");
-        String password = scanner.nextLine();
+        String email = leggiStringaNonVuota(scanner, "Email: ");
+        String password = leggiStringaNonVuota(scanner, "Password: ");
 
         CredenzialiBean credenziali = new CredenzialiBean(email, password);
 

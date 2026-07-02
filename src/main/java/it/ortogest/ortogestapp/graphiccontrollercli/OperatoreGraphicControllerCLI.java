@@ -8,7 +8,7 @@ import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SessionManager;
 
-public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
+public class OperatoreGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private final CreaOrdineAppController appController;
 
@@ -22,16 +22,12 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
         String userName = SessionManager.getInstance().getCurrentUser().getNome();
 
         while (!exit) {
-            Printer.print("\n=================================");
-            Printer.print("     CASSA / OPERATORE           ");
-            Printer.print("     Turno di: " + userName);
-            Printer.print("=================================");
-            Printer.print("1. Visualizza Ordini in attesa di ritiro");
-            Printer.print("2. Evadi Ordine ed Emetti Scontrino");
-            Printer.print("0. Logout");
-            Printer.print("Scelta: ");
-
-            String scelta = scanner.nextLine();
+            stampaMenu("CASSA / OPERATORE",
+                    "Turno di: " + userName,
+                    "1. Visualizza Ordini in attesa di ritiro",
+                    "2. Evadi Ordine ed Emetti Scontrino",
+                    "0. Logout");
+            String scelta = leggiStringaNonVuota(scanner, "Scelta: ");
 
             switch (scelta) {
                 case "1":
@@ -41,8 +37,7 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
                     evadiOrdine(scanner);
                     break;
                 case "0":
-                    Printer.print("Chiusura cassa in corso...");
-                    SessionManager.getInstance().logout();
+                    eseguiLogout();
                     exit = true;
                     break;
                 default:
@@ -78,31 +73,21 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
         List<OrdineBean> pronti = getOrdiniPronti();
         if (pronti.isEmpty()) return;
 
-        Printer.print("\nInserisci il NUM dell'ordine da evadere (oppure 0 per annullare): ");
-        try {
-            int numOrdine = Integer.parseInt(scanner.nextLine().trim());
-            if (numOrdine == 0) return;
-            if (numOrdine < 1 || numOrdine > pronti.size()) {
-                Printer.perror("[ERRORE] Numero non valido.");
-                return;
-            }
-            
-            OrdineBean ordineDaEvadere = pronti.get(numOrdine - 1);
+        int numOrdine = leggiInteroValido(scanner, "\nInserisci il NUM dell'ordine da evadere (oppure 0 per annullare): ", 0, pronti.size());
+        if (numOrdine == 0) return;
+        
+        OrdineBean ordineDaEvadere = pronti.get(numOrdine - 1);
 
-            Printer.print("\n--- Riepilogo Ordine #" + ordineDaEvadere.getIdOrdine() + " ---");
-            Printer.print("Cliente: " + ordineDaEvadere.getEmailCliente());
-            Printer.print("Prodotti: " + ordineDaEvadere.getRiepilogoProdotti());
-            Printer.printf("TOTALE DA INCASSARE: %.2f EUR\n", ordineDaEvadere.getTotale());
-            Printer.print("Confermi l'avvenuto pagamento? (S/N): ");
-            
-            String conferma = scanner.nextLine().trim().toUpperCase();
-            if ("S".equals(conferma)) {
-                confermaEmettiScontrino(ordineDaEvadere);
-            } else {
-                Printer.print("Operazione annullata.");
-            }
-        } catch (NumberFormatException _) {
-            Printer.perror("[ERRORE] Formato numerico non valido.");
+        Printer.print("\n--- Riepilogo Ordine #" + ordineDaEvadere.getIdOrdine() + " ---");
+        Printer.print("Cliente: " + ordineDaEvadere.getEmailCliente());
+        Printer.print("Prodotti: " + ordineDaEvadere.getRiepilogoProdotti());
+        Printer.printf("TOTALE DA INCASSARE: %.2f EUR\n", ordineDaEvadere.getTotale());
+        
+        String conferma = leggiStringaNonVuota(scanner, "Confermi l'avvenuto pagamento? (S/N): ").toUpperCase();
+        if ("S".equals(conferma)) {
+            confermaEmettiScontrino(ordineDaEvadere);
+        } else {
+            Printer.print("Operazione annullata.");
         }
     }
 
@@ -115,8 +100,10 @@ public class OperatoreGraphicControllerCLI implements GraphicControllerCLI {
             Printer.printf(" Pagato: %.2f EUR\n", ordineDaEvadere.getTotale());
             Printer.print("**************************************");
             Printer.print("[SUCCESS] Ordine completato e passato allo stato 'Ritirato'.");
-        } catch (Exception e) {
+        } catch (it.ortogest.ortogestapp.exception.InvalidStateException | it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
             Printer.perror("[ERRORE] Impossibile aggiornare lo stato dell'ordine: " + e.getMessage());
+        } catch (it.ortogest.ortogestapp.exception.GestioneException e) {
+            Printer.perror("[ERRORE DI SISTEMA] " + e.getMessage());
         }
     }
 

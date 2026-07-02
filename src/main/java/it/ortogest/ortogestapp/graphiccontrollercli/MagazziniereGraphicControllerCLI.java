@@ -14,7 +14,7 @@ import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SessionManager;
 
-public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
+public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private static final String MSG_INVIO_MANTENERE = ") [Invio per mantenere]: ";
 
@@ -32,17 +32,13 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
         String userName = SessionManager.getInstance().getCurrentUser().getNome();
 
         while (!exit) {
-            Printer.print("\n=================================");
-            Printer.print("     DASHBOARD MAGAZZINIERE      ");
-            Printer.print("     Bentornato, " + userName);
-            Printer.print("=================================");
-            Printer.print("1. Visualizza Inventario");
-            Printer.print("2. Registra Nuovo Lotto");
-            Printer.print("3. Segnala Anomalia (Merce Mancante/Danneggiata)");
-            Printer.print("0. Logout");
-            Printer.print("Scelta: ");
-
-            String scelta = scanner.nextLine();
+            stampaMenu("DASHBOARD MAGAZZINIERE",
+                    "Bentornato, " + userName,
+                    "1. Visualizza Inventario",
+                    "2. Registra Nuovo Lotto",
+                    "3. Segnala Anomalia (Merce Mancante/Danneggiata)",
+                    "0. Logout");
+            String scelta = leggiStringaNonVuota(scanner, "Scelta: ");
 
             switch (scelta) {
                 case "1":
@@ -55,8 +51,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
                     segnalaAnomalia(scanner);
                     break;
                 case "0":
-                    Printer.print("Logout in corso...");
-                    SessionManager.getInstance().logout();
+                    eseguiLogout();
                     exit = true;
                     break;
                 default:
@@ -85,21 +80,15 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
                 p.getPrezzoAttuale());
         }
 
-        Printer.print("\nInserisci il NUM del Prodotto per visualizzarne i lotti (oppure 0 per tornare al menu): ");
+        int numProd = leggiInteroValido(scanner, "\nInserisci il NUM del Prodotto per visualizzarne i lotti (oppure 0 per tornare al menu): ", 0, inventario.size());
+        if (numProd == 0) return;
+        String nomeProdotto = inventario.get(numProd - 1).getNome();
         try {
-            int numProd = Integer.parseInt(scanner.nextLine().trim());
-            if (numProd == 0) return;
-            if (numProd < 1 || numProd > inventario.size()) {
-                Printer.perror("[ERRORE] Numero non valido.");
-                return;
-            }
-            String nomeProdotto = inventario.get(numProd - 1).getNome();
             gestioneLottiProdotto(scanner, nomeProdotto);
-            
-        } catch (NumberFormatException _) {
-            Printer.perror("[ERRORE] Formato numerico non valido.");
-        } catch (GestioneException e) {
+        } catch (it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
             Printer.perror("[ERRORE] " + e.getMessage());
+        } catch (GestioneException e) {
+            Printer.perror("[ERRORE SISTEMA] " + e.getMessage());
         }
     }
 
@@ -124,8 +113,7 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
                     l.getNomeFornitore());
         }
 
-        Printer.print("\nVuoi modificare (M) o eliminare (E) un lotto? (oppure INVIO per annullare): ");
-        String azione = scanner.nextLine().trim().toUpperCase();
+        String azione = leggiStringaOpzionale(scanner, "\nVuoi modificare (M) o eliminare (E) un lotto? (oppure INVIO per annullare): ").toUpperCase();
         if (azione.isEmpty()) return;
 
         if (!azione.equals("M") && !azione.equals("E")) {
@@ -133,15 +121,14 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             return;
         }
 
-        Printer.print("Inserisci il NUM del lotto: ");
-        int numLotto = Integer.parseInt(scanner.nextLine().trim());
-        if (numLotto < 1 || numLotto > lotti.size()) {
-            Printer.perror("Numero non valido.");
-            return;
-        }
+        int numLotto = leggiInteroValido(scanner, "Inserisci il NUM del lotto: ", 1, lotti.size());
         
         LottoBean lottoDaModificare = lotti.get(numLotto - 1);
-        eseguiAzioneSuLotto(scanner, lottoDaModificare, azione);
+        try {
+            eseguiAzioneSuLotto(scanner, lottoDaModificare, azione);
+        } catch (NumberFormatException e) {
+            Printer.perror("[ERRORE] Hai inserito un formato numerico non valido durante la modifica.");
+        }
     }
 
     private void eseguiAzioneSuLotto(Scanner scanner, LottoBean lottoDaModificare, String azione) throws GestioneException {
@@ -169,20 +156,11 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
     private void registraLotto(Scanner scanner) {
         Printer.print("\n--- Registrazione Nuovo Lotto ---");
         try {
-            Printer.print("ID Lotto: ");
-            String idLotto = scanner.nextLine();
-
-            Printer.print("Nome Fornitore: ");
-            String fornitore = scanner.nextLine();
-
-            Printer.print("Nome Prodotto (es. Mele, Zucchine): ");
-            String prodotto = scanner.nextLine();
-
-            Printer.print("Quantità (in Kg): ");
-            double quantita = Double.parseDouble(scanner.nextLine());
-
-            Printer.print("Costo di Acquisto Totale (EUR): ");
-            double costo = Double.parseDouble(scanner.nextLine());
+            String idLotto = leggiStringaNonVuota(scanner, "ID Lotto: ");
+            String fornitore = leggiStringaNonVuota(scanner, "Nome Fornitore: ");
+            String prodotto = leggiStringaNonVuota(scanner, "Nome Prodotto (es. Mele, Zucchine): ");
+            double quantita = leggiDoubleValido(scanner, "Quantità (in Kg): ", 0.01);
+            double costo = leggiDoubleValido(scanner, "Costo di Acquisto Totale (EUR): ", 0.0);
 
             LocalDate dataArrivo = leggiData(scanner, "Data di Arrivo (YYYY-MM-DD): ");
             LocalDate dataScadenza = leggiData(scanner, "Data di Scadenza (YYYY-MM-DD): ");
@@ -200,10 +178,10 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
             appController.registraLotto(lottoBean);
             Printer.print("[SUCCESS] Lotto registrato correttamente!");
 
-        } catch (NumberFormatException _) {
-            Printer.perror("[ERRORE] Formato numerico non valido per Quantità o Costo.");
-        } catch (GestioneException e) {
+        } catch (it.ortogest.ortogestapp.exception.ValidationException | it.ortogest.ortogestapp.exception.DuplicateItemException | it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
             Printer.perror("[ERRORE] Impossibile registrare il lotto: " + e.getMessage());
+        } catch (GestioneException e) {
+            Printer.perror("[ERRORE SISTEMA] " + e.getMessage());
         } catch (Exception e) {
             Printer.perror("[ERRORE] " + e.getMessage());
         }
@@ -212,28 +190,21 @@ public class MagazziniereGraphicControllerCLI implements GraphicControllerCLI {
     private void segnalaAnomalia(Scanner scanner) {
         Printer.print("\n--- Segnalazione Anomalia di Fornitura ---");
         try {
-            Printer.print("Tipo di Anomalia (Mancante / Danneggiata): ");
-            String tipo = scanner.nextLine();
-
-            Printer.print("Email Fornitore: ");
-            String email = scanner.nextLine();
-
-            Printer.print("Nome del Prodotto interessato: ");
-            String prodotto = scanner.nextLine();
-
-            Printer.print("Quantità interessata (Kg): ");
-            double quantita = Double.parseDouble(scanner.nextLine());
-
-            Printer.print("Note aggiuntive: ");
-            String note = scanner.nextLine();
+            String tipo = leggiStringaNonVuota(scanner, "Tipo di Anomalia (Mancante / Danneggiata): ");
+            String email = leggiStringaNonVuota(scanner, "Email Fornitore: ");
+            String prodotto = leggiStringaNonVuota(scanner, "Nome del Prodotto interessato: ");
+            double quantita = leggiDoubleValido(scanner, "Quantità interessata (Kg): ", 0.01);
+            String note = leggiStringaOpzionale(scanner, "Note aggiuntive: ");
 
             AnomaliaBean anomalia = new AnomaliaBean(tipo, prodotto, quantita, note, email);
             
             String risultato = appController.inoltraSegnalazione(anomalia);
             Printer.print("[ESITO] " + risultato);
 
-        } catch (NumberFormatException _) {
-            Printer.perror("[ERRORE] Formato numerico non valido per la Quantità.");
+        } catch (it.ortogest.ortogestapp.exception.ValidationException | it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
+            Printer.perror("[ERRORE] " + e.getMessage());
+        } catch (GestioneException e) {
+            Printer.perror("[ERRORE SISTEMA] " + e.getMessage());
         }
     }
 

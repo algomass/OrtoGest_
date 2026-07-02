@@ -6,6 +6,10 @@ import it.ortogest.ortogestapp.dao.interfacedao.ILottoDAO;
 import it.ortogest.ortogestapp.dao.interfacedao.IOrdineDAO;
 import it.ortogest.ortogestapp.dao.interfacedao.IProdottoDAO;
 import it.ortogest.ortogestapp.exception.GestioneException;
+import it.ortogest.ortogestapp.exception.ValidationException;
+import it.ortogest.ortogestapp.exception.ItemNotFoundException;
+import it.ortogest.ortogestapp.exception.InsufficientStockException;
+import it.ortogest.ortogestapp.exception.InvalidStateException;
 import it.ortogest.ortogestapp.model.Lotto;
 import it.ortogest.ortogestapp.model.Ordine;
 import it.ortogest.ortogestapp.model.Prodotto;
@@ -115,7 +119,7 @@ public class CreaOrdineAppController {
     public String creaOrdine(String emailCliente, List<it.ortogest.ortogestapp.beans.RigaOrdineBean> carrello)
             throws GestioneException {
         if (carrello == null || carrello.isEmpty()) {
-            throw new GestioneException("Il carrello è vuoto.");
+            throw new ValidationException("Il carrello è vuoto.");
         }
 
         List<it.ortogest.ortogestapp.model.RigaOrdine> righeModello = new ArrayList<>();
@@ -123,10 +127,10 @@ public class CreaOrdineAppController {
         for (it.ortogest.ortogestapp.beans.RigaOrdineBean rigaBean : carrello) {
             Prodotto p = prodottoDAO.trovaPerNome(rigaBean.getNomeProdotto());
             if (p == null) {
-                throw new GestioneException("Prodotto '" + rigaBean.getNomeProdotto() + "' non trovato.");
+                throw new ItemNotFoundException("Prodotto '" + rigaBean.getNomeProdotto() + "' non trovato.");
             }
             if (p.getQuantitaTotaleDisponibile() < rigaBean.getQuantita()) {
-                throw new GestioneException("Giacenza insufficiente per: " + rigaBean.getNomeProdotto());
+                throw new InsufficientStockException("Giacenza insufficiente per: " + rigaBean.getNomeProdotto());
             }
             righeModello.add(new it.ortogest.ortogestapp.model.RigaOrdine(
                     p.getNome(),
@@ -151,7 +155,7 @@ public class CreaOrdineAppController {
                 l.setQuantitaKg(l.getQuantitaKg() - riga.getQuantita());
                 lottoDAO.salvaLotto(l);
             } else {
-                throw new GestioneException(
+                throw new InsufficientStockException(
                         "Quantità non disponibile nel lotto selezionato per: " + riga.getNomeProdotto());
             }
         }
@@ -176,11 +180,11 @@ public class CreaOrdineAppController {
     public void eliminaOrdine(String idOrdine) throws GestioneException {
         Ordine ordine = ordineDAO.trovaOrdinePerId(idOrdine);
         if (ordine == null) {
-            throw new GestioneException("Ordine non trovato.");
+            throw new ItemNotFoundException("Ordine non trovato.");
         }
 
         if ("Pronto per il Ritiro".equals(ordine.getStato())) {
-            throw new GestioneException("l'ordine è in attesa di ritiro dunque non può essere annullato");
+            throw new InvalidStateException("l'ordine è in attesa di ritiro dunque non può essere annullato");
         }
 
         if (!"Ritirato".equals(ordine.getStato())) {
@@ -247,10 +251,10 @@ public class CreaOrdineAppController {
     public void registraVendita(String idOrdine) throws GestioneException {
         Ordine ordine = ordineDAO.trovaOrdinePerId(idOrdine);
         if (ordine == null) {
-            throw new GestioneException("Ordine non trovato.");
+            throw new ItemNotFoundException("Ordine non trovato.");
         }
         if (!"Pronto per il Ritiro".equals(ordine.getStato())) {
-            throw new GestioneException("L'ordine non è pronto per il ritiro.");
+            throw new InvalidStateException("L'ordine non è pronto per il ritiro.");
         }
 
         ordineDAO.aggiornaStatoOrdine(idOrdine, "Ritirato");
