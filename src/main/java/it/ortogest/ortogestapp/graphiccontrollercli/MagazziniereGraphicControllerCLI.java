@@ -17,6 +17,7 @@ import it.ortogest.ortogestapp.utils.SessionManager;
 public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private static final String MSG_INVIO_MANTENERE = ") [Invio per mantenere]: ";
+    private static final String ERRORE_PREFIX = "[ERRORE] ";
 
     private final RegistraLottoAppController appController;
     private final DateTimeFormatter dateFormatter;
@@ -86,7 +87,7 @@ public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
         try {
             gestioneLottiProdotto(scanner, nomeProdotto);
         } catch (it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
-            Printer.perror("[ERRORE] " + e.getMessage());
+            Printer.perror(ERRORE_PREFIX + e.getMessage());
         } catch (GestioneException e) {
             Printer.perror("[ERRORE SISTEMA] " + e.getMessage());
         }
@@ -128,7 +129,7 @@ public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
             eseguiAzioneSuLotto(scanner, lottoDaModificare, azione);
         } catch (NumberFormatException e) {
             it.ortogest.ortogestapp.exception.ValidationException ve = new it.ortogest.ortogestapp.exception.ValidationException("Hai inserito un formato numerico non valido durante la modifica.", e);
-            Printer.perror("[ERRORE] " + ve.getMessage());
+            Printer.perror(ERRORE_PREFIX + ve.getMessage());
         }
     }
 
@@ -180,11 +181,11 @@ public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
             Printer.print("[SUCCESS] Lotto registrato correttamente!");
 
         } catch (it.ortogest.ortogestapp.exception.ValidationException | it.ortogest.ortogestapp.exception.DuplicateItemException | it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
-            Printer.perror("[ERRORE] Impossibile registrare il lotto: " + e.getMessage());
+            Printer.perror(ERRORE_PREFIX + "Impossibile registrare il lotto: " + e.getMessage());
         } catch (GestioneException e) {
             Printer.perror("[ERRORE SISTEMA] " + e.getMessage());
         } catch (Exception e) {
-            Printer.perror("[ERRORE] " + e.getMessage());
+            Printer.perror(ERRORE_PREFIX + e.getMessage());
         }
     }
 
@@ -209,7 +210,7 @@ public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
             try {
                 return LocalDate.parse(input, dateFormatter);
             } catch (DateTimeParseException _) {
-                Printer.perror("[ERRORE] Formato data non valido. Assicurati di usare il formato YYYY-MM-DD (es. 2024-05-20). Riprova.");
+                Printer.perror(ERRORE_PREFIX + "Formato data non valido. Assicurati di usare il formato YYYY-MM-DD (es. 2024-05-20). Riprova.");
                 // Continua il loop per far riprovare
             }
         }
