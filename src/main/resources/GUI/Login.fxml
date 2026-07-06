@@ -9,7 +9,7 @@
     <children>
         <VBox alignment="CENTER" maxWidth="400.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
             <children>
-                <Label text="OrtoGest 1.0" textFill="#27ae60">
+                <Label text="OrtoGest" textFill="#27ae60">
                     <font><Font name="System Bold" size="36.0" /></font>
                     <VBox.margin><Insets bottom="10.0" /></VBox.margin>
                 </Label>
