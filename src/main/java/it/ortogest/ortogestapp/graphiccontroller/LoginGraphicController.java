@@ -60,20 +60,21 @@ public class LoginGraphicController {
             return;
         }
 
+        if (ruoloSelezionato == null) {
+            mostraErrore("Seleziona un ruolo con cui accedere!");
+            return;
+        }
+
         // 2. Impacchetto i dati nel Bean e chiamo il Controller Applicativo
         CredenzialiBean credenziali = new CredenzialiBean(emailInserita, passwordInserita);
         LoginAppController appController = new LoginAppController();
 
         try {
-            // L'AppController esegue la logica (tramite il DAO) e ci restituisce il Bean
-            // dell'utente
+            // L'AppController esegue la logica (tramite il DAO) e ci restituisce il Bean dell'utente
             UtenteBean utenteLoggato = appController.login(credenziali);
 
-            // Per ora il ruolo lo forziamo se non l'ha scelto, nella realtà potrebbe essere
-            // un controllo extra
-            if (ruoloSelezionato != null) {
-                utenteLoggato.setRuolo(ruoloSelezionato);
-            }
+            // Dato che vogliamo scegliere come accedere, impostiamo il ruolo selezionato 
+            utenteLoggato.setRuolo(ruoloSelezionato);
 
             // 3. Memorizzo l'utente nella sessione globale
             SessionManager.getInstance().login(utenteLoggato);

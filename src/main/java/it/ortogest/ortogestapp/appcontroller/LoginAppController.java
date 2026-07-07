@@ -24,6 +24,11 @@ public class LoginAppController {
             throw new LoginFallitoException("Credenziali non valide o utente inesistente.");
         }
 
+        // Controllo case-sensitive per email e password (necessario poiché alcuni DB sono case-insensitive di default)
+        if (!utenteModel.getEmail().equals(credenziali.getEmail()) || !utenteModel.getPassword().equals(credenziali.getPassword())) {
+            throw new LoginFallitoException("Credenziali non valide o utente inesistente.");
+        }
+
         // Qui in futuro potresti aggiungere altre regole.
 
         // 3. Rispetto la regola "Isolamento Tramite Beans":
