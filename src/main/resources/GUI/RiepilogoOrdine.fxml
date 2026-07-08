@@ -41,19 +41,19 @@
 
                 <TableView fx:id="recapTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 8; -fx-border-radius: 8;">
                     <columns>
-                        <TableColumn prefWidth="300.0" text="Prodotto">
+                        <TableColumn resizable="false" prefWidth="300.0" text="Prodotto">
                             <cellValueFactory><PropertyValueFactory property="nomeProdotto" /></cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="120.0" text="Quantità (Kg)">
+                        <TableColumn resizable="false" prefWidth="120.0" text="Quantità (Kg)">
                             <cellValueFactory><PropertyValueFactory property="quantita" /></cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colPrezzoUnitario" prefWidth="150.0" text="Prezzo Unit. (€/Kg)">
+                        <TableColumn resizable="false" fx:id="colPrezzoUnitario" prefWidth="150.0" text="Prezzo Unit. (€/Kg)">
                             <cellValueFactory><PropertyValueFactory property="prezzoUnitario" /></cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colSubtotale" prefWidth="150.0" text="Subtotale (€)">
+                        <TableColumn resizable="false" fx:id="colSubtotale" prefWidth="150.0" text="Subtotale (€)">
                             <cellValueFactory><PropertyValueFactory property="subtotale" /></cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colRimuovi" prefWidth="120.0" text="Azioni" />
+                        <TableColumn resizable="false" fx:id="colRimuovi" prefWidth="120.0" text="Azioni" />
                     </columns>
                 </TableView>
 

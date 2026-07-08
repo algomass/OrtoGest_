@@ -48,6 +48,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
 
     @FXML
     public void initialize() {
+        fissaTabelle(inventarioTable);
         // Configurazione delle colonne con le proprietà del ProdottoBean
         colNome.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNome()));
         colPrezzo.setCellValueFactory(
@@ -149,6 +150,8 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         table.getColumns().add(colCosto);
         table.getColumns().add(colArrivo);
         table.getColumns().add(colScadenza);
+        
+        fissaTabelle(table);
 
         Button btnModifica = new Button("Modifica");
         Button btnElimina = new Button("Elimina");
@@ -298,6 +301,8 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         table.getColumns().add(colProdotto);
         table.getColumns().add(colQuantita);
         table.getColumns().add(colScadenza);
+        
+        fissaTabelle(table);
 
         Button btnSmaltisci = new Button("Smaltisci Selezionato");
         btnSmaltisci.setStyle("-fx-background-color: #8e44ad; -fx-text-fill: white;");

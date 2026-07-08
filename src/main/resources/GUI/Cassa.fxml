@@ -42,9 +42,9 @@
                         <Label text="Seleziona un ordine Pronto per il Ritiro per effettuare il pagamento:" textFill="#7f8c8d" />
                         <TableView fx:id="ordiniTable" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="colIdOrdine" prefWidth="100.0" text="N° Ordine" />
-                                <TableColumn fx:id="colCliente" prefWidth="150.0" text="Cliente" />
-                                <TableColumn fx:id="colTotale" prefWidth="100.0" text="Totale €" />
+                                <TableColumn resizable="false" fx:id="colIdOrdine" prefWidth="100.0" text="N° Ordine" />
+                                <TableColumn resizable="false" fx:id="colCliente" prefWidth="150.0" text="Cliente" />
+                                <TableColumn resizable="false" fx:id="colTotale" prefWidth="100.0" text="Totale €" />
                             </columns>
                         </TableView>
                         <Button onAction="#caricaOrdineAction" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="CARICA ORDINE IN CASSA">

@@ -44,6 +44,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
 
     @FXML
     public void initialize() {
+        fissaTabelle(recapTable);
         appController = new CreaOrdineAppController();
         carrello = SessionManager.getInstance().getCarrelloCorrente();
 

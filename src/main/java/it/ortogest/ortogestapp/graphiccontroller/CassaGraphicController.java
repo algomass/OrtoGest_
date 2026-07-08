@@ -30,6 +30,7 @@ public class CassaGraphicController extends BaseGraphicController {
 
     @FXML
     public void initialize() {
+        fissaTabelle(ordiniTable);
         appController = new CreaOrdineAppController();
 
         if (colIdOrdine != null) {

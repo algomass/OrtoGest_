@@ -77,17 +77,17 @@
                         <!-- Tabella Prodotti -->
                         <TableView fx:id="tabellaProdotti" prefHeight="150.0" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="colNome" prefWidth="250.0" text="Nome Prodotto">
+                                <TableColumn resizable="false" fx:id="colNome" prefWidth="250.0" text="Nome Prodotto">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="nome" />
                                     </cellValueFactory>
                                 </TableColumn>
-                                <TableColumn fx:id="colCategoria" prefWidth="150.0" text="Categoria">
+                                <TableColumn resizable="false" fx:id="colCategoria" prefWidth="150.0" text="Categoria">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="categoria" />
                                     </cellValueFactory>
                                 </TableColumn>
-                                <TableColumn fx:id="colGiacenza" prefWidth="150.0" text="Giacenza Tot. (Kg)">
+                                <TableColumn resizable="false" fx:id="colGiacenza" prefWidth="150.0" text="Giacenza Tot. (Kg)">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="giacenza" />
                                     </cellValueFactory>
@@ -116,42 +116,42 @@
                 <!-- Tabella Lotti -->
                 <TableView fx:id="tabellaLotti" prefHeight="150.0" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colIdLotto" prefWidth="90.0" text="ID Lotto">
+                        <TableColumn resizable="false" fx:id="colIdLotto" prefWidth="90.0" text="ID Lotto">
                             <cellValueFactory>
                                 <PropertyValueFactory property="idLotto" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colNomeProdottoLotto" prefWidth="150.0" text="Prodotto">
+                        <TableColumn resizable="false" fx:id="colNomeProdottoLotto" prefWidth="150.0" text="Prodotto">
                             <cellValueFactory>
                                 <PropertyValueFactory property="nomeProdotto" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colDataScadenza" prefWidth="90.0" text="Scadenza">
+                        <TableColumn resizable="false" fx:id="colDataScadenza" prefWidth="90.0" text="Scadenza">
                             <cellValueFactory>
                                 <PropertyValueFactory property="dataScadenza" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colQuantitaLotto" prefWidth="100.0" text="Qtà (Kg)">
+                        <TableColumn resizable="false" fx:id="colQuantitaLotto" prefWidth="100.0" text="Qtà (Kg)">
                             <cellValueFactory>
                                 <PropertyValueFactory property="quantitaKg" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colCostoAcquisto" prefWidth="100.0" text="Costo (€)">
+                        <TableColumn resizable="false" fx:id="colCostoAcquisto" prefWidth="100.0" text="Costo (€)">
                             <cellValueFactory>
                                 <PropertyValueFactory property="costoAcquisto" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colPrezzoVendita" prefWidth="100.0" text="Prezzo Vend. (€)">
+                        <TableColumn resizable="false" fx:id="colPrezzoVendita" prefWidth="100.0" text="Prezzo Vend. (€)">
                             <cellValueFactory>
                                 <PropertyValueFactory property="prezzoVendita" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colScontoAttivo" prefWidth="80.0" text="In Sconto">
+                        <TableColumn resizable="false" fx:id="colScontoAttivo" prefWidth="80.0" text="In Sconto">
                             <cellValueFactory>
                                 <PropertyValueFactory property="scontoScadenzaAttivo" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn fx:id="colPrezzoScontato" prefWidth="120.0" text="Prezzo Scontato (€)">
+                        <TableColumn resizable="false" fx:id="colPrezzoScontato" prefWidth="120.0" text="Prezzo Scontato (€)">
                             <cellValueFactory>
                                 <PropertyValueFactory property="prezzoScontato" />
                             </cellValueFactory>

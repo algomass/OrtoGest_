@@ -51,9 +51,9 @@
 
                 <TableView fx:id="inventarioTable" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colNome" prefWidth="300.0" text="Prodotto" />
-                        <TableColumn fx:id="colPrezzo" prefWidth="200.0" text="Prezzo Medio Acquisto (€/Kg)" />
-                        <TableColumn fx:id="colGiacenza" prefWidth="250.0" text="Giacenza Attuale (Kg)" />
+                        <TableColumn resizable="false" fx:id="colNome" prefWidth="300.0" text="Prodotto" />
+                        <TableColumn resizable="false" fx:id="colPrezzo" prefWidth="200.0" text="Prezzo Medio Acquisto (€/Kg)" />
+                        <TableColumn resizable="false" fx:id="colGiacenza" prefWidth="250.0" text="Giacenza Attuale (Kg)" />
                     </columns>
                 </TableView>
             </children>

@@ -96,6 +96,7 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void initialize() {
+        fissaTabelle(ordiniTable);
         appController = new CreaOrdineAppController();
 
         // Recupera il carrello dalla sessione se presente (es. ritorno da riepilogo)

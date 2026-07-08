@@ -104,16 +104,16 @@
                         <children>
                             <TableView fx:id="ordiniTable" VBox.vgrow="ALWAYS">
                                 <columns>
-                                    <TableColumn prefWidth="100.0" text="ID Ordine">
+                                    <TableColumn resizable="false" prefWidth="100.0" text="ID Ordine">
                                         <cellValueFactory><PropertyValueFactory property="idOrdine" /></cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn prefWidth="350.0" text="Riepilogo Prodotti">
+                                    <TableColumn resizable="false" prefWidth="350.0" text="Riepilogo Prodotti">
                                         <cellValueFactory><PropertyValueFactory property="riepilogoProdotti" /></cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn prefWidth="100.0" text="Totale (€)">
+                                    <TableColumn resizable="false" prefWidth="100.0" text="Totale (€)">
                                         <cellValueFactory><PropertyValueFactory property="totale" /></cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn prefWidth="120.0" text="Stato">
+                                    <TableColumn resizable="false" prefWidth="120.0" text="Stato">
                                         <cellValueFactory><PropertyValueFactory property="stato" /></cellValueFactory>
                                     </TableColumn>
                                 </columns>

@@ -36,6 +36,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
 
     @FXML
     public void initialize() {
+        fissaTabelle(ordiniTable);
         appController = new CreaOrdineAppController();
 
         colIdOrdine.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrdine()));
