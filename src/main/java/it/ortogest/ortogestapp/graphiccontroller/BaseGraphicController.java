@@ -72,14 +72,16 @@ public abstract class BaseGraphicController {
     }
 
     /**
-     * Imposta le tabelle in modo che occupino tutto lo spazio disponibile senza lasciare 
-     * colonne vuote alla fine. L'utente potrà comunque modificarne la larghezza manualmente.
+     * Imposta le tabelle in modo che occupino tutto lo spazio disponibile senza
+     * lasciare
+     * colonne vuote alla fine. L'utente potrà comunque modificarne la larghezza
+     * manualmente.
      */
     protected void fissaTabelle(javafx.scene.control.TableView<?>... tables) {
         for (javafx.scene.control.TableView<?> table : tables) {
             if (table != null) {
                 table.getColumns().forEach(c -> c.setResizable(true));
-                table.setColumnResizePolicy(javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY);
+                table.setColumnResizePolicy(javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
             }
         }
     }
