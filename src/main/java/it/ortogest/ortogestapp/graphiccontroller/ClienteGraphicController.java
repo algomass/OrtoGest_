@@ -261,7 +261,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     private void mostraPopupSelezioneLotto(ProdottoBean prodotto) {
         errorLabel.setVisible(false);
 
-        List<it.ortogest.ortogestapp.model.Lotto> lotti = appController.getLottiDisponibili(prodotto.getNome());
+        List<it.ortogest.ortogestapp.beans.LottoBean> lotti = appController.getLottiDisponibili(prodotto.getNome());
         if (lotti == null || lotti.isEmpty()) {
             mostraMessaggio("Nessun lotto disponibile per questo prodotto.", false);
             return;
@@ -279,7 +279,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         title.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
         root.getChildren().add(title);
 
-        for (it.ortogest.ortogestapp.model.Lotto l : lotti) {
+        for (it.ortogest.ortogestapp.beans.LottoBean l : lotti) {
             // Calcola disponibilità residua del lotto rispetto al carrello
             double giacenzaResidua = calcolaGiacenzaResidua(l);
 
@@ -331,7 +331,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         popupStage.show();
     }
 
-    private double calcolaGiacenzaResidua(it.ortogest.ortogestapp.model.Lotto l) {
+    private double calcolaGiacenzaResidua(it.ortogest.ortogestapp.beans.LottoBean l) {
         double giacenzaResidua = l.getQuantitaKg();
         for (RigaOrdineBean r : carrello) {
             if (r.getIdLotto() != null && l.getIdLotto().equals(r.getIdLotto())) {

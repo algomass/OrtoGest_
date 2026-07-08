@@ -1,5 +1,6 @@
 package it.ortogest.ortogestapp.appcontroller;
 
+import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.dao.interfacedao.ILottoDAO;
@@ -106,15 +107,29 @@ public class CreaOrdineAppController {
         return (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato() : l.getPrezzoVendita();
     }
 
-    public List<Lotto> getLottiDisponibili(String nomeProdotto) {
+    public List<LottoBean> getLottiDisponibili(String nomeProdotto) {
         List<Lotto> lotti = lottoDAO.trovaPerProdotto(nomeProdotto);
-        List<Lotto> lottiValidi = new ArrayList<>();
+        List<LottoBean> lottiValidi = new ArrayList<>();
         for (Lotto l : lotti) {
             if (isLottoValido(l)) {
-                lottiValidi.add(l);
+                LottoBean bean = LottoBean.builder()
+                        .nomeProdotto(nomeProdotto)
+                        .idLotto(l.getIdLotto())
+                        .nomeFornitore(l.getNomeFornitore())
+                        .quantitaKg(l.getQuantitaKg())
+                        .dataArrivo(l.getDataArrivo())
+                        .dataScadenza(l.getDataScadenza())
+                        .costoAcquisto(l.getCostoAcquisto())
+                        .prezzoVendita(l.getPrezzoVendita())
+                        .scontoScadenzaAttivo(l.isScontoScadenzaAttivo())
+                        .prezzoScontato(l.getPrezzoScontato())
+                        .smaltito(l.isSmaltito())
+                        .ritirato(l.isRitirato())
+                        .build();
+                lottiValidi.add(bean);
             }
         }
-        lottiValidi.sort(Comparator.comparing(Lotto::getDataScadenza));
+        lottiValidi.sort(Comparator.comparing(LottoBean::getDataScadenza));
         return lottiValidi;
     }
 

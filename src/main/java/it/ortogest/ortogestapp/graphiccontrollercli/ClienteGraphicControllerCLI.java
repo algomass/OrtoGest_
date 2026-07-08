@@ -9,7 +9,7 @@ import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
 import it.ortogest.ortogestapp.beans.RigaOrdineBean;
 import it.ortogest.ortogestapp.exception.GestioneException;
-import it.ortogest.ortogestapp.model.Lotto;
+import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SessionManager;
 
@@ -101,7 +101,7 @@ public class ClienteGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private void scegliLottoEQuantita(ProdottoBean prodotto, Scanner scanner) {
         Printer.print("\nLotti disponibili per: " + prodotto.getNome());
-        List<Lotto> lotti = appController.getLottiDisponibili(prodotto.getNome());
+        List<LottoBean> lotti = appController.getLottiDisponibili(prodotto.getNome());
 
         if (lotti.isEmpty()) {
             Printer.print("Nessun lotto disponibile.");
@@ -111,7 +111,7 @@ public class ClienteGraphicControllerCLI extends BaseGraphicControllerCLI {
         Printer.printf("%-5s %-15s %-15s %-15s %-15s\n", "NUM", "ID LOTTO", "SCADENZA", "GIACENZA", "PREZZO/KG");
         Printer.print("-------------------------------------------------------------------------");
         for (int i = 0; i < lotti.size(); i++) {
-            Lotto l = lotti.get(i);
+            LottoBean l = lotti.get(i);
             double prezzoEffettivo = l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0 ? l.getPrezzoScontato()
                     : l.getPrezzoVendita();
             String infoSconto = l.isScontoScadenzaAttivo() ? " [SCONTATO]" : "";
@@ -127,7 +127,7 @@ public class ClienteGraphicControllerCLI extends BaseGraphicControllerCLI {
         int sceltaLotto = leggiInteroValido(scanner, "\nInserisci il NUM del lotto dal quale prelevare (oppure 0 per annullare): ", 0, lotti.size());
         if (sceltaLotto == 0) return;
 
-        Lotto lottoScelto = lotti.get(sceltaLotto - 1);
+        LottoBean lottoScelto = lotti.get(sceltaLotto - 1);
         double prezzoScelto = lottoScelto.isScontoScadenzaAttivo() && lottoScelto.getPrezzoScontato() > 0
                 ? lottoScelto.getPrezzoScontato()
                 : lottoScelto.getPrezzoVendita();
