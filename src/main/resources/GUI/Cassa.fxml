@@ -36,7 +36,7 @@
                 <VBox spacing="15.0" style="-fx-background-color: white;">
                     <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
                     <children>
-                        <Label text="Ordini Online (Da Pagare)" textFill="#2c3e50">
+                        <Label text="Ordini Online " textFill="#2c3e50">
                             <font><Font name="System Bold" size="18.0" /></font>
                         </Label>
                         <Label text="Seleziona un ordine Pronto per il Ritiro per effettuare il pagamento:" textFill="#7f8c8d" />

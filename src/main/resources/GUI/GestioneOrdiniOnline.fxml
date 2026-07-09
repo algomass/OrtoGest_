@@ -24,7 +24,7 @@
                 <Button onAction="#tornaIndietroAction" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Indietro">
                     <HBox.margin><Insets right="15.0" /></HBox.margin>
                 </Button>
-                <Label text="Gestione Ordini Online (Clicca &amp; Ritira)" textFill="WHITE">
+                <Label text="Gestione Ordini Online " textFill="WHITE">
                     <font><Font name="System Bold" size="20.0" /></font>
                 </Label>
                 <Region HBox.hgrow="ALWAYS" />
