@@ -93,12 +93,14 @@ public class RegistraLottoAppController {
 
                 Con la presente segnaliamo un'anomalia relativa all'ultima consegna.
                 Prodotto: %s
+                Lotto: %s
                 Quantità %s: %.2f Kg
                 Note aggiuntive: %s
 
                 In attesa di un vostro riscontro, porgiamo cordiali saluti.
                 Il team di OrtoGest.""",
                 anomaliaBean.getNomeProdotto(),
+                anomaliaBean.getLotto(),
                 anomaliaBean.getTipoAnomalia().toLowerCase(),
                 anomaliaBean.getQuantita(),
                 anomaliaBean.getNote());

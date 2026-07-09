@@ -26,6 +26,9 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
     private TextField prodottoField;
 
     @FXML
+    private TextField lottoField;
+
+    @FXML
     private TextField quantitaField;
 
     @FXML
@@ -47,10 +50,12 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
         String tipo = tipoAnomaliaComboBox.getValue();
         String email = emailFornitoreField.getText();
         String prodotto = prodottoField.getText();
+        String lotto = lottoField.getText();
         String quantitaStr = quantitaField.getText();
         String note = noteArea.getText();
 
         if (tipo == null || email == null || email.trim().isEmpty() || prodotto == null || prodotto.trim().isEmpty()
+                || lotto == null || lotto.trim().isEmpty()
                 || quantitaStr == null
                 || quantitaStr.trim().isEmpty()) {
             mostraStatus("Tutti i campi obbligatori devono essere compilati.", false);
@@ -68,7 +73,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
         }
 
         // 2. Creazione Bean e comunicazione con l'Application Controller
-        AnomaliaBean anomaliaBean = new AnomaliaBean(tipo, prodotto, quantita, note, email);
+        AnomaliaBean anomaliaBean = new AnomaliaBean(tipo, prodotto, lotto, quantita, note, email);
         RegistraLottoAppController appController = new RegistraLottoAppController();
 
         String messaggioRisultato = appController.inoltraSegnalazione(anomaliaBean);

@@ -41,6 +41,9 @@
                 <Label text="Nome Prodotto:" textFill="#7f8c8d" />
                 <TextField fx:id="prodottoField" prefHeight="40.0" promptText="es. Mele Golden" />
 
+                <Label text="Lotto:" textFill="#7f8c8d" />
+                <TextField fx:id="lottoField" prefHeight="40.0" promptText="es. L-12345" />
+
                 <Label text="Quantità Anomala (Kg):" textFill="#7f8c8d" />
                 <TextField fx:id="quantitaField" prefHeight="40.0" promptText="es. 15.5" />
 

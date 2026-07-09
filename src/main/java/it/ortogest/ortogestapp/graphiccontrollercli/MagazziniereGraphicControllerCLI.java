@@ -194,10 +194,11 @@ public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
         String tipo = leggiStringaNonVuota(scanner, "Tipo di Anomalia (Mancante / Danneggiata): ");
         String email = leggiStringaNonVuota(scanner, "Email Fornitore: ");
         String prodotto = leggiStringaNonVuota(scanner, "Nome del Prodotto interessato: ");
+        String lotto = leggiStringaNonVuota(scanner, "ID Lotto interessato: ");
         double quantita = leggiDoubleValido(scanner, "Quantità interessata (Kg): ", 0.01);
         String note = leggiStringaOpzionale(scanner, "Note aggiuntive: ");
 
-        AnomaliaBean anomalia = new AnomaliaBean(tipo, prodotto, quantita, note, email);
+        AnomaliaBean anomalia = new AnomaliaBean(tipo, prodotto, lotto, quantita, note, email);
         
         String risultato = appController.inoltraSegnalazione(anomalia);
         Printer.print("[ESITO] " + risultato);
