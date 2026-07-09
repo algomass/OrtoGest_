@@ -33,7 +33,7 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>9.7.0</version>
         </dependency>
-        <!-- Apache Commons Email (Adaptee per pattern Adapter) -->
+        <!-- Apache Commons Email -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-email</artifactId>
@@ -67,7 +67,7 @@
                     <target>25</target>
                 </configuration>
             </plugin>
-            <!-- JavaFX Maven Plugin per l'avvio semplificato -->
+            <!-- JavaFX Maven Plugin per avvio semplificato -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -76,7 +76,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <!-- La nostra classe main di avvio -->
+                            <!-- classe main di avvio -->
                             <mainClass>it.ortogest.ortogestapp/it.ortogest.ortogestapp.AppStarter</mainClass>
                         </configuration>
                     </execution>

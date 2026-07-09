@@ -112,7 +112,8 @@ public class DatabaseHelper {
         try {
             stmt.execute(sql);
         } catch (SQLException _) {
-            
+            // L'eccezione viene ignorata intenzionalmente perché, se la colonna esiste già,
+            // l'ALTER TABLE fallirà, ma possiamo procedere tranquillamente.
         }
     }
 
