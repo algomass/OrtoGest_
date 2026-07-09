@@ -1,8 +1,6 @@
 package it.ortogest.ortogestapp.beans;
 
-/**
- * DTO per trasportare i dati del Prodotto dal backend alla vista (Catalogo).
- */
+
 public class ProdottoBean {
     private String nome;
     private double prezzoAttuale;
@@ -11,7 +9,7 @@ public class ProdottoBean {
     private String immaginePath;
     private double prezzoAcquistoMedio;
     
-    // Campi aggiuntivi per la gestione FEFO / Sconto scadenza / Selezione Lotti
+    
     private double prezzoPieno;
     private boolean inOffertaScadenza;
     private double quantitaMassimaOfferta;

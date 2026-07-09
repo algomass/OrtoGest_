@@ -15,7 +15,7 @@ public class LottoDAOInMemory implements ILottoDAO {
 
     public LottoDAOInMemory(IProdottoDAO prodottoDAO) {
         this.lotti = new ArrayList<>();
-        // Per popolare i lotti demo usiamo il prodottoDAO passato
+        
         Prodotto mela = prodottoDAO.trovaPerNome("Mela Golden");
         Prodotto zucchina = prodottoDAO.trovaPerNome("Zucchina Romana");
 

@@ -1,9 +1,6 @@
 package it.ortogest.ortogestapp.beans;
 
-/**
- * Bean per trasportare le credenziali dalla Vista (Graphic Controller) 
- * alla Logica (App Controller).
- */
+
 public class CredenzialiBean {
     private String email;
     private String password;

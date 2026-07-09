@@ -11,9 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-/**
- * Controller Grafico per la schermata di Segnalazione Anomalia.
- */
+
 public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController {
 
     @FXML
@@ -46,7 +44,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
     public void inoltraSegnalazioneAction() {
         statusLabel.setVisible(false);
 
-        // 1. Validazione base dei dati inseriti dalla grafica
+        
         String tipo = tipoAnomaliaComboBox.getValue();
         String email = emailFornitoreField.getText();
         String prodotto = prodottoField.getText();
@@ -72,13 +70,13 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
             return;
         }
 
-        // 2. Creazione Bean e comunicazione con l'Application Controller
+        
         AnomaliaBean anomaliaBean = new AnomaliaBean(tipo, prodotto, lotto, quantita, note, email);
         RegistraLottoAppController appController = new RegistraLottoAppController();
 
         String messaggioRisultato = appController.inoltraSegnalazione(anomaliaBean);
 
-        // 3. Mostro successo e torno al Magazzino
+        
         mostraStatus(messaggioRisultato, true);
         Printer.printf(messaggioRisultato);
 

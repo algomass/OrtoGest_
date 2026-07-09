@@ -21,9 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Use Case Controller per la creazione e gestione degli ordini (Cliente e Responsabile).
- */
+
 public class CreaOrdineAppController {
 
     private static final String STATO_PRONTO_RITIRO = "Pronto per il Ritiro";
@@ -242,9 +240,7 @@ public class CreaOrdineAppController {
         ordineDAO.aggiornaStatoOrdine(idOrdine, nuovoStato);
     }
 
-    /**
-     * Recupera la lista degli ordini che sono stati preparati e attendono solo il pagamento in cassa.
-     */
+    
     public List<OrdineBean> getOrdiniProntiPerRitiro() {
         List<Ordine> tuttiOrdini = ordineDAO.trovaTuttiOrdini();
         List<OrdineBean> pronti = new ArrayList<>();
@@ -262,9 +258,7 @@ public class CreaOrdineAppController {
         return pronti;
     }
 
-    /**
-     * Finalizza la vendita dell'ordine, registrando il pagamento e l'uscita fisica della merce.
-     */
+    
     public void registraVendita(String idOrdine) throws GestioneException {
         Ordine ordine = ordineDAO.trovaOrdinePerId(idOrdine);
         if (ordine == null) {

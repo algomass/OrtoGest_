@@ -25,7 +25,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
         String sqlRiga = "INSERT INTO riga_ordine (id_ordine, id_lotto, nome_prodotto, quantita, prezzo_fissato) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseHelper.getInstance().getConnection()) {
-            conn.setAutoCommit(false); // Transazione per sicurezza
+            conn.setAutoCommit(false); 
 
             try (PreparedStatement stmtOrdine = conn.prepareStatement(sqlOrdine)) {
                 stmtOrdine.setString(1, ordine.getIdOrdine());
@@ -34,8 +34,8 @@ public class OrdineDAOJdbc implements IOrdineDAO {
                 stmtOrdine.executeUpdate();
             }
 
-            // Per semplicità e pulizia in caso di aggiornamento, cancelliamo le righe
-            // vecchie se esistono e le reinseriamo
+            
+            
             try (PreparedStatement stmtDelete = conn.prepareStatement("DELETE FROM riga_ordine WHERE id_ordine = ?")) {
                 stmtDelete.setString(1, ordine.getIdOrdine());
                 stmtDelete.executeUpdate();
@@ -127,7 +127,7 @@ public class OrdineDAOJdbc implements IOrdineDAO {
         String sqlOrdine = "DELETE FROM ordine WHERE id_ordine = ?";
 
         try (Connection conn = DatabaseHelper.getInstance().getConnection()) {
-            conn.setAutoCommit(false); // Transazione
+            conn.setAutoCommit(false); 
 
             try (PreparedStatement stmtRiga = conn.prepareStatement(sqlRiga)) {
                 stmtRiga.setString(1, idOrdine);

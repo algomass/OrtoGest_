@@ -19,7 +19,7 @@ public class ClienteGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     public ClienteGraphicControllerCLI() {
         this.appController = new CreaOrdineAppController();
-        // Inizializza il carrello in sessione se non esiste
+        
         if (SessionManager.getInstance().getCarrelloCorrente() == null) {
             SessionManager.getInstance().setCarrelloCorrente(new ArrayList<>());
         }
@@ -139,7 +139,7 @@ public class ClienteGraphicControllerCLI extends BaseGraphicControllerCLI {
             return;
         }
 
-        // Creiamo la riga d'ordine e l'aggiungiamo al carrello
+        
         RigaOrdineBean riga = new RigaOrdineBean(prodotto.getNome(), lottoScelto.getIdLotto(), quantita, prezzoScelto);
         SessionManager.getInstance().getCarrelloCorrente().add(riga);
         Printer.print("[SUCCESS] Prodotto aggiunto al carrello!");
@@ -183,7 +183,7 @@ public class ClienteGraphicControllerCLI extends BaseGraphicControllerCLI {
         try {
             String risultato = appController.creaOrdine(emailUtente, carrello);
             Printer.print("[SUCCESS] " + risultato);
-            // Svuota carrello dopo il completamento
+            
             carrello.clear();
         } catch (it.ortogest.ortogestapp.exception.ValidationException | it.ortogest.ortogestapp.exception.InsufficientStockException | it.ortogest.ortogestapp.exception.ItemNotFoundException e) {
             Printer.perror("[ERRORE] Impossibile creare l'ordine: " + e.getMessage());

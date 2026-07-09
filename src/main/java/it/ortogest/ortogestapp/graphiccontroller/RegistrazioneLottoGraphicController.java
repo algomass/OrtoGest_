@@ -36,7 +36,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
 
     @FXML
     public void initialize() {
-        // Popolamento della ComboBox con i prodotti esistenti
+        
         RegistraLottoAppController appController = new RegistraLottoAppController();
         List<String> nomi = appController.getNomiProdotti();
         ObservableList<String> nomiProdotti = FXCollections.observableArrayList(nomi);
@@ -59,10 +59,10 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
         errorLabel.setVisible(false);
 
         try {
-            // 1. Lettura campi
+            
             String idLotto = idLottoField.getText();
             String fornitore = fornitoreField.getText();
-            // Usiamo getEditor().getText() per leggere anche i nomi digitati manualmente
+            
             String prodotto = prodottoComboBox.getEditor().getText();
             String quantitaStr = quantitaField.getText();
 
@@ -80,7 +80,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
                 costoAcquisto = parseDoubleOrThrow(costoStr, "Il costo di acquisto deve essere un numero valido.");
             }
 
-            // 2. Creazione Bean
+            
             LottoBean lottoBean = LottoBean.builder()
                     .idLotto(idLotto)
                     .nomeFornitore(fornitore)
@@ -91,14 +91,14 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
                     .costoAcquisto(costoAcquisto)
                     .build();
 
-            // 3. Invio all'App Controller
+            
             RegistraLottoAppController appController = new RegistraLottoAppController();
             LottoBean risultato = appController.registraLotto(lottoBean);
 
-            // 4. Successo
+            
             Printer.printf("Lotto registrato con successo! ID: " + risultato.getIdLotto());
 
-            // Torniamo alla home magazzino
+            
             indietroAction();
 
         } catch (GestioneException e) {

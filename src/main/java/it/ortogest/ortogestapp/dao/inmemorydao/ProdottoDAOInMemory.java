@@ -12,7 +12,7 @@ public class ProdottoDAOInMemory implements IProdottoDAO {
 
     public ProdottoDAOInMemory() {
         this.prodotti = new ArrayList<>();
-        // Dati iniziali fittizi per la demo
+        
         prodotti.add(new Prodotto("Mela Golden", 2.50, 100.0, "Frutta", "/images/mela_golden.png"));
         prodotti.add(new Prodotto("Zucchina Romana", 1.80, 50.0, "Verdura", "/images/zucchina.png"));
         prodotti.add(new Prodotto("Banana", 1.99, 120.0, "Frutta", "/images/banana.png"));
@@ -20,7 +20,7 @@ public class ProdottoDAOInMemory implements IProdottoDAO {
 
     @Override
     public List<Prodotto> getTuttiIProdotti() {
-        return new ArrayList<>(prodotti); // Copia difensiva
+        return new ArrayList<>(prodotti); 
     }
 
     @Override

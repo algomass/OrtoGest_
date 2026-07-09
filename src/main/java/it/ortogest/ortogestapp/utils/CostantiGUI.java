@@ -12,6 +12,6 @@ public final class CostantiGUI {
     public static final String VIEW_GESTIONE_ORDINI_ONLINE = "/GUI/GestioneOrdiniOnline.fxml";
 
     private CostantiGUI() {
-        // Nasconde il costruttore di default
+        
     }
 }

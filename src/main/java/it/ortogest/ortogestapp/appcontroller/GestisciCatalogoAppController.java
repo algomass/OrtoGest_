@@ -14,10 +14,7 @@ import it.ortogest.ortogestapp.pattern.abstractfactory.DAOFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Use Case Controller aggregato per la gestione del catalogo (Responsabile).
- * Ingloba le operazioni di aggiunta, modifica prezzi e rimozione dei lotti.
- */
+
 public class GestisciCatalogoAppController {
 
     public List<ProdottoBean> getTuttiIProdotti() {
@@ -237,7 +234,7 @@ public class GestisciCatalogoAppController {
         }
 
         lotto.setRitirato(false);
-        lotto.setSmaltito(false); // Per sicurezza
+        lotto.setSmaltito(false); 
         lotto.setPrezzoVendita(nuovoPrezzo);
         lotto.setScontoScadenzaAttivo(scontoAttivo);
         lotto.setPrezzoScontato(prezzoScontato);

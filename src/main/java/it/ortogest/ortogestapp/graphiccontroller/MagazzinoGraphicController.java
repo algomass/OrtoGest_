@@ -29,9 +29,7 @@ import it.ortogest.ortogestapp.exception.GestioneException;
 
 import java.util.List;
 
-/**
- * Controller Grafico (Boundary) per la schermata del Magazzino.
- */
+
 public class MagazzinoGraphicController extends BaseGraphicController {
 
     @FXML
@@ -49,7 +47,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
     @FXML
     public void initialize() {
         fissaTabelle(inventarioTable);
-        // Configurazione delle colonne con le proprietà del ProdottoBean
+        
         colNome.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNome()));
         colPrezzo.setCellValueFactory(
                 cellData -> new SimpleDoubleProperty(cellData.getValue().getPrezzoAcquistoMedio()));
@@ -313,7 +311,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
                     controller.smaltisciLotto(selected.getIdLotto());
                     data.remove(selected);
                     table.refresh();
-                    caricaInventario(); // Aggiorna la vista dietro
+                    caricaInventario(); 
                     Printer.printf("Lotto smaltito con successo.");
 
                     if (data.isEmpty()) {

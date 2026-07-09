@@ -106,7 +106,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
         formatDoubleColumn(colCostoAcquisto);
         formatDoubleColumn(colPrezzoScontato);
 
-        // Coloriamo di rosso i lotti "Da prezzare" (prezzo vendita 0.0)
+        
         colPrezzoVendita.setCellFactory(column -> new TableCell<LottoBean, Double>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
@@ -129,7 +129,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
         nuovaCategoriaComboBox.getItems().addAll(CategoriaProdotto.FRUTTA, CategoriaProdotto.VERDURA);
 
-        // Listener per la selezione nella tabella prodotti
+        
         tabellaProdotti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 prodottoSelezionatoField.setText(newSelection.getNome());
@@ -139,7 +139,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             }
         });
 
-        // Listener per la selezione nella tabella lotti
+        
         tabellaLotti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 lottoSelezionatoField.setText(newSelection.getIdLotto());
@@ -149,7 +149,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             }
         });
 
-        // Gestione abilitazione/disabilitazione campo sconto
+        
         prezzoScontatoField.setDisable(true);
         scontoCheckBox.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
             prezzoScontatoField.setDisable(!isNowSelected);
@@ -164,7 +164,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
         ObservableList<ProdottoBean> observableList = FXCollections.observableArrayList(prodotti);
         tabellaProdotti.setItems(observableList);
 
-        // Manteniamo la selezione se possibile
+        
         String prodSelezionato = prodottoSelezionatoField.getText();
         if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
             caricaLotti(prodSelezionato);
@@ -261,7 +261,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             mostraSuccesso("Prezzi del lotto aggiornati correttamente");
 
-            // Ricarichiamo i lotti del prodotto corrente o la lista scadenze/da prezzare
+            
             ricaricaVistaCorrente();
 
         } catch (NumberFormatException _) {
@@ -310,7 +310,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
                 appController.rimuoviLottoDalCatalogo(idLotto);
                 mostraSuccesso("Lotto " + idLotto + " rimosso con successo.");
                 
-                // Ricarica la tabella
+                
                 if (vistaCorrente == StatoVista.CLASSICA) {
                     String prodSelezionato = prodottoSelezionatoField.getText();
                     if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
@@ -429,14 +429,14 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
     private void impostaVistaSconti() {
         try {
-            List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2); // 48 ore di preavviso
+            List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2); 
             if (lottiInScadenza.isEmpty()) {
                 mostraSuccesso("Nessun prodotto in scadenza nelle prossime 48 ore.");
             } else {
                 mostraSuccesso(MSG_TROVATI + lottiInScadenza.size() + " lotti da scontare.");
             }
 
-            // Popoliamo la tabella dei lotti
+            
             ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lottiInScadenza);
             tabellaLotti.setItems(observableList);
 
@@ -449,7 +449,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             if (btnRimettiInCommercio != null) { btnRimettiInCommercio.setVisible(false); btnRimettiInCommercio.setManaged(false); }
             if (btnRimuoviLotto != null) { btnRimuoviLotto.setVisible(true); btnRimuoviLotto.setManaged(true); }
 
-            // Deselezioniamo il prodotto corrente per indicare che stiamo vedendo una vista globale
+            
             tabellaProdotti.getSelectionModel().clearSelection();
             prodottoSelezionatoField.clear();
             nuovaCategoriaComboBox.setValue(null);

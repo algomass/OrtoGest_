@@ -131,7 +131,7 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
             Printer.print("Attuale costo di acquisto: " + lottoScelto.getCostoAcquisto() + " EUR");
             double nuovoPrezzo = leggiDoubleValido(scanner, "Nuovo Prezzo di Vendita al pubblico (EUR): ", 0.0);
 
-            // Il bean viene usato come trasportatore dei dati modificati
+            
             lottoScelto.setPrezzoVendita(nuovoPrezzo);
 
             appController.aggiornaPrezzoLotto(lottoScelto);
@@ -146,7 +146,7 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private void applicaScontiScadenza(Scanner scanner) {
         Printer.print("\n--- Analisi Lotti in Scadenza (entro 48h) ---");
-        // Passiamo 2 giorni (48 ore) come da requisiti (FR-5)
+        
         List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2);
 
         if (lottiInScadenza.isEmpty()) {

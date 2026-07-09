@@ -9,10 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Classe di supporto per la gestione della connessione al database MySQL.
- * Implementa il pattern Singleton.
- */
+
 public class DatabaseHelper {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/ortogest?createDatabaseIfNotExist=true";
@@ -33,17 +30,12 @@ public class DatabaseHelper {
         return instance;
     }
 
-    /**
-     * Restituisce una nuova connessione al database.
-     * È responsabilità di chi chiama questo metodo chiudere la connessione.
-     */
+    
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
     }
 
-    /**
-     * Crea le tabelle se non esistono già.
-     */
+    
     private void inizializzaDatabase() {
         String sqlProdotto = "CREATE TABLE IF NOT EXISTS prodotto (" +
                 "nome VARCHAR(255) PRIMARY KEY, " +
@@ -101,7 +93,7 @@ public class DatabaseHelper {
             stmt.execute(sqlRigaOrdine);
             stmt.execute(sqlUtente);
 
-            // Tentativo di ALTER TABLE per supportare aggiornamenti senza cancellare i dati
+            
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN prezzo_vendita DOUBLE DEFAULT 0.0");
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN sconto_attivo BOOLEAN DEFAULT FALSE");
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN prezzo_scontato DOUBLE DEFAULT 0.0");
@@ -120,7 +112,7 @@ public class DatabaseHelper {
         try {
             stmt.execute(sql);
         } catch (SQLException _) {
-            // Ignora se la colonna esiste già
+            
         }
     }
 

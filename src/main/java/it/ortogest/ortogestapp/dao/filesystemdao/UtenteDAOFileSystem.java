@@ -17,8 +17,8 @@ public class UtenteDAOFileSystem implements IUtenteDAO {
         File f = new File(FILE_PATH);
         if (!f.exists()) {
             try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
-                pw.println("nome,email,password,ruolo"); // Header
-                // Inseriamo gli utenti di default come in SQL
+                pw.println("nome,email,password,ruolo"); 
+                
                 pw.println("Admin,admin@ortogest.it,admin123,Responsabile");
                 pw.println("Mario,mario@ortogest.it,mario123,Magazziniere");
                 pw.println("Luigi,luigi@ortogest.it,luigi123,Operatore");
@@ -37,7 +37,7 @@ public class UtenteDAOFileSystem implements IUtenteDAO {
             while ((line = br.readLine()) != null) {
                 if (firstLine) {
                     firstLine = false;
-                    continue; // Skip header
+                    continue; 
                 }
                 String[] values = line.split(",");
                 if (values.length >= 4 && values[1].equals(email) && values[2].equals(password)) {

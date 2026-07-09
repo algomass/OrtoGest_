@@ -73,7 +73,7 @@ public class OrdineDAOFileSystem implements IOrdineDAO {
                 StringBuilder righeSb = new StringBuilder();
                 for (int i = 0; i < o.getRighe().size(); i++) {
                     RigaOrdine r = o.getRighe().get(i);
-                    // formato: nome:idLotto:qta:prezzo
+                    
                     righeSb.append(r.getNomeProdotto()).append(":")
                             .append(r.getIdLotto()).append(":")
                             .append(r.getQuantita()).append(":")

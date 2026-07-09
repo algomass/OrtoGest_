@@ -4,16 +4,10 @@ import java.util.Scanner;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SessionManager;
 
-/**
- * Classe base astratta per tutti i controller grafici CLI.
- * Centralizza l'acquisizione robusta dell'input e le funzionalità comuni (es. logout).
- */
+
 public abstract class BaseGraphicControllerCLI implements GraphicControllerCLI {
 
-    /**
-     * Legge un intero da terminale gestendo i NumberFormatException.
-     * Continua a chiedere finché l'utente non inserisce un numero compreso tra min e max.
-     */
+    
     protected int leggiInteroValido(Scanner scanner, String prompt, int min, int max) {
         while (true) {
             Printer.print(prompt);
@@ -31,10 +25,7 @@ public abstract class BaseGraphicControllerCLI implements GraphicControllerCLI {
         }
     }
 
-    /**
-     * Legge un double da terminale gestendo i NumberFormatException.
-     * Continua a chiedere finché l'utente non inserisce un numero maggiore o uguale a min.
-     */
+    
     protected double leggiDoubleValido(Scanner scanner, String prompt, double min) {
         while (true) {
             Printer.print(prompt);
@@ -52,9 +43,7 @@ public abstract class BaseGraphicControllerCLI implements GraphicControllerCLI {
         }
     }
 
-    /**
-     * Legge una stringa non vuota.
-     */
+    
     protected String leggiStringaNonVuota(Scanner scanner, String prompt) {
         while (true) {
             Printer.print(prompt);
@@ -66,26 +55,20 @@ public abstract class BaseGraphicControllerCLI implements GraphicControllerCLI {
         }
     }
 
-    /**
-     * Legge una stringa opzionale (può essere vuota).
-     */
+    
     protected String leggiStringaOpzionale(Scanner scanner, String prompt) {
         Printer.print(prompt);
         return scanner.nextLine().trim();
     }
 
-    /**
-     * Esegue il logout dell'utente corrente e pulisce il carrello se esistente.
-     */
+    
     protected void eseguiLogout() {
         Printer.print("Logout in corso...");
         SessionManager.getInstance().setCarrelloCorrente(null);
         SessionManager.getInstance().logout();
     }
 
-    /**
-     * Stampa un menu standardizzato.
-     */
+    
     protected void stampaMenu(String titolo, String... opzioni) {
         Printer.print("\n=================================");
         Printer.print("       " + titolo + "       ");

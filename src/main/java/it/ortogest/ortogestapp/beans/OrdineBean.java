@@ -1,15 +1,11 @@
 package it.ortogest.ortogestapp.beans;
 
-/**
- * DTO per trasportare i dati di un Ordine dal backend alla vista
- * (Tracciamento).
- * Ogni ordine contiene una o più righe (prodotti ordinati).
- */
+
 public class OrdineBean {
     private String idOrdine;
-    private String riepilogoProdotti; // Es: "Mele Golden x2kg, Banane x1.5kg"
+    private String riepilogoProdotti; 
     private double totale;
-    private String stato; // "Inviato", "Pronto per il Ritiro", "Ritirato"
+    private String stato; 
     private String emailCliente;
 
     public OrdineBean(String idOrdine, String riepilogoProdotti, double totale, String stato) {

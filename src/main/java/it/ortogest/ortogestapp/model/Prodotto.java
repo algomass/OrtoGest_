@@ -1,14 +1,12 @@
 package it.ortogest.ortogestapp.model;
 
-/**
- * Entità di Dominio: Rappresenta un prodotto presente nel sistema.
- */
+
 public class Prodotto {
     private String nome;
     private double prezzoAttuale;
-    private double quantitaTotaleDisponibile; // In Kg
-    private String categoria; // "Frutta" o "Verdura"
-    private String immaginePath; // Path relativo nel classpath (es. "/images/mele_golden.png")
+    private double quantitaTotaleDisponibile; 
+    private String categoria; 
+    private String immaginePath; 
 
     public Prodotto(String nome, double prezzoAttuale, double quantitaTotaleDisponibile, String categoria, String immaginePath) {
         this.nome = nome;

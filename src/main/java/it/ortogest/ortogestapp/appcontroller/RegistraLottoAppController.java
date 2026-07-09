@@ -20,10 +20,7 @@ import it.ortogest.ortogestapp.pattern.adapter.EmailTarget;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Use Case Controller per la registrazione e gestione dei lotti nel Magazzino.
- * Assorbe anche il caso d'uso secondario di "Notifica merce anomala".
- */
+
 public class RegistraLottoAppController {
 
     private EmailTarget emailAdapter;

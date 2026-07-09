@@ -10,9 +10,7 @@ import javafx.scene.control.*;
 
 import java.util.List;
 
-/**
- * Controller Grafico (Boundary) per la schermata della Cassa.
- */
+
 public class CassaGraphicController extends BaseGraphicController {
 
     @FXML private TableView<OrdineBean> ordiniTable;
@@ -25,7 +23,7 @@ public class CassaGraphicController extends BaseGraphicController {
 
     private CreaOrdineAppController appController;
     
-    // Memorizza l'ordine online correntemente in fase di pagamento
+    
     private OrdineBean ordineInPagamento = null;
 
     @FXML
@@ -70,15 +68,15 @@ public class CassaGraphicController extends BaseGraphicController {
     public void emettiScontrinoAction() {
         if (ordineInPagamento != null) {
             try {
-                // L'operatore fa pagare il cliente e l'ordine passa a "Ritirato"
+                
                 appController.registraVendita(ordineInPagamento.getIdOrdine());
                 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Pagamento completato. L'ordine #" + ordineInPagamento.getIdOrdine() + " è ora Ritirato.", ButtonType.OK);
                 alert.setHeaderText("Transazione Eseguita");
                 alert.showAndWait();
                 
-                annullaOperazioneAction(); // Resetta la cassa
-                caricaOrdiniPronti(); // Aggiorna la tabella
+                annullaOperazioneAction(); 
+                caricaOrdiniPronti(); 
             } catch (Exception e) {
                 mostraAlertErrore("Errore durante il pagamento: " + e.getMessage());
             }

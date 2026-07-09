@@ -21,7 +21,7 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
         if (!f.exists()) {
             try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
                 pw.println("nome,prezzoAttuale,quantitaTotaleDisponibile,categoria,immaginePath");
-                // Insert some default products
+                
                 pw.println("Mela Golden,2.50,100.0,Frutta,/images/mela_golden.png");
                 pw.println("Zucchina Romana,1.80,50.0,Verdura,/images/zucchina.png");
             } catch (IOException e) {
@@ -80,13 +80,13 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
         boolean found = false;
         for (int i = 0; i < prodotti.size(); i++) {
             if (prodotti.get(i).getNome().equalsIgnoreCase(prodotto.getNome())) {
-                prodotti.set(i, prodotto); // Update
+                prodotti.set(i, prodotto); 
                 found = true;
                 break;
             }
         }
         if (!found) {
-            prodotti.add(prodotto); // Insert
+            prodotti.add(prodotto); 
         }
         scriviTutti(prodotti);
     }

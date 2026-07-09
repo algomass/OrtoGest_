@@ -9,9 +9,7 @@ import it.ortogest.ortogestapp.dao.jdbcdao.OrdineDAOJdbc;
 import it.ortogest.ortogestapp.dao.jdbcdao.ProdottoDAOJdbc;
 import it.ortogest.ortogestapp.dao.jdbcdao.UtenteDAOJdbc;
 
-/**
- * Concrete Factory per la famiglia di oggetti DAO JDBC (Database).
- */
+
 public class JdbcDAOFactory extends DAOFactory {
 
     @Override

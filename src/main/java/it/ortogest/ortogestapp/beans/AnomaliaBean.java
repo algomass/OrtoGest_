@@ -1,11 +1,8 @@
 package it.ortogest.ortogestapp.beans;
 
-/**
- * DTO per trasportare i dati di una segnalazione di anomalia 
- * (merce mancante o danneggiata) dal Boundary al Control.
- */
+
 public class AnomaliaBean {
-    private String tipoAnomalia; // "Mancante" o "Danneggiata"
+    private String tipoAnomalia; 
     private String nomeProdotto;
     private String lotto;
     private double quantita;

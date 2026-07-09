@@ -36,10 +36,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Controller Grafico (Boundary) per la schermata dell'Area Cliente.
- * Gestisce il catalogo, il carrello multi-prodotto e lo storico ordini.
- */
+
 public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
@@ -75,7 +72,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     @FXML
     private Button btnOrdini;
 
-    // --- Elementi UI Carrello nell'Header ---
+    
     @FXML
     private Label cartSummaryLabel;
 
@@ -87,10 +84,10 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     private CreaOrdineAppController appController;
 
-    // Lista locale per gestire il carrello prima dell'invio finale
+    
     private List<RigaOrdineBean> carrello = new ArrayList<>();
 
-    // Stili per i pulsanti della sidebar
+    
     private static final String STILE_BTN_ATTIVO = "-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-font-size: 14; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 20; -fx-cursor: hand;";
     private static final String STILE_BTN_INATTIVO = "-fx-background-color: transparent; -fx-text-fill: #bdc3c7; -fx-font-size: 14; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 20; -fx-cursor: hand;";
 
@@ -99,18 +96,18 @@ public class ClienteGraphicController extends BaseGraphicController {
         fissaTabelle(ordiniTable);
         appController = new CreaOrdineAppController();
 
-        // Recupera il carrello dalla sessione se presente (es. ritorno da riepilogo)
+        
         List<RigaOrdineBean> cartInSession = SessionManager.getInstance().getCarrelloCorrente();
         if (cartInSession != null) {
             this.carrello = cartInSession;
         }
 
-        // Di default mostra la categoria Frutta
+        
         mostraFruttaAction();
         aggiornaUIHeaderCarrello();
     }
 
-    // ==================== AZIONI SIDEBAR ====================
+    
 
     @FXML
     public void mostraFruttaAction() {
@@ -142,7 +139,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         caricaOrdiniCliente();
     }
 
-    // ==================== LOGICA DI VISUALIZZAZIONE E RICERCA ====================
+    
 
     @FXML
     public void cercaProdottoAction() {
@@ -183,7 +180,7 @@ public class ClienteGraphicController extends BaseGraphicController {
                 continue;
             }
             trovati = true;
-            // Sottrai la quantità già presente nel carrello
+            
             double giacenzaResidua = prodotto.getGiacenza();
             for (RigaOrdineBean r : carrello) {
                 if (r.getNomeProdotto().equals(prodotto.getNome())) {
@@ -254,11 +251,9 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
     }
 
-    // ==================== GESTIONE CARRELLO ====================
+    
 
-    /**
-     * Mostra il popup per selezionare un lotto da cui acquistare.
-     */
+    
     private void mostraPopupSelezioneLotto(ProdottoBean prodotto) {
         errorLabel.setVisible(false);
 
@@ -281,7 +276,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         root.getChildren().add(title);
 
         for (it.ortogest.ortogestapp.beans.LottoBean l : lotti) {
-            // Calcola disponibilità residua del lotto rispetto al carrello
+            
             double giacenzaResidua = calcolaGiacenzaResidua(l);
 
             if (giacenzaResidua <= 0)
@@ -368,7 +363,7 @@ public class ClienteGraphicController extends BaseGraphicController {
             return;
         }
 
-        // Aggiunge o aggiorna nel carrello
+        
         boolean trovato = false;
         for (RigaOrdineBean r : carrello) {
             if (r.getIdLotto() != null && r.getIdLotto().equals(idLotto)) {
@@ -386,25 +381,23 @@ public class ClienteGraphicController extends BaseGraphicController {
         mostraMessaggio(nomeProdotto + " aggiunto al carrello!", true);
         aggiornaUIHeaderCarrello();
 
-        // Ricarica la categoria per aggiornare le giacenze sulle card
+        
         String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA
                 : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
 
-    /**
-     * Salva il carrello in sessione e passa alla schermata di riepilogo dedicata.
-     */
+    
     @FXML
     public void confermaOrdineAction() {
         if (carrello.isEmpty())
             return;
 
         try {
-            // Salva il carrello nel SessionManager per passarlo alla nuova scena
+            
             SessionManager.getInstance().setCarrelloCorrente(carrello);
 
-            // Cambia scena verso il file FXML dedicato
+            
             SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_RIEPILOGO_ORDINE);
 
         } catch (it.ortogest.ortogestapp.exception.ViewException e) {
@@ -419,7 +412,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         aggiornaUIHeaderCarrello();
         mostraMessaggio("Carrello svuotato.", true);
 
-        // Ricarica la categoria per ripristinare le giacenze originali sulle card
+        
         String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA
                 : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
@@ -443,7 +436,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
     }
 
-    // ==================== COSTRUZIONE CARD ====================
+    
 
     private VBox creaProdottoCard(ProdottoBean prodotto) {
         VBox card = new VBox(8);
@@ -508,7 +501,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         return card;
     }
 
-    // ==================== UTILITÀ ====================
+    
 
     private void aggiornaStileSidebar(Button attivo) {
         btnFrutta.setStyle(STILE_BTN_INATTIVO);

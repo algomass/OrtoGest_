@@ -9,12 +9,7 @@ import it.ortogest.ortogestapp.dao.interfacedao.IOrdineDAO;
 import it.ortogest.ortogestapp.dao.interfacedao.IProdottoDAO;
 import it.ortogest.ortogestapp.dao.interfacedao.IUtenteDAO;
 
-/**
- * Concrete Factory per la famiglia di oggetti DAO In-Memory (Versione Demo).
- * Mantiene le singole istanze dei DAO in modo che i dati in RAM persistano
- * per l'intera durata della sessione applicativa, senza andare persi tra
- * una chiamata e l'altra dei controller.
- */
+
 public class InMemoryDAOFactory extends DAOFactory {
 
     private IProdottoDAO prodottoDAO;
@@ -23,7 +18,7 @@ public class InMemoryDAOFactory extends DAOFactory {
     private IUtenteDAO utenteDAO;
 
     public InMemoryDAOFactory() {
-        // Inizializza i DAO una sola volta per mantenere i dati in memoria
+        
         this.prodottoDAO = new ProdottoDAOInMemory();
         this.lottoDAO = new LottoDAOInMemory(this.prodottoDAO);
         this.ordineDAO = new OrdineDAOInMemory();

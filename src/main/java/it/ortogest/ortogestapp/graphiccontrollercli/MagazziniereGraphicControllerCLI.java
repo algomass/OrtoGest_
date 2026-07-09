@@ -212,7 +212,7 @@ public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
                 return LocalDate.parse(input, dateFormatter);
             } catch (DateTimeParseException _) {
                 Printer.perror(ERRORE_PREFIX + "Formato data non valido. Assicurati di usare il formato YYYY-MM-DD (es. 2024-05-20). Riprova.");
-                // Continua il loop per far riprovare
+                
             }
         }
     }

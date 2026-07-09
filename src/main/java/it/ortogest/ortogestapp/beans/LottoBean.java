@@ -2,12 +2,9 @@ package it.ortogest.ortogestapp.beans;
 
 import it.ortogest.ortogestapp.model.AbstractLotto;
 
-/**
- * Data Transfer Object per trasportare i dati del Lotto
- * tra il Graphic Controller e l'Application Controller.
- */
+
 public class LottoBean extends AbstractLotto {
-    private String nomeProdotto; // Trasportiamo solo il nome del prodotto (stringa) per disaccoppiamento
+    private String nomeProdotto; 
 
     private LottoBean(Builder builder) {
         super(builder);

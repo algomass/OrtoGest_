@@ -1,14 +1,11 @@
 package it.ortogest.ortogestapp.beans;
 
-/**
- * DTO per trasportare i dati di una singola riga (voce) dell'ordine.
- * Usato sia per il carrello lato client sia per il riepilogo degli ordini.
- */
+
 public class RigaOrdineBean {
     private String nomeProdotto;
     private String idLotto;
-    private double quantita;       // In Kg
-    private double prezzoUnitario; // EUR/Kg
+    private double quantita;       
+    private double prezzoUnitario; 
 
     public RigaOrdineBean(String nomeProdotto, String idLotto, double quantita, double prezzoUnitario) {
         this.nomeProdotto = nomeProdotto;
@@ -29,9 +26,7 @@ public class RigaOrdineBean {
     public double getPrezzoUnitario() { return prezzoUnitario; }
     public void setPrezzoUnitario(double prezzoUnitario) { this.prezzoUnitario = prezzoUnitario; }
 
-    /**
-     * Calcola il subtotale di questa riga.
-     */
+    
     public double getSubtotale() {
         return prezzoUnitario * quantita;
     }

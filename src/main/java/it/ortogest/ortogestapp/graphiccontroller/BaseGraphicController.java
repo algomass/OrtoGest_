@@ -8,16 +8,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
-/**
- * Controller Grafico Base (Boundary).
- * Contiene i metodi e i comportamenti comuni a tutte le schermate,
- * come ad esempio l'azione di logout (Esci).
- */
+
 public abstract class BaseGraphicController {
 
     @FXML
     public void logoutAction() {
-        // 1. Pulisco la sessione globale rimuovendo l'utente corrente
+        
         SessionManager.getInstance().logout();
         Printer.printf("Logout effettuato con successo. Ritorno alla schermata iniziale.");
 
@@ -25,12 +21,7 @@ public abstract class BaseGraphicController {
                 "Errore critico durante il logout: impossibile ricaricare Login.fxml.");
     }
 
-    /**
-     * Esegue il cambio di scena gestendo l'eccezione in modo sicuro.
-     * 
-     * @param viewName     Nome della vista da caricare.
-     * @param errorMessage Messaggio di errore se fallisce.
-     */
+    
     protected void cambiaScenaSicuro(String viewName, String errorMessage) {
         try {
             SceneManager.getInstance().cambiaScena(viewName);
@@ -39,10 +30,7 @@ public abstract class BaseGraphicController {
         }
     }
 
-    /**
-     * Centralizza la logica di colorazione delle label di stato (verde se successo,
-     * rosso se errore).
-     */
+    
     protected void mostraStatusLabel(Label label, String messaggio, boolean successo) {
         if (label != null) {
             label.setText(messaggio);
@@ -51,10 +39,7 @@ public abstract class BaseGraphicController {
         }
     }
 
-    /**
-     * Formats a table column containing numbers to display with exactly two decimal
-     * places.
-     */
+    
     protected <T, N extends Number> void formatDoubleColumn(javafx.scene.control.TableColumn<T, N> column) {
         if (column != null) {
             column.setCellFactory(tc -> new javafx.scene.control.TableCell<T, N>() {
@@ -71,12 +56,7 @@ public abstract class BaseGraphicController {
         }
     }
 
-    /**
-     * Imposta le tabelle in modo che occupino tutto lo spazio disponibile senza
-     * lasciare
-     * colonne vuote alla fine. L'utente potrà comunque modificarne la larghezza
-     * manualmente.
-     */
+    
     protected void fissaTabelle(javafx.scene.control.TableView<?>... tables) {
         for (javafx.scene.control.TableView<?> table : tables) {
             if (table != null) {

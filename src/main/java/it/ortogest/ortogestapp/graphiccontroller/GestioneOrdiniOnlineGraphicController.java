@@ -10,9 +10,7 @@ import javafx.scene.control.*;
 
 import java.util.List;
 
-/**
- * Controller Grafico (Boundary) per la schermata Ordini Online.
- */
+
 public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController {
 
     private static final String STATO_INVIATO = "Inviato";
@@ -41,9 +39,9 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
 
         colIdOrdine.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrdine()));
         colCliente.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmailCliente()));
-        colOrario.setCellValueFactory(cellData -> new SimpleStringProperty("Oggi")); // Placeholder
+        colOrario.setCellValueFactory(cellData -> new SimpleStringProperty("Oggi")); 
         
-        // Formattazione per la colonna totale
+        
         colTotale.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("totale"));
         formatDoubleColumn(colTotale);
         colStato.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("stato"));
@@ -78,7 +76,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
         ObservableList<OrdineBean> data = FXCollections.observableArrayList(filtrati);
         ordiniTable.setItems(data);
         
-        // Deseleziona e pulisci dettagli se la lista viene ricaricata
+        
         ordiniTable.getSelectionModel().clearSelection();
         pulisciDettagli();
     }
@@ -93,7 +91,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
             dettaglioProdottiList.getItems().add(r);
         }
         
-        // Abilita il pulsante solo se l'ordine è "Inviato"
+        
         btnSegnaPronto.setDisable(!STATO_INVIATO.equals(ordine.getStato()));
         messaggioLabel.setText("");
     }
@@ -122,7 +120,7 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
         try {
             appController.aggiornaStatoOrdine(selected.getIdOrdine(), "Pronto per il Ritiro");
             mostraSuccesso("Stato aggiornato correttamente.");
-            caricaOrdini(); // Ricarica la tabella
+            caricaOrdini(); 
         } catch (Exception e) {
             mostraErrore("Errore nell'aggiornamento: " + e.getMessage());
         }

@@ -15,10 +15,7 @@ import javafx.scene.paint.Color;
 
 import java.util.List;
 
-/**
- * Controller Grafico dedicato esclusivamente alla fase di conferma finale
- * dell'ordine.
- */
+
 public class RiepilogoOrdineGraphicController extends BaseGraphicController {
 
     @FXML
@@ -150,14 +147,14 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
         try {
             String risultato = appController.creaOrdine(currentUser.getEmail(), carrello);
 
-            // Successo: svuota carrello e torna indietro con feedback
+            
             carrello.clear();
             SessionManager.getInstance().setCarrelloCorrente(null);
 
             Printer.printf("Ordine confermato: " + risultato);
             tornaAlCatalogo();
-            // N.B. Qui potresti voler mostrare un messaggio di successo,
-            // ma dato che cambiamo scena, il controller del catalogo dovrà occuparsene.
+            
+            
 
         } catch (Exception e) {
             mostraErrore("Errore nell'invio dell'ordine: " + e.getMessage());

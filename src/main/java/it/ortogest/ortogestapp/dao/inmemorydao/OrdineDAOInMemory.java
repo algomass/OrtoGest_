@@ -12,8 +12,8 @@ public class OrdineDAOInMemory implements IOrdineDAO {
 
     public OrdineDAOInMemory() {
         this.ordini = new ArrayList<>();
-        // Per gli ordini non carichiamo nulla di base per la demo, o se si vuole si può
-        // aggiungere
+        
+        
     }
 
     @Override
