@@ -8,6 +8,7 @@ import java.io.*;
 public class UtenteDAOFileSystem implements IUtenteDAO {
 
     private static final String FILE_PATH = "data/utenti.csv";
+    private static final String ERRORE_IO = "Errore I/O in UtenteDAOFileSystem: ";
 
     public UtenteDAOFileSystem() {
         File dataDir = new File("data");
@@ -24,7 +25,7 @@ public class UtenteDAOFileSystem implements IUtenteDAO {
                 pw.println("Luigi,luigi@ortogest.it,luigi123,Operatore");
                 pw.println("Cliente Test,cliente@test.it,cliente123,Cliente");
             } catch (IOException e) {
-                it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in UtenteDAOFileSystem: " + e.getMessage());
+                it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO + e.getMessage());
             }
         }
     }
@@ -45,7 +46,7 @@ public class UtenteDAOFileSystem implements IUtenteDAO {
                 }
             }
         } catch (IOException e) {
-            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in UtenteDAOFileSystem: " + e.getMessage());
+            it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO + e.getMessage());
         }
         return null;
     }
@@ -61,7 +62,7 @@ public class UtenteDAOFileSystem implements IUtenteDAO {
             pw.println(utente.getNome() + "," + utente.getEmail() + "," + utente.getPassword() + "," + utente.getRuolo());
             return true;
         } catch (IOException e) {
-            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in UtenteDAOFileSystem: " + e.getMessage());
+            it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO + e.getMessage());
             return false;
         }
     }
