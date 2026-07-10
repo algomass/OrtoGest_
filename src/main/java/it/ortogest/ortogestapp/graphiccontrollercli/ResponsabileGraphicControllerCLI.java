@@ -219,7 +219,7 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
             return;
         }
 
-        ProdottoBean bean = new ProdottoBean(nomeProdotto, 0, 0, null, null);
+        ProdottoBean bean = new ProdottoBean(nomeProdotto, 0, 0, null);
         bean.setCategoria(nuovaCategoria);
 
         try {

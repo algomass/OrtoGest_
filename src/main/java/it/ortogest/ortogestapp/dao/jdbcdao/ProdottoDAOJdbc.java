@@ -11,34 +11,33 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
 
     @Override
     public List<Prodotto> getTuttiIProdotti() {
-        String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto";
+        String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria FROM prodotto";
         return DatabaseHelper.getInstance().queryForList(sql, this::estraiProdotto, "Errore in getTuttiIProdotti");
     }
 
     @Override
     public void salvaProdotto(Prodotto prodotto) {
-        String sql = "INSERT INTO prodotto (nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path) " +
-                "VALUES (?, ?, ?, ?, ?) " +
+        String sql = "INSERT INTO prodotto (nome, prezzo_attuale, quantita_disponibile, categoria) " +
+                "VALUES (?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
                 "prezzo_attuale = VALUES(prezzo_attuale), " +
                 "quantita_disponibile = VALUES(quantita_disponibile), " +
-                "categoria = VALUES(categoria), " +
-                "immagine_path = VALUES(immagine_path)";
+                "categoria = VALUES(categoria)";
 
         DatabaseHelper.getInstance().executeUpdate(sql, "Errore in salvaProdotto",
                 prodotto.getNome(), prodotto.getPrezzoAttuale(), prodotto.getQuantitaTotaleDisponibile(),
-                prodotto.getCategoria(), prodotto.getImmaginePath());
+                prodotto.getCategoria());
     }
 
     @Override
     public Prodotto trovaPerNome(String nome) {
-        String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto WHERE nome = ?";
+        String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria FROM prodotto WHERE nome = ?";
         return DatabaseHelper.getInstance().queryForObject(sql, this::estraiProdotto, "Errore in trovaPerNome", nome);
     }
 
     @Override
     public List<Prodotto> trovaPerCategoria(String categoria) {
-        String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria, immagine_path FROM prodotto WHERE categoria = ?";
+        String sql = "SELECT nome, prezzo_attuale, quantita_disponibile, categoria FROM prodotto WHERE categoria = ?";
         return DatabaseHelper.getInstance().queryForList(sql, this::estraiProdotto, "Errore in trovaPerCategoria",
                 categoria);
     }
@@ -48,8 +47,7 @@ public class ProdottoDAOJdbc implements IProdottoDAO {
                 rs.getString("nome"),
                 rs.getDouble("prezzo_attuale"),
                 rs.getDouble("quantita_disponibile"),
-                rs.getString("categoria"),
-                rs.getString("immagine_path"));
+                rs.getString("categoria"));
     }
 
     @Override

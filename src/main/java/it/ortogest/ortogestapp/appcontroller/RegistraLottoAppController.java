@@ -42,7 +42,7 @@ public class RegistraLottoAppController {
             List<Lotto> lotti = lottoDAO.trovaPerProdotto(p.getNome());
             if (!lotti.isEmpty()) {
                 ProdottoBean bean = new ProdottoBean(p.getNome(), p.getPrezzoAttuale(),
-                        p.getQuantitaTotaleDisponibile(), p.getCategoria(), p.getImmaginePath());
+                        p.getQuantitaTotaleDisponibile(), p.getCategoria());
                 bean.setPrezzoAcquistoMedio(lottoDAO.getPrezzoMedioAcquisto(p.getNome()));
                 beans.add(bean);
             }
@@ -132,8 +132,7 @@ public class RegistraLottoAppController {
         Prodotto prodotto = prodottoDAO.trovaPerNome(bean.getNomeProdotto());
 
         if (prodotto == null) {
-            prodotto = new Prodotto(bean.getNomeProdotto(), 0.0, 0.0, CategoriaProdotto.FRUTTA,
-                    "/images/placeholder.png");
+            prodotto = new Prodotto(bean.getNomeProdotto(), 0.0, 0.0, CategoriaProdotto.FRUTTA);
             prodottoDAO.salvaProdotto(prodotto);
         }
 

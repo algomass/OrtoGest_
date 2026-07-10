@@ -23,8 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -446,18 +445,11 @@ public class ClienteGraphicController extends BaseGraphicController {
         card.setStyle(
                 "-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #bdc3c7; -fx-border-radius: 8;");
 
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
-        imageView.setPreserveRatio(true);
-
-        try {
-            InputStream imgStream = getClass().getResourceAsStream(prodotto.getImmaginePath());
-            if (imgStream != null)
-                imageView.setImage(new Image(imgStream));
-        } catch (Exception e) {
-            Printer.perror("Errore caricamento immagine: " + e.getMessage());
-        }
+        // Manteniamo lo spazio dedicato all'immagine come richiesto
+        javafx.scene.layout.Region imageSpacer = new javafx.scene.layout.Region();
+        imageSpacer.setPrefSize(100, 100);
+        imageSpacer.setMinSize(100, 100);
+        imageSpacer.setMaxSize(100, 100);
 
         Label nomeLabel = new Label(prodotto.getNome());
         nomeLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
@@ -491,7 +483,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         HBox bottomBox = new HBox(5, selezionaBtn);
         bottomBox.setAlignment(Pos.CENTER);
 
-        card.getChildren().addAll(imageView, nomeLabel, prezziBox, giacenzaLabel, bottomBox);
+        card.getChildren().addAll(imageSpacer, nomeLabel, prezziBox, giacenzaLabel, bottomBox);
 
         card.setOnMouseEntered(e -> card.setStyle(
                 "-fx-background-color: #f8f9fa; -fx-background-radius: 8; -fx-border-color: #3498db; -fx-border-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);"));

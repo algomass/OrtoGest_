@@ -41,8 +41,7 @@ public class DatabaseHelper {
                 "nome VARCHAR(255) PRIMARY KEY, " +
                 "prezzo_attuale DOUBLE NOT NULL, " +
                 "quantita_disponibile DOUBLE NOT NULL, " +
-                "categoria VARCHAR(100) NOT NULL, " +
-                "immagine_path VARCHAR(255)" +
+                "categoria VARCHAR(100) NOT NULL" +
                 ");";
 
         String sqlLotto = "CREATE TABLE IF NOT EXISTS lotto (" +

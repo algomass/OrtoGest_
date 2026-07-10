@@ -8,8 +8,7 @@ CREATE TABLE IF NOT EXISTS prodotto (
     nome VARCHAR(255) PRIMARY KEY,
     prezzo_attuale DOUBLE NOT NULL,
     quantita_disponibile DOUBLE NOT NULL,
-    categoria VARCHAR(100) NOT NULL,
-    immagine_path VARCHAR(255)
+    categoria VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS lotto (
@@ -57,7 +56,6 @@ INSERT IGNORE INTO utente (email, password, ruolo) VALUES ('c', 'c', 'Magazzinie
 INSERT IGNORE INTO utente (email, password, ruolo) VALUES ('d', 'd', 'Operatore');
 
 -- Inserimento di qualche prodotto di base per avere un catalogo iniziale
-INSERT IGNORE INTO prodotto (nome, prezzo_attuale, quantita_disponib1
-ile, categoria, immagine_path) VALUES 
-('Mele Golden', 1.50, 120.0, 'Frutta', '/images/mele_golden.png'),
-('Zucchine', 2.00, 70.0, 'Verdura', '/images/zucchine.png');
+INSERT IGNORE INTO prodotto (nome, prezzo_attuale, quantita_disponibile, categoria) VALUES 
+('Mele Golden', 1.50, 120.0, 'Frutta'),
+('Zucchine', 2.00, 70.0, 'Verdura');

@@ -8,13 +8,12 @@ class TestProdottoBean {
 
     @Test
     void testCostruttoreEGetters() {
-        ProdottoBean bean = new ProdottoBean("Fragola", 3.5, 50.0, "Frutta", "/img/fragola.png");
+        ProdottoBean bean = new ProdottoBean("Fragola", 3.5, 50.0, "Frutta");
         
         Assertions.assertEquals("Fragola", bean.getNome(), "Il nome deve corrispondere");
         Assertions.assertEquals(3.5, bean.getPrezzoAttuale(), "Il prezzo deve corrispondere");
         Assertions.assertEquals(50.0, bean.getGiacenza(), "La giacenza deve corrispondere");
         Assertions.assertEquals("Frutta", bean.getCategoria(), "La categoria deve corrispondere");
-        Assertions.assertEquals("/img/fragola.png", bean.getImmaginePath(), "Il path dell'immagine deve corrispondere");
     }
     
     @Test

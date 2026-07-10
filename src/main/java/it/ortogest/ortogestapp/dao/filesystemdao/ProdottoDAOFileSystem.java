@@ -20,10 +20,10 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
         File f = new File(FILE_PATH);
         if (!f.exists()) {
             try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
-                pw.println("nome,prezzoAttuale,quantitaTotaleDisponibile,categoria,immaginePath");
+                pw.println("nome,prezzoAttuale,quantitaTotaleDisponibile,categoria");
                 
-                pw.println("Mela Golden,2.50,100.0,Frutta,/images/mela_golden.png");
-                pw.println("Zucchina Romana,1.80,50.0,Verdura,/images/zucchina.png");
+                pw.println("Mela Golden,2.50,100.0,Frutta");
+                pw.println("Zucchina Romana,1.80,50.0,Verdura");
             } catch (IOException e) {
                 it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());
             }
@@ -41,13 +41,12 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
                     continue;
                 }
                 String[] values = line.split(",");
-                if (values.length >= 5) {
+                if (values.length >= 4) {
                     Prodotto p = new Prodotto(
                             values[0],
                             Double.parseDouble(values[1]),
                             Double.parseDouble(values[2]),
-                            values[3],
-                            values[4]);
+                            values[3]);
                     prodotti.add(p);
                 }
             }
@@ -59,10 +58,10 @@ public class ProdottoDAOFileSystem implements IProdottoDAO {
 
     private void scriviTutti(List<Prodotto> prodotti) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_PATH))) {
-            pw.println("nome,prezzoAttuale,quantitaTotaleDisponibile,categoria,immaginePath");
+            pw.println("nome,prezzoAttuale,quantitaTotaleDisponibile,categoria");
             for (Prodotto p : prodotti) {
                 pw.println(p.getNome() + "," + p.getPrezzoAttuale() + "," +
-                        p.getQuantitaTotaleDisponibile() + "," + p.getCategoria() + "," + p.getImmaginePath());
+                        p.getQuantitaTotaleDisponibile() + "," + p.getCategoria());
             }
         } catch (IOException e) {
             it.ortogest.ortogestapp.utils.Printer.perror(ERRORE_IO_MSG + e.getMessage());

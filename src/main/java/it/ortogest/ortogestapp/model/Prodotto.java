@@ -6,14 +6,12 @@ public class Prodotto {
     private double prezzoAttuale;
     private double quantitaTotaleDisponibile; 
     private String categoria; 
-    private String immaginePath; 
 
-    public Prodotto(String nome, double prezzoAttuale, double quantitaTotaleDisponibile, String categoria, String immaginePath) {
+    public Prodotto(String nome, double prezzoAttuale, double quantitaTotaleDisponibile, String categoria) {
         this.nome = nome;
         this.prezzoAttuale = prezzoAttuale;
         this.quantitaTotaleDisponibile = quantitaTotaleDisponibile;
         this.categoria = categoria;
-        this.immaginePath = immaginePath;
     }
 
     public String getNome() { return nome; }
@@ -27,9 +25,6 @@ public class Prodotto {
 
     public String getCategoria() { return categoria; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
-
-    public String getImmaginePath() { return immaginePath; }
-    public void setImmaginePath(String immaginePath) { this.immaginePath = immaginePath; }
 
     public void sottraiGiacenza(double quantita) {
         this.quantitaTotaleDisponibile -= quantita;

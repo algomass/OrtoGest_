@@ -6,7 +6,6 @@ public class ProdottoBean {
     private double prezzoAttuale;
     private double giacenza;
     private String categoria;
-    private String immaginePath;
     private double prezzoAcquistoMedio;
     
     
@@ -17,12 +16,11 @@ public class ProdottoBean {
     private double prezzoMin;
     private double prezzoMax;
 
-    public ProdottoBean(String nome, double prezzoAttuale, double giacenza, String categoria, String immaginePath) {
+    public ProdottoBean(String nome, double prezzoAttuale, double giacenza, String categoria) {
         this.nome = nome;
         this.prezzoAttuale = prezzoAttuale;
         this.giacenza = giacenza;
         this.categoria = categoria;
-        this.immaginePath = immaginePath;
     }
 
     public ProdottoBean() {
@@ -58,14 +56,6 @@ public class ProdottoBean {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
-    }
-
-    public String getImmaginePath() {
-        return immaginePath;
-    }
-
-    public void setImmaginePath(String immaginePath) {
-        this.immaginePath = immaginePath;
     }
 
     public double getPrezzoAcquistoMedio() {

@@ -13,9 +13,9 @@ public class ProdottoDAOInMemory implements IProdottoDAO {
     public ProdottoDAOInMemory() {
         this.prodotti = new ArrayList<>();
         
-        prodotti.add(new Prodotto("Mela Golden", 2.50, 100.0, "Frutta", "/images/mela_golden.png"));
-        prodotti.add(new Prodotto("Zucchina Romana", 1.80, 50.0, "Verdura", "/images/zucchina.png"));
-        prodotti.add(new Prodotto("Banana", 1.99, 120.0, "Frutta", "/images/banana.png"));
+        prodotti.add(new Prodotto("Mela Golden", 2.50, 100.0, "Frutta"));
+        prodotti.add(new Prodotto("Zucchina Romana", 1.80, 50.0, "Verdura"));
+        prodotti.add(new Prodotto("Banana", 1.99, 120.0, "Frutta"));
     }
 
     @Override

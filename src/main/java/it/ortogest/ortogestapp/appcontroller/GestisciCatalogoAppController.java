@@ -44,8 +44,7 @@ public class GestisciCatalogoAppController {
                         p.getNome(),
                         p.getPrezzoAttuale(),
                         validGiacenza,
-                        p.getCategoria(),
-                        p.getImmaginePath());
+                        p.getCategoria());
                 bean.setPrezzoAcquistoMedio(lottoDAO.getPrezzoMedioAcquisto(p.getNome()));
                 beans.add(bean);
             }

@@ -89,8 +89,7 @@ public class CreaOrdineAppController {
                 p.getNome(),
                 minPrice,
                 validGiacenza,
-                p.getCategoria(),
-                p.getImmaginePath());
+                p.getCategoria());
         bean.setPrezzoMin(minPrice);
         bean.setPrezzoMax(maxPrice);
 
