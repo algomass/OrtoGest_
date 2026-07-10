@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-
 public class LoginGraphicController {
 
     @FXML
@@ -31,21 +30,19 @@ public class LoginGraphicController {
 
     @FXML
     public void initialize() {
-        
+
         ruoloComboBox.getItems().addAll("Cliente", "Magazziniere", "Operatore", "Responsabile");
     }
 
     @FXML
     public void loginAction() {
-        
+
         errorLabel.setVisible(false);
 
-        
         String emailInserita = emailField.getText();
         String passwordInserita = passwordField.getText();
         String ruoloSelezionato = ruoloComboBox.getValue();
 
-        
         if (emailInserita == null || emailInserita.trim().isEmpty() ||
                 passwordInserita == null || passwordInserita.trim().isEmpty()) {
             mostraErrore("Compila tutti i campi!");
@@ -57,22 +54,21 @@ public class LoginGraphicController {
             return;
         }
 
-        
         CredenzialiBean credenziali = new CredenzialiBean(emailInserita, passwordInserita);
         LoginAppController appController = new LoginAppController();
 
         try {
-            
+
             UtenteBean utenteLoggato = appController.login(credenziali);
 
-            
-            utenteLoggato.setRuolo(ruoloSelezionato);
+            if (!utenteLoggato.getRuolo().equalsIgnoreCase(ruoloSelezionato)) {
+                mostraErrore("L'utente non dispone dei permessi \n per accedere come " + ruoloSelezionato + ".");
+                return;
+            }
 
-            
             SessionManager.getInstance().login(utenteLoggato);
             Printer.printf("Login effettuato con successo. Benvenuto, " + utenteLoggato.getNome() + "!");
 
-            
             String fxmlPath;
             switch (utenteLoggato.getRuolo()) {
                 case "Magazziniere":
@@ -88,15 +84,14 @@ public class LoginGraphicController {
                     fxmlPath = CostantiGUI.VIEW_CLIENTE;
                     break;
                 default:
-                    fxmlPath = CostantiGUI.VIEW_MAGAZZINO; 
+                    fxmlPath = CostantiGUI.VIEW_MAGAZZINO;
                     Printer.perror("Attenzione: ruolo non riconosciuto (" + utenteLoggato.getRuolo() + ").");
                     break;
             }
             SceneManager.getInstance().cambiaScena(fxmlPath);
 
         } catch (it.ortogest.ortogestapp.exception.LoginFallitoException e) {
-            
-            
+
             Printer.perror("Errore di accesso: " + e.getMessage());
             mostraErrore(e.getMessage());
         } catch (it.ortogest.ortogestapp.exception.ViewException e) {

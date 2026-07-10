@@ -1,5 +1,4 @@
 -- Script di inizializzazione del database OrtoGest
--- Da eseguire in MySQL Workbench
 
 CREATE DATABASE IF NOT EXISTS ortogest;
 USE ortogest;
