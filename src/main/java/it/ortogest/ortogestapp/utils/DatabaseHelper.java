@@ -99,6 +99,7 @@ public class DatabaseHelper {
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN smaltito BOOLEAN DEFAULT FALSE");
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE lotto ADD COLUMN ritirato BOOLEAN DEFAULT FALSE");
             eseguiAlterTableSilenzioso(stmt, "ALTER TABLE riga_ordine ADD COLUMN id_lotto VARCHAR(100)");
+            eseguiAlterTableSilenzioso(stmt, "ALTER TABLE utente ADD COLUMN nome VARCHAR(255) DEFAULT 'Utente'");
 
             Printer.printf("Database MySQL inizializzato con successo.");
 

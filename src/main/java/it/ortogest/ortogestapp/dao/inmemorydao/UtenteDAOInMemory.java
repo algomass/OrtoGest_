@@ -28,4 +28,14 @@ public class UtenteDAOInMemory implements IUtenteDAO {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public boolean registraUtente(Utente utente) {
+        // Controllo se l'email esiste già
+        if (utenti.stream().anyMatch(u -> u.getEmail().equals(utente.getEmail()))) {
+            return false;
+        }
+        utenti.add(utente);
+        return true;
+    }
 }

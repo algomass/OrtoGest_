@@ -104,4 +104,14 @@ public class LoginGraphicController {
         errorLabel.setText(messaggio);
         errorLabel.setVisible(true);
     }
+
+    @FXML
+    public void vaiARegistrazioneAction() {
+        try {
+            SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_REGISTRAZIONE);
+        } catch (it.ortogest.ortogestapp.exception.ViewException e) {
+            Printer.perror("Errore caricamento schermata registrazione: " + e.getMessage());
+            mostraErrore("Impossibile caricare la pagina di registrazione.");
+        }
+    }
 }

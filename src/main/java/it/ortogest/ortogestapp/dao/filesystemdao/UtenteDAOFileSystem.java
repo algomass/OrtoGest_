@@ -49,4 +49,20 @@ public class UtenteDAOFileSystem implements IUtenteDAO {
         }
         return null;
     }
+
+    @Override
+    public boolean registraUtente(Utente utente) {
+        // Controllo esistenza email (semplificato)
+        if (verificaCredenziali(utente.getEmail(), utente.getPassword()) != null) {
+            return false;
+        }
+        
+        try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_PATH, true))) {
+            pw.println(utente.getNome() + "," + utente.getEmail() + "," + utente.getPassword() + "," + utente.getRuolo());
+            return true;
+        } catch (IOException e) {
+            it.ortogest.ortogestapp.utils.Printer.perror("Errore I/O in UtenteDAOFileSystem: " + e.getMessage());
+            return false;
+        }
+    }
 }

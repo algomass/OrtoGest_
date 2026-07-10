@@ -24,4 +24,17 @@ public class UtenteDAOJdbc implements IUtenteDAO {
             return fallback;
         }
     }
+
+    @Override
+    public boolean registraUtente(Utente utente) {
+        String sql = "INSERT INTO utente (nome, email, password, ruolo) VALUES (?, ?, ?, ?)";
+        try {
+            DatabaseHelper.getInstance().executeUpdate(sql, "Errore durante la registrazione", 
+                utente.getNome(), utente.getEmail(), utente.getPassword(), utente.getRuolo());
+            return true;
+        } catch (Exception e) {
+            it.ortogest.ortogestapp.utils.Printer.perror("Errore registrazione: " + e.getMessage());
+            return false;
+        }
+    }
 }

@@ -25,6 +25,7 @@ public class LoginGraphicControllerCLI extends BaseGraphicControllerCLI {
         while (!exit) {
             stampaMenu("BENVENUTO IN ORTOGEST (CLI)",
                     "1. Effettua il Login",
+                    "2. Registrati come nuovo cliente",
                     "0. Esci dall'applicazione");
             String scelta = leggiStringaNonVuota(scanner, "Scelta: ");
 
@@ -38,6 +39,10 @@ public class LoginGraphicControllerCLI extends BaseGraphicControllerCLI {
                         
                         
                     }
+                    break;
+                case "2":
+                    RegistrazioneGraphicControllerCLI regController = new RegistrazioneGraphicControllerCLI();
+                    regController.start(scanner);
                     break;
                 case "0":
                     Printer.print("Uscita in corso...");
