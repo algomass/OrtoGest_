@@ -39,10 +39,18 @@ public class SceneManager {
         }
         try {
             Parent root = FXMLLoader.load(resource);
+            Scene scene;
             if (primaryWindow.getScene() == null) {
-                primaryWindow.setScene(new Scene(root));
+                scene = new Scene(root);
+                primaryWindow.setScene(scene);
             } else {
-                primaryWindow.getScene().setRoot(root);
+                scene = primaryWindow.getScene();
+                scene.setRoot(root);
+            }
+            
+            String css = getClass().getResource("/GUI/style.css").toExternalForm();
+            if (!scene.getStylesheets().contains(css)) {
+                scene.getStylesheets().add(css);
             }
             primaryWindow.show();
         } catch(IOException e) {

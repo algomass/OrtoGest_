@@ -8,7 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
 
 import javafx.scene.layout.VBox;
 
@@ -26,6 +25,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     private enum StatoVista {
         CLASSICA, SCONTI, DA_PREZZARE, RITIRATI
     }
+
     private StatoVista vistaCorrente = StatoVista.CLASSICA;
 
     @FXML
@@ -106,22 +106,19 @@ public class ResponsabileGraphicController extends BaseGraphicController {
         formatDoubleColumn(colCostoAcquisto);
         formatDoubleColumn(colPrezzoScontato);
 
-        
         colPrezzoVendita.setCellFactory(column -> new TableCell<LottoBean, Double>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
+                getStyleClass().removeAll("text-danger", "font-bold", "text-black");
                 if (empty || item == null) {
                     setText(null);
-                    setStyle("");
                 } else {
                     setText(String.format("%.2f", item));
                     if (item == 0.0) {
-                        setTextFill(Color.RED);
-                        setStyle("-fx-font-weight: bold;");
+                        getStyleClass().addAll("text-danger", "font-bold");
                     } else {
-                        setTextFill(Color.BLACK);
-                        setStyle("");
+                        getStyleClass().add("text-black");
                     }
                 }
             }
@@ -129,7 +126,6 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
         nuovaCategoriaComboBox.getItems().addAll(CategoriaProdotto.FRUTTA, CategoriaProdotto.VERDURA);
 
-        
         tabellaProdotti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 prodottoSelezionatoField.setText(newSelection.getNome());
@@ -139,7 +135,6 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             }
         });
 
-        
         tabellaLotti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 lottoSelezionatoField.setText(newSelection.getIdLotto());
@@ -149,7 +144,6 @@ public class ResponsabileGraphicController extends BaseGraphicController {
             }
         });
 
-        
         prezzoScontatoField.setDisable(true);
         scontoCheckBox.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
             prezzoScontatoField.setDisable(!isNowSelected);
@@ -164,7 +158,6 @@ public class ResponsabileGraphicController extends BaseGraphicController {
         ObservableList<ProdottoBean> observableList = FXCollections.observableArrayList(prodotti);
         tabellaProdotti.setItems(observableList);
 
-        
         String prodSelezionato = prodottoSelezionatoField.getText();
         if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
             caricaLotti(prodSelezionato);
@@ -261,7 +254,6 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             mostraSuccesso("Prezzi del lotto aggiornati correttamente");
 
-            
             ricaricaVistaCorrente();
 
         } catch (NumberFormatException _) {
@@ -302,15 +294,15 @@ public class ResponsabileGraphicController extends BaseGraphicController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma Rimozione");
         alert.setHeaderText("Rimozione lotto dal catalogo");
-        alert.setContentText("Sei sicuro di voler rimuovere il lotto " + idLotto + "? Lo stato verrà impostato su RITIRATO.");
+        alert.setContentText(
+                "Sei sicuro di voler rimuovere il lotto " + idLotto + "? Lo stato verrà impostato su RITIRATO.");
 
         java.util.Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 appController.rimuoviLottoDalCatalogo(idLotto);
                 mostraSuccesso("Lotto " + idLotto + " rimosso con successo.");
-                
-                
+
                 if (vistaCorrente == StatoVista.CLASSICA) {
                     String prodSelezionato = prodottoSelezionatoField.getText();
                     if (prodSelezionato != null && !prodSelezionato.isEmpty()) {
@@ -326,7 +318,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
                     List<LottoBean> lottiRitirati = appController.getLottiRitirati();
                     tabellaLotti.setItems(FXCollections.observableArrayList(lottiRitirati));
                 }
-                
+
                 pulisciFormLotto();
             } catch (Exception e) {
                 mostraErrore("Errore durante la rimozione: " + e.getMessage());
@@ -376,7 +368,8 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     @FXML
     public void apriGestioneOrdiniAction() {
         try {
-            it.ortogest.ortogestapp.utils.SceneManager.getInstance().cambiaScena(it.ortogest.ortogestapp.utils.CostantiGUI.VIEW_GESTIONE_ORDINI_ONLINE);
+            it.ortogest.ortogestapp.utils.SceneManager.getInstance()
+                    .cambiaScena(it.ortogest.ortogestapp.utils.CostantiGUI.VIEW_GESTIONE_ORDINI_ONLINE);
         } catch (it.ortogest.ortogestapp.exception.ViewException e) {
             mostraErrore("Errore nell'apertura della gestione ordini: " + e.getMessage());
         }
@@ -416,12 +409,20 @@ public class ResponsabileGraphicController extends BaseGraphicController {
         sezioneSuperiore.setVisible(true);
         sezioneSuperiore.setManaged(true);
         btnToggleVista.setText(MSG_PRODOTTI_DA_SCONTARE);
-        if (btnDaPrezzare != null) btnDaPrezzare.setText(MSG_PRODOTTI_DA_PREZZARE);
-        if (btnRitirati != null) btnRitirati.setText(MSG_LOTTI_RITIRATI);
+        if (btnDaPrezzare != null)
+            btnDaPrezzare.setText(MSG_PRODOTTI_DA_PREZZARE);
+        if (btnRitirati != null)
+            btnRitirati.setText(MSG_LOTTI_RITIRATI);
         vistaCorrente = StatoVista.CLASSICA;
 
-        if (btnRimettiInCommercio != null) { btnRimettiInCommercio.setVisible(false); btnRimettiInCommercio.setManaged(false); }
-        if (btnRimuoviLotto != null) { btnRimuoviLotto.setVisible(true); btnRimuoviLotto.setManaged(true); }
+        if (btnRimettiInCommercio != null) {
+            btnRimettiInCommercio.setVisible(false);
+            btnRimettiInCommercio.setManaged(false);
+        }
+        if (btnRimuoviLotto != null) {
+            btnRimuoviLotto.setVisible(true);
+            btnRimuoviLotto.setManaged(true);
+        }
 
         pulisciFormLotto();
         caricaCatalogo();
@@ -429,27 +430,33 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
     private void impostaVistaSconti() {
         try {
-            List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2); 
+            List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2);
             if (lottiInScadenza.isEmpty()) {
                 mostraSuccesso("Nessun prodotto in scadenza nelle prossime 48 ore.");
             } else {
                 mostraSuccesso(MSG_TROVATI + lottiInScadenza.size() + " lotti da scontare.");
             }
 
-            
             ObservableList<LottoBean> observableList = FXCollections.observableArrayList(lottiInScadenza);
             tabellaLotti.setItems(observableList);
 
             sezioneSuperiore.setVisible(false);
             sezioneSuperiore.setManaged(false);
             btnToggleVista.setText(MSG_VISTA_CLASSICA);
-            if (btnDaPrezzare != null) btnDaPrezzare.setText(MSG_PRODOTTI_DA_PREZZARE);
-            if (btnRitirati != null) btnRitirati.setText(MSG_LOTTI_RITIRATI);
+            if (btnDaPrezzare != null)
+                btnDaPrezzare.setText(MSG_PRODOTTI_DA_PREZZARE);
+            if (btnRitirati != null)
+                btnRitirati.setText(MSG_LOTTI_RITIRATI);
 
-            if (btnRimettiInCommercio != null) { btnRimettiInCommercio.setVisible(false); btnRimettiInCommercio.setManaged(false); }
-            if (btnRimuoviLotto != null) { btnRimuoviLotto.setVisible(true); btnRimuoviLotto.setManaged(true); }
+            if (btnRimettiInCommercio != null) {
+                btnRimettiInCommercio.setVisible(false);
+                btnRimettiInCommercio.setManaged(false);
+            }
+            if (btnRimuoviLotto != null) {
+                btnRimuoviLotto.setVisible(true);
+                btnRimuoviLotto.setManaged(true);
+            }
 
-            
             tabellaProdotti.getSelectionModel().clearSelection();
             prodottoSelezionatoField.clear();
             nuovaCategoriaComboBox.setValue(null);
@@ -476,12 +483,20 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             sezioneSuperiore.setVisible(false);
             sezioneSuperiore.setManaged(false);
-            if (btnDaPrezzare != null) btnDaPrezzare.setText(MSG_VISTA_CLASSICA);
+            if (btnDaPrezzare != null)
+                btnDaPrezzare.setText(MSG_VISTA_CLASSICA);
             btnToggleVista.setText(MSG_PRODOTTI_DA_SCONTARE);
-            if (btnRitirati != null) btnRitirati.setText(MSG_LOTTI_RITIRATI);
+            if (btnRitirati != null)
+                btnRitirati.setText(MSG_LOTTI_RITIRATI);
 
-            if (btnRimettiInCommercio != null) { btnRimettiInCommercio.setVisible(false); btnRimettiInCommercio.setManaged(false); }
-            if (btnRimuoviLotto != null) { btnRimuoviLotto.setVisible(true); btnRimuoviLotto.setManaged(true); }
+            if (btnRimettiInCommercio != null) {
+                btnRimettiInCommercio.setVisible(false);
+                btnRimettiInCommercio.setManaged(false);
+            }
+            if (btnRimuoviLotto != null) {
+                btnRimuoviLotto.setVisible(true);
+                btnRimuoviLotto.setManaged(true);
+            }
 
             tabellaProdotti.getSelectionModel().clearSelection();
             prodottoSelezionatoField.clear();
@@ -509,12 +524,20 @@ public class ResponsabileGraphicController extends BaseGraphicController {
 
             sezioneSuperiore.setVisible(false);
             sezioneSuperiore.setManaged(false);
-            if (btnRitirati != null) btnRitirati.setText(MSG_VISTA_CLASSICA);
+            if (btnRitirati != null)
+                btnRitirati.setText(MSG_VISTA_CLASSICA);
             btnToggleVista.setText(MSG_PRODOTTI_DA_SCONTARE);
-            if (btnDaPrezzare != null) btnDaPrezzare.setText(MSG_PRODOTTI_DA_PREZZARE);
+            if (btnDaPrezzare != null)
+                btnDaPrezzare.setText(MSG_PRODOTTI_DA_PREZZARE);
 
-            if (btnRimettiInCommercio != null) { btnRimettiInCommercio.setVisible(true); btnRimettiInCommercio.setManaged(true); }
-            if (btnRimuoviLotto != null) { btnRimuoviLotto.setVisible(false); btnRimuoviLotto.setManaged(false); }
+            if (btnRimettiInCommercio != null) {
+                btnRimettiInCommercio.setVisible(true);
+                btnRimettiInCommercio.setManaged(true);
+            }
+            if (btnRimuoviLotto != null) {
+                btnRimuoviLotto.setVisible(false);
+                btnRimuoviLotto.setManaged(false);
+            }
 
             tabellaProdotti.getSelectionModel().clearSelection();
             prodottoSelezionatoField.clear();

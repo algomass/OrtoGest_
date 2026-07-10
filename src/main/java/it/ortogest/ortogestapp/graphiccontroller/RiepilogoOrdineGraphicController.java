@@ -11,10 +11,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
 
 import java.util.List;
-
 
 public class RiepilogoOrdineGraphicController extends BaseGraphicController {
 
@@ -97,7 +95,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
         colRimuovi.setCellFactory(param -> new TableCell<RigaOrdineBean, Void>() {
             private final Button btn = new Button("Rimuovi");
             {
-                btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;");
+                btn.getStyleClass().add("btn-danger");
                 btn.setOnAction(event -> {
                     RigaOrdineBean riga = getTableView().getItems().get(getIndex());
                     rimuoviDalCarrello(riga);
@@ -147,14 +145,11 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
         try {
             String risultato = appController.creaOrdine(currentUser.getEmail(), carrello);
 
-            
             carrello.clear();
             SessionManager.getInstance().setCarrelloCorrente(null);
 
             Printer.printf("Ordine confermato: " + risultato);
             tornaAlCatalogo();
-            
-            
 
         } catch (Exception e) {
             mostraErrore("Errore nell'invio dell'ordine: " + e.getMessage());
@@ -172,7 +167,7 @@ public class RiepilogoOrdineGraphicController extends BaseGraphicController {
 
     private void mostraErrore(String msg) {
         statusLabel.setText(msg);
-        statusLabel.setTextFill(Color.web("#e74c3c"));
+        statusLabel.getStyleClass().add("text-error");
         statusLabel.setVisible(true);
     }
 }

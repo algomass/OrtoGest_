@@ -6,14 +6,12 @@ import it.ortogest.ortogestapp.utils.SceneManager;
 import it.ortogest.ortogestapp.utils.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
-
 
 public abstract class BaseGraphicController {
 
     @FXML
     public void logoutAction() {
-        
+
         SessionManager.getInstance().logout();
         Printer.printf("Logout effettuato con successo. Ritorno alla schermata iniziale.");
 
@@ -21,7 +19,6 @@ public abstract class BaseGraphicController {
                 "Errore critico durante il logout: impossibile ricaricare Login.fxml.");
     }
 
-    
     protected void cambiaScenaSicuro(String viewName, String errorMessage) {
         try {
             SceneManager.getInstance().cambiaScena(viewName);
@@ -30,16 +27,15 @@ public abstract class BaseGraphicController {
         }
     }
 
-    
     protected void mostraStatusLabel(Label label, String messaggio, boolean successo) {
         if (label != null) {
             label.setText(messaggio);
-            label.setTextFill(successo ? Color.web("#27ae60") : Color.web("#e74c3c"));
+            label.getStyleClass().removeAll("text-success", "text-error");
+            label.getStyleClass().add(successo ? "text-success" : "text-error");
             label.setVisible(true);
         }
     }
 
-    
     protected <T, N extends Number> void formatDoubleColumn(javafx.scene.control.TableColumn<T, N> column) {
         if (column != null) {
             column.setCellFactory(tc -> new javafx.scene.control.TableCell<T, N>() {
@@ -56,7 +52,6 @@ public abstract class BaseGraphicController {
         }
     }
 
-    
     protected void fissaTabelle(javafx.scene.control.TableView<?>... tables) {
         for (javafx.scene.control.TableView<?> table : tables) {
             if (table != null) {

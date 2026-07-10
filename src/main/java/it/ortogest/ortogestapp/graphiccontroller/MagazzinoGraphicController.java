@@ -83,9 +83,11 @@ public class MagazzinoGraphicController extends BaseGraphicController {
                 ? searchField.getText().trim().toLowerCase()
                 : "";
         if (!filter.isEmpty() && item.getNome().toLowerCase().contains(filter)) {
-            row.setStyle("-fx-background-color: #ffcccc;");
+            if (!row.getStyleClass().contains("row-error")) {
+                row.getStyleClass().add("row-error");
+            }
         } else {
-            row.setStyle("");
+            row.getStyleClass().remove("row-error");
         }
     }
 
@@ -303,7 +305,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
         fissaTabelle(table);
 
         Button btnSmaltisci = new Button("Smaltisci Selezionato");
-        btnSmaltisci.setStyle("-fx-background-color: #8e44ad; -fx-text-fill: white;");
+        btnSmaltisci.getStyleClass().add("btn-purple");
         btnSmaltisci.setOnAction(e -> {
             LottoBean selected = table.getSelectionModel().getSelectedItem();
             if (selected != null) {

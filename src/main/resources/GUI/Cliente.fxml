@@ -59,10 +59,10 @@
                 </Label>
 
                 <Button fx:id="btnFrutta" onAction="#mostraFruttaAction" text="Frutta" prefWidth="180.0" prefHeight="45.0"
-                        style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-font-size: 14; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 20; -fx-cursor: hand;" />
+                        styleClass="menu-btn, menu-btn-active" />
 
                 <Button fx:id="btnVerdura" onAction="#mostraVerduraAction" text="Verdura" prefWidth="180.0" prefHeight="45.0"
-                        style="-fx-background-color: transparent; -fx-text-fill: #bdc3c7; -fx-font-size: 14; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 20; -fx-cursor: hand;" />
+                        styleClass="menu-btn, menu-btn-inactive" />
 
                 <!-- Separatore visivo -->
                 <Region prefHeight="20.0" />
@@ -71,7 +71,7 @@
                 </Label>
 
                 <Button fx:id="btnOrdini" onAction="#mostraOrdiniAction" text="I Miei Ordini" prefWidth="180.0" prefHeight="45.0"
-                        style="-fx-background-color: transparent; -fx-text-fill: #bdc3c7; -fx-font-size: 14; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 20; -fx-cursor: hand;" />
+                        styleClass="menu-btn, menu-btn-inactive" />
             </children>
         </VBox>
     </left>

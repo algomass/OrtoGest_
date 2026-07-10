@@ -27,14 +27,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class ClienteGraphicController extends BaseGraphicController {
 
@@ -71,7 +68,6 @@ public class ClienteGraphicController extends BaseGraphicController {
     @FXML
     private Button btnOrdini;
 
-    
     @FXML
     private Label cartSummaryLabel;
 
@@ -83,30 +79,21 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     private CreaOrdineAppController appController;
 
-    
     private List<RigaOrdineBean> carrello = new ArrayList<>();
-
-    
-    private static final String STILE_BTN_ATTIVO = "-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-font-size: 14; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 20; -fx-cursor: hand;";
-    private static final String STILE_BTN_INATTIVO = "-fx-background-color: transparent; -fx-text-fill: #bdc3c7; -fx-font-size: 14; -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 20; -fx-cursor: hand;";
 
     @FXML
     public void initialize() {
         fissaTabelle(ordiniTable);
         appController = new CreaOrdineAppController();
 
-        
         List<RigaOrdineBean> cartInSession = SessionManager.getInstance().getCarrelloCorrente();
         if (cartInSession != null) {
             this.carrello = cartInSession;
         }
 
-        
         mostraFruttaAction();
         aggiornaUIHeaderCarrello();
     }
-
-    
 
     @FXML
     public void mostraFruttaAction() {
@@ -138,11 +125,9 @@ public class ClienteGraphicController extends BaseGraphicController {
         caricaOrdiniCliente();
     }
 
-    
-
     @FXML
     public void cercaProdottoAction() {
-        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA
+        String cat = btnVerdura.getStyleClass().contains("menu-btn-active") ? CategoriaProdotto.VERDURA
                 : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
@@ -179,7 +164,7 @@ public class ClienteGraphicController extends BaseGraphicController {
                 continue;
             }
             trovati = true;
-            
+
             double giacenzaResidua = prodotto.getGiacenza();
             for (RigaOrdineBean r : carrello) {
                 if (r.getNomeProdotto().equals(prodotto.getNome())) {
@@ -195,8 +180,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         if (!trovati) {
             Label vuoto = new Label(filter.isEmpty() ? "Nessun prodotto disponibile in questa categoria."
                     : "Nessun prodotto corrisponde alla ricerca.");
-            vuoto.setTextFill(Color.web("#7f8c8d"));
-            vuoto.setStyle("-fx-font-size: 14;");
+            vuoto.getStyleClass().add("vuoto-label");
             flowPaneProdotti.getChildren().add(vuoto);
         }
     }
@@ -250,9 +234,6 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
     }
 
-    
-
-    
     private void mostraPopupSelezioneLotto(ProdottoBean prodotto) {
         errorLabel.setVisible(false);
 
@@ -271,11 +252,11 @@ public class ClienteGraphicController extends BaseGraphicController {
         root.setAlignment(Pos.TOP_CENTER);
 
         Label title = new Label("Lotti disponibili per " + prodotto.getNome());
-        title.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+        title.getStyleClass().add("title-bold-16");
         root.getChildren().add(title);
 
         for (it.ortogest.ortogestapp.beans.LottoBean l : lotti) {
-            
+
             double giacenzaResidua = calcolaGiacenzaResidua(l);
 
             if (giacenzaResidua <= 0)
@@ -283,17 +264,17 @@ public class ClienteGraphicController extends BaseGraphicController {
 
             HBox lottoBox = new HBox(15);
             lottoBox.setAlignment(Pos.CENTER_LEFT);
-            lottoBox.setStyle("-fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-padding: 10;");
+            lottoBox.getStyleClass().add("lotto-box");
 
             VBox infoBox = new VBox(5);
             Label scadeLabel = new Label("Scadenza: " + l.getDataScadenza());
-            scadeLabel.setStyle("-fx-font-weight: bold;");
+            scadeLabel.getStyleClass().add("font-bold");
 
             double prezzoReale = (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) ? l.getPrezzoScontato()
                     : l.getPrezzoVendita();
             Label prezzoLabel = new Label(String.format("Prezzo: %.2f EUR/Kg", prezzoReale));
             if (l.isScontoScadenzaAttivo() && l.getPrezzoScontato() > 0) {
-                prezzoLabel.setTextFill(Color.web("#e74c3c"));
+                prezzoLabel.getStyleClass().add("text-error");
             }
 
             Label qtaLabel = new Label(String.format("Disp: %.1f Kg", giacenzaResidua));
@@ -304,7 +285,7 @@ public class ClienteGraphicController extends BaseGraphicController {
             quantitaField.setPrefWidth(60);
 
             Button aggiungiBtn = new Button("Aggiungi");
-            aggiungiBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
+            aggiungiBtn.getStyleClass().add("btn-success");
 
             double finalGiacenzaResidua = giacenzaResidua;
             aggiungiBtn.setOnAction(e -> {
@@ -322,6 +303,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
 
         Scene scene = new Scene(root, 400, 400);
+        scene.getStylesheets().add(getClass().getResource("/GUI/style.css").toExternalForm());
         popupStage.setScene(scene);
         popupStage.show();
     }
@@ -362,7 +344,6 @@ public class ClienteGraphicController extends BaseGraphicController {
             return;
         }
 
-        
         boolean trovato = false;
         for (RigaOrdineBean r : carrello) {
             if (r.getIdLotto() != null && r.getIdLotto().equals(idLotto)) {
@@ -380,23 +361,20 @@ public class ClienteGraphicController extends BaseGraphicController {
         mostraMessaggio(nomeProdotto + " aggiunto al carrello!", true);
         aggiornaUIHeaderCarrello();
 
-        
-        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA
+        String cat = btnVerdura.getStyleClass().contains("menu-btn-active") ? CategoriaProdotto.VERDURA
                 : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
 
-    
     @FXML
     public void confermaOrdineAction() {
         if (carrello.isEmpty())
             return;
 
         try {
-            
+
             SessionManager.getInstance().setCarrelloCorrente(carrello);
 
-            
             SceneManager.getInstance().cambiaScena(CostantiGUI.VIEW_RIEPILOGO_ORDINE);
 
         } catch (it.ortogest.ortogestapp.exception.ViewException e) {
@@ -411,8 +389,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         aggiornaUIHeaderCarrello();
         mostraMessaggio("Carrello svuotato.", true);
 
-        
-        String cat = btnVerdura.getStyle().contains(STILE_BTN_ATTIVO) ? CategoriaProdotto.VERDURA
+        String cat = btnVerdura.getStyleClass().contains("menu-btn-active") ? CategoriaProdotto.VERDURA
                 : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
@@ -435,15 +412,12 @@ public class ClienteGraphicController extends BaseGraphicController {
         }
     }
 
-    
-
     private VBox creaProdottoCard(ProdottoBean prodotto) {
         VBox card = new VBox(8);
         card.setAlignment(Pos.CENTER);
         card.setPrefWidth(180);
         card.setPadding(new Insets(15));
-        card.setStyle(
-                "-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #bdc3c7; -fx-border-radius: 8;");
+        card.getStyleClass().add("product-card");
 
         // Manteniamo lo spazio dedicato all'immagine come richiesto
         javafx.scene.layout.Region imageSpacer = new javafx.scene.layout.Region();
@@ -452,32 +426,30 @@ public class ClienteGraphicController extends BaseGraphicController {
         imageSpacer.setMaxSize(100, 100);
 
         Label nomeLabel = new Label(prodotto.getNome());
-        nomeLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+        nomeLabel.getStyleClass().add("title-bold-14");
 
         VBox prezziBox = new VBox(2);
         prezziBox.setAlignment(Pos.CENTER);
 
         if (prodotto.getPrezzoMin() == prodotto.getPrezzoMax()) {
             Label prezzoLabel = new Label(String.format("%.2f EUR/Kg", prodotto.getPrezzoMin()));
-            prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 14;");
+            prezzoLabel.getStyleClass().add("price-label-big");
             prezziBox.getChildren().add(prezzoLabel);
         } else {
             Label badgeVari = new Label("Lotti Multipli");
-            badgeVari.setStyle(
-                    "-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 3 6; -fx-background-radius: 4; -fx-font-size: 10; -fx-font-weight: bold;");
+            badgeVari.getStyleClass().add("badge-warning");
 
             Label prezzoLabel = new Label(
                     String.format("Da %.2f EUR a %.2f EUR", prodotto.getPrezzoMin(), prodotto.getPrezzoMax()));
-            prezzoLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 13;");
+            prezzoLabel.getStyleClass().add("price-label-small");
             prezziBox.getChildren().addAll(badgeVari, prezzoLabel);
         }
 
         Label giacenzaLabel = new Label(String.format("Disp. Totale: %.1f Kg", prodotto.getGiacenza()));
-        giacenzaLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #7f8c8d;");
+        giacenzaLabel.getStyleClass().add("giacenza-label");
 
         Button selezionaBtn = new Button("Scegli Lotto");
-        selezionaBtn.setStyle(
-                "-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
+        selezionaBtn.getStyleClass().add("btn-primary");
         selezionaBtn.setOnAction(e -> mostraPopupSelezioneLotto(prodotto));
 
         HBox bottomBox = new HBox(5, selezionaBtn);
@@ -485,21 +457,22 @@ public class ClienteGraphicController extends BaseGraphicController {
 
         card.getChildren().addAll(imageSpacer, nomeLabel, prezziBox, giacenzaLabel, bottomBox);
 
-        card.setOnMouseEntered(e -> card.setStyle(
-                "-fx-background-color: #f8f9fa; -fx-background-radius: 8; -fx-border-color: #3498db; -fx-border-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);"));
-        card.setOnMouseExited(e -> card.setStyle(
-                "-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #bdc3c7; -fx-border-radius: 8;"));
-
         return card;
     }
 
-    
+    private void setMenuBtnStyle(Button btn, boolean active) {
+        btn.getStyleClass().removeAll("menu-btn-active", "menu-btn-inactive");
+        if (!btn.getStyleClass().contains("menu-btn")) {
+            btn.getStyleClass().add("menu-btn");
+        }
+        btn.getStyleClass().add(active ? "menu-btn-active" : "menu-btn-inactive");
+    }
 
     private void aggiornaStileSidebar(Button attivo) {
-        btnFrutta.setStyle(STILE_BTN_INATTIVO);
-        btnVerdura.setStyle(STILE_BTN_INATTIVO);
-        btnOrdini.setStyle(STILE_BTN_INATTIVO);
-        attivo.setStyle(STILE_BTN_ATTIVO);
+        setMenuBtnStyle(btnFrutta, false);
+        setMenuBtnStyle(btnVerdura, false);
+        setMenuBtnStyle(btnOrdini, false);
+        setMenuBtnStyle(attivo, true);
     }
 
     private void mostraMessaggio(String msg, boolean successo) {
