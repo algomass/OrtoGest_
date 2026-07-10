@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS ordine (
 CREATE TABLE IF NOT EXISTS riga_ordine (
     id_riga INT AUTO_INCREMENT PRIMARY KEY,
     id_ordine VARCHAR(100) NOT NULL,
+    id_lotto VARCHAR(100),
     nome_prodotto VARCHAR(255) NOT NULL,
     quantita DOUBLE NOT NULL,
     prezzo_fissato DOUBLE NOT NULL,
@@ -45,7 +46,8 @@ CREATE TABLE IF NOT EXISTS riga_ordine (
 CREATE TABLE IF NOT EXISTS utente (
     email VARCHAR(255) PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
-    ruolo VARCHAR(50) NOT NULL
+    ruolo VARCHAR(50) NOT NULL,
+    nome VARCHAR(255) DEFAULT 'Utente'
 );
 
 -- Inserimento di un utente di default per poter accedere al sistema (Responsabile)

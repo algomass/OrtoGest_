@@ -160,8 +160,6 @@ public class RegistraLottoAppController {
         }
 
         Prodotto prodotto = lotto.getTipologiaProdotto();
-        List<Lotto> lottiEsistenti = lottoDAO.trovaPerProdotto(prodotto.getNome());
-        boolean isUltimoLotto = (lottiEsistenti.size() == 1 && lottiEsistenti.get(0).getIdLotto().equals(idLotto));
 
         lottoDAO.eliminaLotto(idLotto);
 
@@ -170,10 +168,6 @@ public class RegistraLottoAppController {
             prodotto.setQuantitaTotaleDisponibile(0);
         }
         prodottoDAO.salvaProdotto(prodotto);
-
-        if (isUltimoLotto) {
-            prodottoDAO.eliminaProdotto(prodotto.getNome());
-        }
     }
 
     public void modificaLotto(LottoBean beanNuovo) throws GestioneException {
