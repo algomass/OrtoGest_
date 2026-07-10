@@ -131,7 +131,6 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
             Printer.print("Attuale costo di acquisto: " + lottoScelto.getCostoAcquisto() + " EUR");
             double nuovoPrezzo = leggiDoubleValido(scanner, "Nuovo Prezzo di Vendita al pubblico (EUR): ", 0.0);
 
-            
             lottoScelto.setPrezzoVendita(nuovoPrezzo);
 
             appController.aggiornaPrezzoLotto(lottoScelto);
@@ -146,7 +145,7 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
 
     private void applicaScontiScadenza(Scanner scanner) {
         Printer.print("\n--- Analisi Lotti in Scadenza (entro 48h) ---");
-        
+
         List<LottoBean> lottiInScadenza = appController.getLottiInScadenza(2);
 
         if (lottiInScadenza.isEmpty()) {
@@ -202,16 +201,17 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
         String nomeProdotto = catalogo.get(numProd - 1).getNome();
 
         Printer.print("\nSeleziona la nuova categoria:");
-        Printer.print("1. FRUTTA");
-        Printer.print("2. VERDURA");
+        Printer.print("1. Frutta");
+        Printer.print("2. Verdura");
 
         int sceltaCat = leggiInteroValido(scanner, "Scelta (1-2, oppure 0 per annullare): ", 0, 2);
         if (sceltaCat == 0)
             return;
 
         String nuovaCategoria = switch (sceltaCat) {
-            case 1 -> "FRUTTA";
-            case 2 -> "VERDURA";
+            case 1 -> "Frutta";
+
+            case 2 -> "Verdura";
             default -> null;
         };
         if (nuovaCategoria == null) {
