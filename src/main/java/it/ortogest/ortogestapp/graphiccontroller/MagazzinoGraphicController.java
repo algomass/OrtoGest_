@@ -32,6 +32,8 @@ import java.util.List;
 
 public class MagazzinoGraphicController extends BaseGraphicController {
 
+    private static final String ROW_ERROR = "row-error";
+
     @FXML
     private TableView<ProdottoBean> inventarioTable;
     @FXML
@@ -83,11 +85,11 @@ public class MagazzinoGraphicController extends BaseGraphicController {
                 ? searchField.getText().trim().toLowerCase()
                 : "";
         if (!filter.isEmpty() && item.getNome().toLowerCase().contains(filter)) {
-            if (!row.getStyleClass().contains("row-error")) {
-                row.getStyleClass().add("row-error");
+            if (!row.getStyleClass().contains(ROW_ERROR)) {
+                row.getStyleClass().add(ROW_ERROR);
             }
         } else {
-            row.getStyleClass().remove("row-error");
+            row.getStyleClass().remove(ROW_ERROR);
         }
     }
 

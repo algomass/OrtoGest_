@@ -43,30 +43,30 @@
 /* Buttons */
 .btn-primary {
     background-color: #3498db;
-    color: white;
+    color: black;
     font-weight: bold;
     cursor: pointer;
     -fx-background-color: #3498db;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-font-weight: bold;
     -fx-cursor: hand;
 }
 
 .btn-success {
     background-color: #27ae60;
-    color: white;
+    color: black;
     cursor: pointer;
     -fx-background-color: #27ae60;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-cursor: hand;
 }
 
 .btn-danger {
     background-color: #e74c3c;
-    color: white;
+    color: black;
     cursor: pointer;
     -fx-background-color: #e74c3c;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-cursor: hand;
 }
 
@@ -132,12 +132,12 @@
 
 .badge-warning {
     background-color: #f39c12;
-    color: white;
+    color: black;
     padding: 3px 6px;
     font-size: 10px;
     font-weight: bold;
     -fx-background-color: #f39c12;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-padding: 3 6;
     -fx-background-radius: 4;
     -fx-font-size: 10;

@@ -35,6 +35,8 @@ import java.util.List;
 
 public class ClienteGraphicController extends BaseGraphicController {
 
+    private static final String MENU_BTN_ACTIVE = "menu-btn-active";
+
     @FXML
     private FlowPane flowPaneProdotti;
 
@@ -127,7 +129,7 @@ public class ClienteGraphicController extends BaseGraphicController {
 
     @FXML
     public void cercaProdottoAction() {
-        String cat = btnVerdura.getStyleClass().contains("menu-btn-active") ? CategoriaProdotto.VERDURA
+        String cat = btnVerdura.getStyleClass().contains(MENU_BTN_ACTIVE) ? CategoriaProdotto.VERDURA
                 : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
@@ -361,7 +363,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         mostraMessaggio(nomeProdotto + " aggiunto al carrello!", true);
         aggiornaUIHeaderCarrello();
 
-        String cat = btnVerdura.getStyleClass().contains("menu-btn-active") ? CategoriaProdotto.VERDURA
+        String cat = btnVerdura.getStyleClass().contains(MENU_BTN_ACTIVE) ? CategoriaProdotto.VERDURA
                 : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
@@ -389,7 +391,7 @@ public class ClienteGraphicController extends BaseGraphicController {
         aggiornaUIHeaderCarrello();
         mostraMessaggio("Carrello svuotato.", true);
 
-        String cat = btnVerdura.getStyleClass().contains("menu-btn-active") ? CategoriaProdotto.VERDURA
+        String cat = btnVerdura.getStyleClass().contains(MENU_BTN_ACTIVE) ? CategoriaProdotto.VERDURA
                 : CategoriaProdotto.FRUTTA;
         caricaProdottiPerCategoria(cat);
     }
@@ -461,11 +463,11 @@ public class ClienteGraphicController extends BaseGraphicController {
     }
 
     private void setMenuBtnStyle(Button btn, boolean active) {
-        btn.getStyleClass().removeAll("menu-btn-active", "menu-btn-inactive");
+        btn.getStyleClass().removeAll(MENU_BTN_ACTIVE, "menu-btn-inactive");
         if (!btn.getStyleClass().contains("menu-btn")) {
             btn.getStyleClass().add("menu-btn");
         }
-        btn.getStyleClass().add(active ? "menu-btn-active" : "menu-btn-inactive");
+        btn.getStyleClass().add(active ? MENU_BTN_ACTIVE : "menu-btn-inactive");
     }
 
     private void aggiornaStileSidebar(Button attivo) {
