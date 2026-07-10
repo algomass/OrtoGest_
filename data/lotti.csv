@@ -1,2 +1,3 @@
 idLotto,nomeFornitore,nomeProdotto,quantitaKg,dataArrivo,dataScadenza,costoAcquisto,prezzoVendita,scontoAttivo,prezzoScontato
 12345678,nanni srl,Mela Golden,21.0,2026-06-09,2026-06-12,1.0,2.0,false,0.0
+    
