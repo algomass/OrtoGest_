@@ -5,15 +5,10 @@ import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.CostantiGUI;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
-import java.util.List;
 
 public class RegistrazioneLottoGraphicController extends BaseGraphicController {
 
@@ -22,7 +17,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
     @FXML
     private TextField fornitoreField;
     @FXML
-    private ComboBox<String> prodottoComboBox;
+    private TextField prodottoField;
     @FXML
     private TextField quantitaField;
     @FXML
@@ -36,11 +31,6 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
 
     @FXML
     public void initialize() {
-        
-        RegistraLottoAppController appController = new RegistraLottoAppController();
-        List<String> nomi = appController.getNomiProdotti();
-        ObservableList<String> nomiProdotti = FXCollections.observableArrayList(nomi);
-        prodottoComboBox.setItems(nomiProdotti);
     }
 
     @FXML
@@ -63,7 +53,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
             String idLotto = idLottoField.getText();
             String fornitore = fornitoreField.getText();
             
-            String prodotto = prodottoComboBox.getEditor().getText();
+            String prodotto = prodottoField.getText();
             String quantitaStr = quantitaField.getText();
 
             if (idLotto == null || idLotto.trim().isEmpty() || fornitore == null || fornitore.trim().isEmpty()
