@@ -16,7 +16,7 @@ class TestRegistraLottoAppController {
     @BeforeEach
     void setUp() {
         // Inizializza il controller che verrà utilizzato nei test
-        controller = new RegistraLottoAppController();
+        controller = RegistraLottoAppController.getInstance();
     }
 
     @Test

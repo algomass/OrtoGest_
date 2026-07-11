@@ -15,7 +15,7 @@ public class LoginGraphicControllerCLI extends BaseGraphicControllerCLI {
     private final LoginAppController loginAppController;
 
     public LoginGraphicControllerCLI() {
-        this.loginAppController = new LoginAppController();
+        this.loginAppController = LoginAppController.getInstance();
     }
 
     @Override

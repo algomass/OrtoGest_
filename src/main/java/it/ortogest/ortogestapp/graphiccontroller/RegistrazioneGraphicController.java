@@ -51,7 +51,7 @@ public class RegistrazioneGraphicController {
         }
 
         NuovoUtenteBean nuovoUtente = new NuovoUtenteBean(nome, email, password, "Cliente");
-        RegistrazioneAppController appController = new RegistrazioneAppController();
+        RegistrazioneAppController appController = RegistrazioneAppController.getInstance();
 
         try {
             boolean successo = appController.registraNuovoCliente(nuovoUtente);

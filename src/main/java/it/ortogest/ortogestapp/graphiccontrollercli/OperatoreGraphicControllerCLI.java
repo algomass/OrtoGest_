@@ -13,7 +13,7 @@ public class OperatoreGraphicControllerCLI extends BaseGraphicControllerCLI {
     private final CreaOrdineAppController appController;
 
     public OperatoreGraphicControllerCLI() {
-        this.appController = new CreaOrdineAppController();
+        this.appController = CreaOrdineAppController.getInstance();
     }
 
     @Override

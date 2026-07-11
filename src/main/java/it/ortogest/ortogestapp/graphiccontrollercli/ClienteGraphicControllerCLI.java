@@ -18,7 +18,7 @@ public class ClienteGraphicControllerCLI extends BaseGraphicControllerCLI {
     private final CreaOrdineAppController appController;
 
     public ClienteGraphicControllerCLI() {
-        this.appController = new CreaOrdineAppController();
+        this.appController = CreaOrdineAppController.getInstance();
         
         if (SessionManager.getInstance().getCarrelloCorrente() == null) {
             SessionManager.getInstance().setCarrelloCorrente(new ArrayList<>());

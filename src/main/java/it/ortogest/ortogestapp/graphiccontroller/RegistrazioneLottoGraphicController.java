@@ -76,7 +76,7 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
                     .costoAcquisto(costoAcquisto)
                     .build();
 
-            RegistraLottoAppController appController = new RegistraLottoAppController();
+            RegistraLottoAppController appController = RegistraLottoAppController.getInstance();
             LottoBean risultato = appController.registraLotto(lottoBean);
 
             Printer.printf("Lotto registrato con successo! ID: " + risultato.getIdLotto());

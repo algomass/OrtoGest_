@@ -17,6 +17,17 @@ import java.util.List;
 
 public class GestisciCatalogoAppController {
 
+    private static GestisciCatalogoAppController instance;
+
+    private GestisciCatalogoAppController() {}
+
+    public static GestisciCatalogoAppController getInstance() {
+        if (instance == null) {
+            instance = new GestisciCatalogoAppController();
+        }
+        return instance;
+    }
+
     public List<ProdottoBean> getTuttiIProdotti() {
         return getTuttiIProdotti(false);
     }

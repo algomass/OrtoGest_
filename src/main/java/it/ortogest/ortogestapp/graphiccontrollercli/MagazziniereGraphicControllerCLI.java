@@ -23,7 +23,7 @@ public class MagazziniereGraphicControllerCLI extends BaseGraphicControllerCLI {
     private final DateTimeFormatter dateFormatter;
 
     public MagazziniereGraphicControllerCLI() {
-        this.appController = new RegistraLottoAppController();
+        this.appController = RegistraLottoAppController.getInstance();
         this.dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     }
 

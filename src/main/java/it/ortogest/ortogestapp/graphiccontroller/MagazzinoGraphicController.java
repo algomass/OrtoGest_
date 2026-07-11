@@ -106,7 +106,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
     }
 
     private void mostraLottiProdotto(String nomeProdotto) {
-        RegistraLottoAppController controller = new RegistraLottoAppController();
+        RegistraLottoAppController controller = RegistraLottoAppController.getInstance();
 
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Gestione Lotti");
@@ -244,7 +244,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
     }
 
     private void caricaInventario() {
-        RegistraLottoAppController appController = new RegistraLottoAppController();
+        RegistraLottoAppController appController = RegistraLottoAppController.getInstance();
         List<ProdottoBean> beans = appController.getInventario();
         ObservableList<ProdottoBean> data = FXCollections.observableArrayList(beans);
         inventarioTable.setItems(data);
@@ -264,7 +264,7 @@ public class MagazzinoGraphicController extends BaseGraphicController {
 
     @FXML
     public void apriDaSmaltireAction() {
-        RegistraLottoAppController controller = new RegistraLottoAppController();
+        RegistraLottoAppController controller = RegistraLottoAppController.getInstance();
         List<LottoBean> lottiDaSmaltire = controller.getLottiDaSmaltire();
 
         if (lottiDaSmaltire.isEmpty()) {

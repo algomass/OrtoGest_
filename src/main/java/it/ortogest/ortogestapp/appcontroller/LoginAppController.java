@@ -10,6 +10,17 @@ import it.ortogest.ortogestapp.pattern.abstractfactory.DAOFactory;
 
 public class LoginAppController {
 
+    private static LoginAppController instance;
+
+    private LoginAppController() {}
+
+    public static LoginAppController getInstance() {
+        if (instance == null) {
+            instance = new LoginAppController();
+        }
+        return instance;
+    }
+
     public UtenteBean login(CredenzialiBean credenziali) throws LoginFallitoException {
         
         IUtenteDAO utenteDAO = DAOFactory.getInstance().getUtenteDAO();

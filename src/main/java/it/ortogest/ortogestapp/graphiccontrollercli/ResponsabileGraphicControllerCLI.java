@@ -20,7 +20,7 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
     private final GestisciCatalogoAppController appController;
 
     public ResponsabileGraphicControllerCLI() {
-        this.appController = new GestisciCatalogoAppController();
+        this.appController = GestisciCatalogoAppController.getInstance();
     }
 
     @Override

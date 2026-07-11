@@ -99,7 +99,7 @@ public class ResponsabileGraphicController extends BaseGraphicController {
     @FXML
     public void initialize() {
         fissaTabelle(tabellaProdotti, tabellaLotti);
-        appController = new GestisciCatalogoAppController();
+        appController = GestisciCatalogoAppController.getInstance();
 
         formatDoubleColumn(colGiacenza);
         formatDoubleColumn(colQuantitaLotto);

@@ -7,6 +7,17 @@ import it.ortogest.ortogestapp.pattern.abstractfactory.DAOFactory;
 
 public class RegistrazioneAppController {
 
+    private static RegistrazioneAppController instance;
+
+    private RegistrazioneAppController() {}
+
+    public static RegistrazioneAppController getInstance() {
+        if (instance == null) {
+            instance = new RegistrazioneAppController();
+        }
+        return instance;
+    }
+
     public boolean registraNuovoCliente(NuovoUtenteBean nuovoUtenteBean) {
         IUtenteDAO utenteDAO = DAOFactory.getInstance().getUtenteDAO();
 

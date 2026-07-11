@@ -29,7 +29,7 @@ public class CassaGraphicController extends BaseGraphicController {
     @FXML
     public void initialize() {
         fissaTabelle(ordiniTable);
-        appController = new CreaOrdineAppController();
+        appController = CreaOrdineAppController.getInstance();
 
         if (colIdOrdine != null) {
             colIdOrdine.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrdine()));

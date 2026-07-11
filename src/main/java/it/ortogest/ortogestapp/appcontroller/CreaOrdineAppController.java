@@ -30,10 +30,19 @@ public class CreaOrdineAppController {
     private IOrdineDAO ordineDAO;
     private ILottoDAO lottoDAO;
 
-    public CreaOrdineAppController() {
+    private static CreaOrdineAppController instance;
+
+    private CreaOrdineAppController() {
         this.prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
         this.ordineDAO = DAOFactory.getInstance().getOrdineDAO();
         this.lottoDAO = DAOFactory.getInstance().getLottoDAO();
+    }
+
+    public static CreaOrdineAppController getInstance() {
+        if (instance == null) {
+            instance = new CreaOrdineAppController();
+        }
+        return instance;
     }
 
     public List<ProdottoBean> getCatalogoDisponibile() {

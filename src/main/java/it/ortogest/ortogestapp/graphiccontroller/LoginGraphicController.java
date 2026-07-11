@@ -55,7 +55,7 @@ public class LoginGraphicController {
         }
 
         CredenzialiBean credenziali = new CredenzialiBean(emailInserita, passwordInserita);
-        LoginAppController appController = new LoginAppController();
+        LoginAppController appController = LoginAppController.getInstance();
 
         try {
 

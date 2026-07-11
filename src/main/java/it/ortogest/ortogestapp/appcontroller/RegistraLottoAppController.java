@@ -29,10 +29,19 @@ public class RegistraLottoAppController {
 
     private static final String EMAIL_FORNITORE_DEFAULT = "assistenza@fornitore-ortofrutta.it";
 
-    public RegistraLottoAppController() {
+    private static RegistraLottoAppController instance;
+
+    private RegistraLottoAppController() {
         this.emailAdapter = new ApacheCommonsEmailAdapter();
         this.lottoDAO = DAOFactory.getInstance().getLottoDAO();
         this.prodottoDAO = DAOFactory.getInstance().getProdottoDAO();
+    }
+
+    public static RegistraLottoAppController getInstance() {
+        if (instance == null) {
+            instance = new RegistraLottoAppController();
+        }
+        return instance;
     }
 
     public List<ProdottoBean> getInventario() {

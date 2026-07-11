@@ -86,7 +86,7 @@ public class ClienteGraphicController extends BaseGraphicController {
     @FXML
     public void initialize() {
         fissaTabelle(ordiniTable);
-        appController = new CreaOrdineAppController();
+        appController = CreaOrdineAppController.getInstance();
 
         List<RigaOrdineBean> cartInSession = SessionManager.getInstance().getCarrelloCorrente();
         if (cartInSession != null) {

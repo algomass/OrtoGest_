@@ -14,7 +14,7 @@ class TestCreaOrdineAppController {
 
     @BeforeEach
     void setUp() {
-        controller = new CreaOrdineAppController();
+        controller = CreaOrdineAppController.getInstance();
     }
 
     @Test

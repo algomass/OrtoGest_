@@ -10,7 +10,7 @@ public class RegistrazioneGraphicControllerCLI extends BaseGraphicControllerCLI 
     private final RegistrazioneAppController appController;
 
     public RegistrazioneGraphicControllerCLI() {
-        this.appController = new RegistrazioneAppController();
+        this.appController = RegistrazioneAppController.getInstance();
     }
 
     @Override

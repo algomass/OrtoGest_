@@ -72,7 +72,7 @@ public class SegnalazioneAnomaliaGraphicController extends BaseGraphicController
 
         
         AnomaliaBean anomaliaBean = new AnomaliaBean(tipo, prodotto, lotto, quantita, note, email);
-        RegistraLottoAppController appController = new RegistraLottoAppController();
+        RegistraLottoAppController appController = RegistraLottoAppController.getInstance();
 
         String messaggioRisultato = appController.inoltraSegnalazione(anomaliaBean);
 
