@@ -30,10 +30,6 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
     private Label errorLabel;
 
     @FXML
-    public void initialize() {
-    }
-
-    @FXML
     public void indietroAction() {
         cambiaScenaSicuro(CostantiGUI.VIEW_MAGAZZINO, "Errore nel ritorno al magazzino:");
     }
@@ -49,10 +45,10 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
         errorLabel.setVisible(false);
 
         try {
-            
+
             String idLotto = idLottoField.getText();
             String fornitore = fornitoreField.getText();
-            
+
             String prodotto = prodottoField.getText();
             String quantitaStr = quantitaField.getText();
 
@@ -70,7 +66,6 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
                 costoAcquisto = parseDoubleOrThrow(costoStr, "Il costo di acquisto deve essere un numero valido.");
             }
 
-            
             LottoBean lottoBean = LottoBean.builder()
                     .idLotto(idLotto)
                     .nomeFornitore(fornitore)
@@ -81,14 +76,11 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
                     .costoAcquisto(costoAcquisto)
                     .build();
 
-            
             RegistraLottoAppController appController = new RegistraLottoAppController();
             LottoBean risultato = appController.registraLotto(lottoBean);
 
-            
             Printer.printf("Lotto registrato con successo! ID: " + risultato.getIdLotto());
 
-            
             indietroAction();
 
         } catch (GestioneException e) {
@@ -100,7 +92,8 @@ public class RegistrazioneLottoGraphicController extends BaseGraphicController {
         }
     }
 
-    private double parseDoubleOrThrow(String value, String errorMessage) throws it.ortogest.ortogestapp.exception.ValidationException {
+    private double parseDoubleOrThrow(String value, String errorMessage)
+            throws it.ortogest.ortogestapp.exception.ValidationException {
         try {
             return Double.parseDouble(value);
         } catch (NumberFormatException _) {

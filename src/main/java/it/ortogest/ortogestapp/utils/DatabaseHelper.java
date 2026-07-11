@@ -11,12 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-
 public class DatabaseHelper {
 
     private String dbUrl = "jdbc:mysql://localhost:3306/ortogest?createDatabaseIfNotExist=true";
     private String dbUser = "root";
-    private String dbPass = "root";
+    private String dbPass = "";
     private static final DatabaseHelper instance = new DatabaseHelper();
 
     private DatabaseHelper() {
@@ -31,7 +30,7 @@ public class DatabaseHelper {
                     dbPass = props.getProperty("db.password", dbPass);
                 }
             }
-            
+
             if (System.getenv("DB_PASSWORD") != null) {
                 dbPass = System.getenv("DB_PASSWORD");
             }
@@ -46,12 +45,9 @@ public class DatabaseHelper {
         return instance;
     }
 
-    
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(dbUrl, dbUser, dbPass);
     }
-
-
 
     @FunctionalInterface
     public interface ResultSetExtractor<T> {
