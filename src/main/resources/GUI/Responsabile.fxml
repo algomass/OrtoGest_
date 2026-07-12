@@ -31,12 +31,12 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="btnToggleVista" onAction="#toggleVistaAction" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Prodotti da scontare">
+                <Button fx:id="btnToggleVista" onAction="#toggleVistaAction" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Lotti da scontare">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="btnDaPrezzare" onAction="#vistaDaPrezzareAction" style="-fx-background-color: #9b59b6; -fx-text-fill: white;" text="Prodotti da prezzare">
+                <Button fx:id="btnDaPrezzare" onAction="#vistaDaPrezzareAction" style="-fx-background-color: #9b59b6; -fx-text-fill: white;" text="Lotti da prezzare">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
