@@ -105,11 +105,7 @@
                     </children>
                 </VBox>
 
-                <Label text="Lotti del Prodotto Selezionato">
-                    <font>
-                        <Font name="System Bold" size="16.0" />
-                    </font>
-                </Label>
+
 
                 <TableView fx:id="tabellaLotti" prefHeight="150.0" VBox.vgrow="ALWAYS">
                     <columns>
