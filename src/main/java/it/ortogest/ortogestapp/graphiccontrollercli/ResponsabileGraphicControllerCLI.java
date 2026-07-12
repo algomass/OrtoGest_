@@ -6,6 +6,8 @@ import java.util.Scanner;
 import it.ortogest.ortogestapp.appcontroller.GestisciCatalogoAppController;
 import it.ortogest.ortogestapp.beans.LottoBean;
 import it.ortogest.ortogestapp.beans.ProdottoBean;
+import it.ortogest.ortogestapp.appcontroller.CreaOrdineAppController;
+import it.ortogest.ortogestapp.beans.OrdineBean;
 import it.ortogest.ortogestapp.exception.GestioneException;
 import it.ortogest.ortogestapp.utils.Printer;
 import it.ortogest.ortogestapp.utils.SessionManager;
@@ -36,6 +38,7 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
                     "3. Monitora Scadenze e Applica Sconti",
                     "4. Aggiorna Categoria Prodotto",
                     "5. Visualizza Lotti da Prezzare",
+                    "6. Gestione Ordini Online",
                     "0. Logout");
             String scelta = leggiStringaNonVuota(scanner, "Scelta: ");
 
@@ -54,6 +57,9 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
                     break;
                 case "5":
                     visualizzaDaPrezzare(scanner);
+                    break;
+                case "6":
+                    gestioneOrdiniOnline(scanner);
                     break;
                 case "0":
                     eseguiLogout();
@@ -255,5 +261,48 @@ public class ResponsabileGraphicControllerCLI extends BaseGraphicControllerCLI {
 
         Printer.print("\nPremi INVIO per tornare al menu...");
         scanner.nextLine();
+    }
+
+    private void gestioneOrdiniOnline(Scanner scanner) {
+        Printer.print("\n--- Gestione Ordini Online ---");
+        CreaOrdineAppController ordineAppController = CreaOrdineAppController.getInstance();
+
+        while (true) {
+            List<OrdineBean> ordini = ordineAppController.getTuttiOrdini();
+
+            if (ordini.isEmpty()) {
+                Printer.print("Nessun ordine presente nel sistema.");
+                return;
+            }
+
+            Printer.printf("\n%-5s %-15s %-30s %-15s %-20s\n", "NUM", "ID ORDINE", "CLIENTE", "TOTALE", "STATO");
+            Printer.print("-------------------------------------------------------------------------------------------");
+            for (int i = 0; i < ordini.size(); i++) {
+                OrdineBean o = ordini.get(i);
+                Printer.printf("%-5d %-15s %-30s %-15.2f EUR %-20s\n",
+                        (i + 1),
+                        o.getIdOrdine(),
+                        o.getEmailCliente(),
+                        o.getTotale(),
+                        o.getStato());
+            }
+
+            int numOrdine = leggiInteroValido(scanner,
+                    "\nInserisci il NUM dell'ordine per segnarlo come 'Pronto per il Ritiro' (oppure 0 per uscire): ", 0, ordini.size());
+            if (numOrdine == 0) return;
+
+            OrdineBean selected = ordini.get(numOrdine - 1);
+            if (!"Inviato".equals(selected.getStato())) {
+                Printer.perror("L'ordine selezionato non è nello stato 'Inviato' e non può essere segnato come pronto.");
+                continue;
+            }
+
+            try {
+                ordineAppController.aggiornaStatoOrdine(selected.getIdOrdine(), "Pronto per il Ritiro");
+                Printer.print("[SUCCESS] Stato dell'ordine aggiornato correttamente a 'Pronto per il Ritiro'.");
+            } catch (Exception e) {
+                Printer.perror(MSG_ERRORE + e.getMessage());
+            }
+        }
     }
 }

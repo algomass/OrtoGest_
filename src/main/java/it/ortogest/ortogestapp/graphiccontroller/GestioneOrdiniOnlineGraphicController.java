@@ -19,7 +19,6 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
     @FXML private TableView<OrdineBean> ordiniTable;
     @FXML private TableColumn<OrdineBean, String> colIdOrdine;
     @FXML private TableColumn<OrdineBean, String> colCliente;
-    @FXML private TableColumn<OrdineBean, String> colOrario;
     @FXML private TableColumn<OrdineBean, Double> colTotale;
     @FXML private TableColumn<OrdineBean, String> colStato;
     @FXML private ComboBox<String> filtroStatoComboBox;
@@ -39,7 +38,6 @@ public class GestioneOrdiniOnlineGraphicController extends BaseGraphicController
 
         colIdOrdine.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIdOrdine()));
         colCliente.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmailCliente()));
-        colOrario.setCellValueFactory(cellData -> new SimpleStringProperty("Oggi")); 
         
         
         colTotale.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("totale"));

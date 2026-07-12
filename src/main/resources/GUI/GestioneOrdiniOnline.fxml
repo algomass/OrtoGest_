@@ -54,7 +54,6 @@
                             <columns>
                                 <TableColumn resizable="false" fx:id="colIdOrdine" prefWidth="90.0" text="N° Ordine" />
                                 <TableColumn resizable="false" fx:id="colCliente" prefWidth="121.5999755859375" text="Cliente" />
-                                <TableColumn resizable="false" fx:id="colOrario" prefWidth="88.800048828125" text="Orario Ritiro" />
                                 <TableColumn resizable="false" fx:id="colTotale" prefWidth="127.199951171875" text="Totale €" />
                                 <TableColumn resizable="false" fx:id="colStato" prefWidth="123.20001220703125" text="Stato Attuale" />
                             </columns>
