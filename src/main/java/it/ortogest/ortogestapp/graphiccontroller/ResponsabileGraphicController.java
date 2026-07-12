@@ -17,8 +17,8 @@ import java.util.List;
 public class ResponsabileGraphicController extends BaseGraphicController {
 
     private static final String MSG_VISTA_CLASSICA = "Vista classica";
-    private static final String MSG_PRODOTTI_DA_SCONTARE = "Prodotti da scontare";
-    private static final String MSG_PRODOTTI_DA_PREZZARE = "Prodotti da prezzare";
+    private static final String MSG_PRODOTTI_DA_SCONTARE = "Lotti da scontare";
+    private static final String MSG_PRODOTTI_DA_PREZZARE = "Lotti da prezzare";
     private static final String MSG_LOTTI_RITIRATI = "Lotti Ritirati";
     private static final String MSG_TROVATI = "Trovati ";
 
